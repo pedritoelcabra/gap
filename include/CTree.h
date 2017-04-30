@@ -3,7 +3,6 @@
 
 #include <CGuiObject.h>
 
-
 class CTree : public CGUIObject
 {
     public:
