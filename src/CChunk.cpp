@@ -6,19 +6,15 @@
 
 extern CGame GAP;
 
-CChunk::CChunk()
-{
+CChunk::CChunk(){
 
 }
 
-CChunk::~CChunk()
-{
+CChunk::~CChunk(){
     //dtor
 }
 
-
-void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap) //
-{
+void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones){
     cx = chunkX;
     cy = chunkY;
     Tiles.clear();
@@ -31,13 +27,13 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap) //
             x = (chunkX * tilesPerChunk) + i;
             y = (chunkY * tilesPerChunk) + k;
             height = heightMap->GetValue(k, i);
-            if(height < -0.7){
+            if(height < -0.5){
                 terrain = 92;
                 moveCost = 4.0f;
-            }else if(height < -0.5){
+            }else if(height < -0.4){
                 terrain = 93;
                 moveCost = CScreen::flatMoveCost;
-            }else if(height < 0.2){
+            }else if(height < 0.0){
                 terrain = 94;
                 moveCost = CScreen::flatMoveCost;
             }else if(height < 0.7){
@@ -49,16 +45,21 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap) //
             }
             resource = 0;
             if(terrain > 93 && terrain < 96){
-                resourceRand = rand() % 1000 ;
-                if( resourceRand < 25 ){
+                resourceRand = rand() % 2000 ;
+                if( (heightMapForest->GetValue(k, i) * 1000) + resourceRand > 2100 ){
                     resource = 1;
+                    resourceAmount = 1;
+                    moveCost = 3.0f;
+                }
+                if( (heightMapStones->GetValue(k, i) * 10000) + resourceRand > 11500 ){
+                    resource = 2;
                     resourceAmount = 1;
                     moveCost = 3.0f;
                 }
             }
             Tiles[y][x] = std::make_shared<CTile>(CTile());
-            Tiles[y][x]->Init(terrain, x, y, resource, resourceAmount);
-            Tiles[y][x]->setMoveCost(moveCost);
+            Tiles[y][x]->Init(terrain, x, y, resource, resourceAmount, rand() % 4);
+            Tiles[y][x]->SetMoveCost(moveCost);
             GAP.Pathfinder.SetCost(x,y,moveCost);
         }
     }

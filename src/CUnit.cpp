@@ -27,8 +27,11 @@ CUnit::CUnit(int x, int y, std::string myName){
     minCollision = 0.0f;
     maxCollision = 3.0f;
     assignment = CAction::idleAssignment;
-
-    this->resetFrames();
+    for(auto p : CGood::GetResources() ){
+        Inventory[p.first] = 0;
+    }
+    carriedItem = 0;
+    this->ResetFrames();
 }
 
 CUnit::~CUnit(){
@@ -39,8 +42,8 @@ bool CUnit::Render(){
 
     box.x = this->x + xoff;
     box.y = this->y + yoff;
-    if(currentFrameStarted + currentFrameSpeed < GAP.getTick() ){
-        currentFrameStarted = GAP.getTick();
+    if(currentFrameStarted + currentFrameSpeed < GAP.GetTick() ){
+        currentFrameStarted = GAP.GetTick();
         currentFrame++;
         if(currentFrame >= frameCount){
             currentFrame = 0;
@@ -57,9 +60,6 @@ void CUnit::Update(){
     if(!busyTime){
         if(!ActionQueue.size()){
             UpdateAssignment();
-        }
-        if(!ActionQueue.size()){
-            SetIdleAssignment();
         }
         if(ActionQueue.size()){
             isIdle = false;
@@ -105,24 +105,32 @@ void CUnit::Update(){
                 break;
         }
     }
-    busyTime--;
+    if(busyTime > 0){
+        busyTime--;
+    }
 }
 
-std::string CUnit::getName() const{
-    return name;
+std::string CUnit::GetAssignmentName() const{
+    switch(assignment){
+        case CAction::idleAssignment: return "Idle";
+        case CAction::followUnit: return "Following a unit";
+        case CAction::builderAssignment: return "Building";
+        case CAction::gatherResources: return "Gathering resources";
+    }
+    return "No assignment";
 }
 
-void CUnit::resetFrames(){
-    setFrameCount();
-    setFrameOffset();
-    setFrameSpeed();
-    x = GAP.tileToPixel(tileX);
-    y = GAP.tileToPixel(tileY);
+void CUnit::ResetFrames(){
+    SetFrameCount();
+    SetFrameOffset();
+    SetFrameSpeed();
+    x = GAP.TileToPixel(tileX);
+    y = GAP.TileToPixel(tileY);
     currentFrame = 0;
-    currentFrameStarted = GAP.getTick();
+    currentFrameStarted = GAP.GetTick();
 }
 
-void CUnit::setFacing(int direction){
+void CUnit::SetFacing(int direction){
     switch(direction){
         case 0:
             facing = 0; break;
@@ -139,22 +147,22 @@ void CUnit::setFacing(int direction){
     }
     if(direction != moveDirection){
         moveDirection = direction;
-        this->resetFrames();
+        this->ResetFrames();
     }
     moveDirection = direction;
 }
 
-void CUnit::setMoving(bool isMoving){
+void CUnit::SetMoving(bool isMoving){
     if(isMoving){
-        this->setAnimation("walking");
+        this->SetAnimation("walking");
     }
     else{
-        this->setAnimation("standing");
+        this->SetAnimation("standing");
     }
     moving = isMoving;
 }
 
-void CUnit::setAnimation(std::string animation){
+void CUnit::SetAnimation(std::string animation){
     int newAnimation;
     if(animation.compare("casting") == 0){
         newAnimation = 1;
@@ -179,11 +187,11 @@ void CUnit::setAnimation(std::string animation){
     }
     if(currentAnimation != newAnimation){
         currentAnimation = newAnimation;
-        this->resetFrames();
+        this->ResetFrames();
     }
 }
 
-int CUnit::setFrameCount(){
+int CUnit::SetFrameCount(){
     switch(currentAnimation){
         case 1:
             frameCount = 7;
@@ -212,7 +220,7 @@ int CUnit::setFrameCount(){
     }
 }
 
-int CUnit::setFrameSpeed(){
+int CUnit::SetFrameSpeed(){
     switch(currentAnimation){
         case 3:
             currentFrameSpeed = 4;
@@ -224,16 +232,16 @@ int CUnit::setFrameSpeed(){
     return currentFrameSpeed;
 }
 
-int CUnit::setFrameOffset(){
+int CUnit::SetFrameOffset(){
     if(currentAnimation == 6){
-        this->frameOffset = this->baseOffset();
+        this->frameOffset = this->BaseOffset();
     }else{
-        this->frameOffset = this->baseOffset() + (13 * facing);
+        this->frameOffset = this->BaseOffset() + (13 * facing);
     }
     return this->frameOffset;
 }
 
-int CUnit::baseOffset(){
+int CUnit::BaseOffset(){
     switch(currentAnimation){
         case 1:
             return 0;
@@ -278,22 +286,22 @@ int CUnit::ExecuteAction(CAction action_){
             break;
         case CAction::gatherResource:
             if(auto s = resourceTilePtr.lock()){
-                if(s->getResource()){
+                if(s->GetResource()){
                     StopMovement();
-                    setAnimation("slashing");
-                    setFacing(getTileDirection(s->getTileX(), s->getTileY()));
+                    SetAnimation("slashing");
+                    SetFacing(GetTileDirection(s->GetTileX(), s->GetTileY()));
                     timeForAction = action_.arga;
                 }
             }
             break;
         case CAction::dropGoods:
             StopMovement();
-            BackPack.clear();
+            Inventory.clear();
             timeForAction = action_.arga;
             break;
         case CAction::buildBuilding:
             StopMovement();
-            setAnimation("slashing");
+            SetAnimation("slashing");
             timeForAction = action_.arga;
             break;
     }
@@ -309,8 +317,8 @@ int CUnit::FinishAction(CAction action_){
         case CAction::gatherResource:
             if(auto s = resourceTilePtr.lock()){
                 if(s->HarvestResource()){
-                    BackPack.push_back(action_.argb);
-                    if(!s->getResource()){
+                    CarryItem(action_.argb);
+                    if(!s->GetResource()){
                         resourceTilePtr.reset();
                     }
                 }
@@ -328,13 +336,13 @@ int CUnit::FinishAction(CAction action_){
 }
 
 void CUnit::StopMovement(){
-    resetFrames();
+    ResetFrames();
     isIdle = true;
-    setMoving(false);
+    SetMoving(false);
 }
 
 bool CUnit::MoveToAdyacent(int x_, int y_){
-    if(getTileFlightSquareDistance(x_, y_) > 1 || (x == x_  && y == y_)){
+    if(GetTileFlightSquareDistance(x_, y_) > 1 || (x == x_  && y == y_)){
         return false;
     }
     float moveCost = GAP.Pathfinder.GetCost(x_, y_);
@@ -348,8 +356,8 @@ bool CUnit::MoveToAdyacent(int x_, int y_){
     if(moveCost < 1.0f){
         moveSpeed = 8;
     }
-    setMoving(true);
-    setFacing(getTileDirection(x_, y_));
+    SetMoving(true);
+    SetFacing(GetTileDirection(x_, y_));
     GAP.ChunkManager.MoveUnit(tileX, tileY, x_, y_, myPtr, id);
     tileX = x_;
     tileY = y_;
@@ -357,16 +365,8 @@ bool CUnit::MoveToAdyacent(int x_, int y_){
     return true;
 }
 
-float CUnit::getMoveSpeed(){
+float CUnit::GetMoveSpeed(){
     return ( (float)CScreen::tileWidth / (float)moveSpeed ) ;
-}
-
-float CUnit::GetMinCollision(){
-    return minCollision;
-}
-
-float CUnit::GetMaxCollision(){
-    return maxCollision;
 }
 
 void CUnit::ClearActions(){
@@ -376,7 +376,7 @@ void CUnit::ClearActions(){
 bool CUnit::MoveTo(int x, int y, int stopShort){
     ClearActions();
     CoordList path = GAP.Pathfinder.FindPath(
-        Coord( getTileX(), getTileY() ),
+        Coord( GetTileX(), GetTileY() ),
         Coord( x, y ),
         GetMinCollision(), GetMaxCollision()
     );
@@ -400,7 +400,7 @@ bool CUnit::MoveNextTo(int x, int y, bool diagonal){
     CoordList path;
     while(path.size() < 1 && adyacentTiles.size() > 0){
         path = GAP.Pathfinder.FindPath(
-            Coord( getTileX(), getTileY() ),
+            Coord( GetTileX(), GetTileY() ),
             Coord( adyacentTiles.back().x, adyacentTiles.back().y ),
             GetMinCollision(), GetMaxCollision());
         adyacentTiles.pop_back();
@@ -458,152 +458,144 @@ void CUnit::SetBuildAssignment(build_weak_ptr targetPtr_){
 
 void CUnit::UpdateAssignment(){
     moveSpeed = baseSpeed;
+    busyTime = 0;
     switch(assignment){
     case CAction::idleAssignment:
         if(auto s = homeBuildingPtr.lock()){
-            if(s->getDoor().first == tileX && s->getDoor().second == tileY){
+            if(s->GetDoor().first == tileX && s->GetDoor().second == tileY){
                 Idle(600);
-                CLog::Write("Idling at my door...");
+                thought =  "Idling at home.";
                 return;
             }
-            MoveTo(s->getDoor().first, s->getDoor().second);
-            CLog::Write("Moving to idle at home...");
+            MoveTo(s->GetDoor().first, s->GetDoor().second);
+            thought = "Going home.";
             return;
         }
         Idle(600);
+        thought = "I have no home...";
         break;
     case CAction::followUnit:{
-        CLog::Write("Processing FollowUnit Assignment");
         auto targetUnitPtrS = targetUnitPtr.lock();
         if(!targetUnitPtrS){
             SetIdleAssignment();
             return;
         }
-        if(getTileFlightSquareDistance(targetUnitPtrS->getTileX(), targetUnitPtrS->getTileY()) < 5){
+        if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) < 5){
             Idle(60);
+            thought = "My leader is close by.";
             return;
         }
-        if(getTileFlightSquareDistance(targetUnitPtrS->getTileX(), targetUnitPtrS->getTileY()) > 10){
+        if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) > 10){
             moveSpeed = baseSpeed / 2;
+            thought = "I better hurry to catch up.";
         }
-        MoveTo(targetUnitPtrS->getTileX(), targetUnitPtrS->getTileY(), 3);
+        MoveTo(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY(), 3);
+        thought = "Following leader.";
         return;
     }
     case CAction::gatherResources:{
-        CLog::Write("Processing Gathering Assignment");
         auto workBuildingPtrS = workBuildingPtr.lock();
         if(!workBuildingPtrS){
             SetIdleAssignment();
-            CLog::Write("I have no workplace!?");
             return;
         }
-        if(BackPack.size() > 10){
-            if(getTileFlightSquareDistance(workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second) < 1 ){
-                DropBackpack();
+        if(GetCarriedItem()){
+            if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
+                workBuildingPtrS->AddToInventory(GetCarriedItem(true), 1);
+                thought = "Dropping off goods.";
                 return;
             }
-            MoveTo(workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second);
+            MoveTo(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
+            thought = "Going to drop off goods.";
             return;
         }
         if(auto s = resourceTilePtr.lock()){
-            if(getTileFlightSquareDistance(s->getTileX(), s->getTileY()) <= 1 ){
-                GatherResource(s->getResource());
+            if(GetTileFlightSquareDistance(s->GetTileX(), s->GetTileY()) <= 1 ){
+                CAction action = CAction(CAction::gatherResource, 240, s->GetResource());
+                AddAction(action);
+                thought = "Gathering resource.";
                 return;
             }
-            if(!MoveNextTo(s->getTileX(), s->getTileY())){
-                Idle(120);
-                hasTargetTile = false;
-                return;
+            if(!MoveNextTo(s->GetTileX(), s->GetTileY())){
+                Idle(60);
+                resourceTilePtr.reset();
+                thought = "Can't reach my resource.";
             }
+            thought = "Moving to reach resource.";
             return;
         }
         int factor = 4;
         while(factor > 0){
-            std::vector<tile_weak_ptr> nearestResource = GAP.ChunkManager.GetResources(workBuildingPtrS->getResource(),
-                      workBuildingPtrS->ResourceArea() / factor, workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second);
+            std::vector<tile_weak_ptr> nearestResource = GAP.ChunkManager.GetResources(workBuildingPtrS->GetResource(),
+                      workBuildingPtrS->ResourceArea() / factor, workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
             if(nearestResource.size() > 0){
                 std::random_shuffle ( nearestResource.begin(), nearestResource.end() );
                 resourceTilePtr = nearestResource.back();
-                CLog::Write("Found a resource");
-                Idle(1);
+                thought = "Found a resource.";
                 return;
             }
             factor--;
         }
-        SetIdleAssignment();
+        thought = "No resources in area.";
+        Idle(300);
         return;
     }
     case CAction::builderAssignment:
-        CLog::Write("Processing Building Assignment");
         auto workBuildingPtrS = workBuildingPtr.lock();
         if(!workBuildingPtrS){
-            CLog::Write("I have no workplace!?");
             SetIdleAssignment();
             return;
         }
         if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
-            CLog::Write("Going to work at site");
-            if(getTileFlightSquareDistance(targetBuildingPtrS->getDoor().first, targetBuildingPtrS->getDoor().second) < 1 ){
+            if(GetTileFlightSquareDistance(targetBuildingPtrS->GetDoor().first, targetBuildingPtrS->GetDoor().second) < 1 ){
                 CAction action = CAction(CAction::buildBuilding, 240, 1);
                 AddAction(action);
+                thought = "Building!.";
                 return;
             }
-            MoveTo(targetBuildingPtrS->getDoor().first, targetBuildingPtrS->getDoor().second);
+            thought = "Going to building site.";
+            MoveTo(targetBuildingPtrS->GetDoor().first, targetBuildingPtrS->GetDoor().second);
             return;
         }
         std::vector<build_weak_ptr> nearestSites = GAP.BuildingManager.GetUnfinishedBuildings(
-                              workBuildingPtrS->BuildArea() , workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second);
+                              workBuildingPtrS->BuildArea() , workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
         if(nearestSites.size() > 0){
             std::random_shuffle ( nearestSites.begin(), nearestSites.end() );
             targetBuildingPtr = nearestSites.back();
-            CLog::Write("Found a site");
-            Idle(1);
+            thought = "Found a site.";
             return;
         }
-        if(getTileFlightSquareDistance(workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second) < 1 ){
+        if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
             Idle(60);
-            CLog::Write("Nothing to build");
+            thought = "Nothing to build.";
             return;
         }
-        MoveTo(workBuildingPtrS->getDoor().first, workBuildingPtrS->getDoor().second);
-        CLog::Write("Nothing to build, going home");
+        if(MoveTo(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second)){
+            thought = "Nothing to build, going home.";
+            return;
+        }
+        thought = "Can't find a way home...";
+        Idle(60);
         return;
     }
 }
 
-void CUnit::setId(int id_, unit_weak_ptr myPtr_){
+void CUnit::SetId(int id_, unit_weak_ptr myPtr_){
     id = id_;
     myPtr = myPtr_;
 }
 
-unit_weak_ptr CUnit::GetPtr(){
-    return myPtr;
-}
-
-int CUnit::getAssignment(){
-    return assignment;
-}
-
 void CUnit::GatherResource(int resource){
     switch(resource){
-    case CAction::wood:
+    case CGood::wood:
         CAction action = CAction(CAction::gatherResource, 240, 1);
         AddAction(action);
         break;
     }
 }
 
-void CUnit::DropBackpack(){
-    CAction action = CAction(CAction::dropGoods, 1, 1);
-    AddAction(action);
-}
-
 bool CUnit::IsIdle(){
     return isIdle;
-}
-
-int CUnit::GetBusyTime(){
-    return busyTime;
 }
 
 void CUnit::SetHome(build_weak_ptr ptr){
@@ -623,3 +615,14 @@ void CUnit::Destroy(){
     GAP.UnitManager.DestroyUnit(id);
 }
 
+void CUnit::CarryItem(int resource){
+    carriedItem = resource;
+}
+
+int CUnit::GetCarriedItem(bool takeIt){
+    int item = carriedItem;
+    if(takeIt){
+        carriedItem = 0;
+    }
+    return item;
+}

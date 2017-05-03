@@ -21,14 +21,14 @@ class CChunkManager
         void                        RenderTiles();
         void                        RenderObjects();
         void                        RenderMinimap();
-        int                         getX();
-        int                         getY();
         void                        Init();
         tile_weak_ptr               GetTile(int x, int y);
         int                         GetChunk(int tile);
         std::vector<tile_weak_ptr>    GetResources(int resourceType, int resourceRadius, int tileX, int tileY);
         void                        MoveUnit(int x, int y, int nx, int ny, unit_weak_ptr ptr, int id, bool removeUnit = false);
 
+        int                         GetX(){             return currentChunkX;};
+        int                         GetY(){             return currentChunkY;};
     protected:
     private:
         int                 currentChunkX;

@@ -33,18 +33,10 @@ void CUnitManager::Update(){
     }
 }
 
-bool CUnitManager::sortByYAxis(CGUIObject* a, CGUIObject* b) {
-
-    if(a->getY() == b->getY()){
-        return a->getZ() < b->getZ();
-    }
-    return a->getY() < b->getY();
-}
-
 void CUnitManager::AddNPC(unit_shared_ptr npc){
     unitCount++;
-    npc->setId(unitCount, unit_weak_ptr(npc));
-    tile_weak_ptr ptr = GAP.ChunkManager.GetTile(npc->getTileX(), npc->getTileY());
+    npc->SetId(unitCount, unit_weak_ptr(npc));
+    tile_weak_ptr ptr = GAP.ChunkManager.GetTile(npc->GetTileX(), npc->GetTileY());
     if(auto s = ptr.lock()){
         s->AddUnit(unit_weak_ptr(npc));
         NPCS.push_back(npc);

@@ -29,6 +29,3 @@ std::vector<unit_weak_ptr> CGame::UnitsAtTile(int x, int y){
     return emptyVector;
 }
 
-int CGame::GetSeed() const{
-    return seed;
-}

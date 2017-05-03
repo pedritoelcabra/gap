@@ -122,6 +122,7 @@ CoordList CPathfinder::FindPath(Coord source_, Coord target_, float minv_, float
                     successor = new Node(newCoords, current);
                     successor->G = totalCost;
                     successor->H = Heuristic(successor->coords, target_);
+                    successor->H = successor->H + static_cast<float>(i)/100;
                     openSet.insert(successor);
                 }
                 else if (totalCost < successor->G) {
@@ -158,10 +159,12 @@ Coord CPathfinder::getDelta(Coord source_, Coord target_){
 }
 
 float CPathfinder::Heuristic(Coord source_, Coord target_){
-    	auto delta = std::move(getDelta(source_, target_));
-    	// return static_cast<float>(1 * (delta.x + delta.y));
-	//return static_cast<float> (sqrt(pow(delta.x, 2) + pow(delta.y, 2)));
-	return 10 * (delta.x + delta.y) + (-6) * std::min(delta.x, delta.y);
+    auto delta = std::move(getDelta(source_, target_));
+    return (abs(delta.x-delta.y) + (1.4f * ( delta.x > delta.y ? delta.y : delta.x) ));
+    // return static_cast<float>(1 * (delta.x + delta.y));
+	// return static_cast<float> (sqrt(pow(delta.x, 2) + pow(delta.y, 2)));
+
+	// return 10 * (delta.x + delta.y) + (-6) * std::min(delta.x, delta.y);
 }
 
 void CPathfinder::releaseNodes(NodeSet& nodes_){

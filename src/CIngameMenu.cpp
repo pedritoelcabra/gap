@@ -10,7 +10,7 @@ CIngameMenu::CIngameMenu()
     CButton button = CButton(0, 0, 1, 1, "Menu" );
     PopUpButtons.push_back(button);
 
-    offset += button.getW();
+    offset += button.GetW();
     CButton button2 = CButton(offset, 0, 1, 2, "Buildings" );
     PopUpButtons.push_back(button2);
 

@@ -16,6 +16,7 @@ class CInfoMenu : public CMenu
 
         void                    Render();
         void                    RenderLine(std::string text, int fontSize);
+        void                    Clicked(CButton button);
 
     protected:
 

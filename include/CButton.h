@@ -11,19 +11,25 @@
 #include "SDL2/SDL_gpu.h"
 #include <CGuiObject.h>
 #include <CUnit.h>
+#include "CBuilding.h"
 
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
+typedef std::weak_ptr<CBuilding> build_weak_ptr;
 class CGUIObject;
 
 class CButton : public CGUIObject{
 public:
     CButton (int x, int y, int clip, unit_weak_ptr object);
+    CButton (int x, int y, int clip, build_weak_ptr building);
     CButton (int x, int y, int clip, int id, std::string caption);
     CButton(int x, int y, int clipnumber, int w, int h);
 
+
     bool                Render();
-    unit_weak_ptr         GetObject();
+    unit_weak_ptr       GetUnit();
+    build_weak_ptr      GetBuilding();
     int                 GetAction();
+    void                SetPosition(int x, int y, int w, int h);
 
 
     const int           TYPE_MENU = 1;
@@ -32,7 +38,8 @@ private:
 
     int                 action;
     std::string         name;
-    unit_weak_ptr       object;
+    unit_weak_ptr       unitPtr;
+    build_weak_ptr      buildingPtr;
     int                 ParentMenu;
     int                 fontSize;
     SDL_Rect            captionRect;

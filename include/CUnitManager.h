@@ -25,7 +25,6 @@ class CUnitManager
 
         std::vector<unit_weak_ptr>          FindCollision(int x, int y);
         std::vector<unit_weak_ptr>          FindTileCollision(int x, int y);
-        static bool                         sortByYAxis(CGUIObject* a, CGUIObject* b);
     protected:
     private:
         std::vector<unit_shared_ptr>        NPCS;

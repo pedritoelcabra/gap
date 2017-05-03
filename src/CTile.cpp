@@ -10,7 +10,7 @@ CTile::~CTile(){
     //dtor
 }
 
-void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_){
+void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, int resourceVariety_){
     x = tx * tileWidth;
     y = ty * tileWidth;
     tileX = tx;
@@ -19,12 +19,13 @@ void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_){
     box.w = tileWidth * 2;
     box.x = x;
     box.y = y;
-    setTerrain(type);
+    SetTerrain(type);
     resource = resource_;
     resourceAmount = resourceAmount_;
+    resourceVariety = resourceVariety_;
 }
 
-void CTile::setTerrain(int type){
+void CTile::SetTerrain(int type){
     terrain = type;
     clip.w = 128;
     clip.h = 128;
@@ -49,8 +50,6 @@ void CTile::setTerrain(int type){
 }
 
 bool CTile::RenderOnMinimap(int x, int y){
-    SDL_SetRenderDrawColor(GAP.getRenderer(),255, 100, 100, 255);
-    SDL_RenderDrawPoint(GAP.getRenderer(), CScreen::screen_w - 120 + x , 20 + y);
     return true;
 }
 
@@ -64,18 +63,6 @@ SDL_Color CTile::GetMinimapColor(){
         case 96: color.r = 255; color.b = 255; color.g = 255; break;
     }
     return color;
-}
-
-void CTile::setMoveCost(float cost_){
-    moveCost = cost_;
-}
-
-float CTile::getMoveCost(){
-    return moveCost;
-}
-
-int CTile::getResource(){
-    return resource;
 }
 
 bool CTile::Render(){
@@ -121,7 +108,7 @@ int CTile::HarvestResource(){
     resourceAmount--;
     if(!resourceAmount){
         resource = 0;
-        GAP.Pathfinder.SetCost(getTileX(), getTileY(), CScreen::flatMoveCost );
+        GAP.Pathfinder.SetCost(GetTileX(), GetTileY(), CScreen::flatMoveCost );
     }
     return 1;
 }

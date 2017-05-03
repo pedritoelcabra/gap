@@ -17,8 +17,7 @@ struct Coord{
     bool operator == (const Coord& coord_) const;
 };
 
-struct CoordHasher
-{
+struct CoordHasher{
       std::size_t operator()(const Coord& k) const
       {
             using std::size_t;
@@ -39,8 +38,8 @@ struct Node{
     float getScore();
 };
 
-class CPathfinder
-{
+
+class CPathfinder{
 
     public:
 

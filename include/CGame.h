@@ -68,20 +68,21 @@ public:
     bool                OnMouseMove(int x, int y);
     bool                OnLButtonDown(int x, int y);
     bool                OnRButtonDown(int x, int y);
-    float               ZoomLvl();
     void                LoadMainMenu();
-    int                 getMouseTileX();
-    int                 getMouseTileY();
-    int                 tileToPixel(int tile);
-    int                 pixelToTile(int pixel);
-    Uint32              getTick();
-    int                 GetSeed() const;
+    int                 TileToPixel(int tile);
+    int                 PixelToTile(int pixel);
     void                Exit();
 
     int                 TranslateXWtoS(int x);
     int                 TranslateXStoW(int x);
     int                 TranslateYWtoS(int y);
     int                 TranslateYStoW(int y);
+
+    int                 GetSeed() const {return seed;};
+    Uint32              GetTick(){return tick;};
+    int                 GetMouseTileX(){return mouseTileX;};
+    int                 GetMouseTileY(){return mouseTileY;};
+    float               ZoomLvl(){return zoom;};
 
     build_weak_ptr                          Building(int id);
     build_weak_ptr                          BuildingAt(int x, int y);
@@ -90,8 +91,6 @@ public:
     unit_weak_ptr                           Unit(int target);
     std::vector<unit_weak_ptr>              UnitsAtTile(int x, int y);
 
-
-    SDL_Renderer*       getRenderer();
     TTF_Font*           gameFont;
 
 

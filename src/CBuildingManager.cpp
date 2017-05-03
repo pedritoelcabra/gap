@@ -60,21 +60,16 @@ void CBuildingManager::LoadBuildingType(std::string fileName){
 build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner){
 
     build_weak_ptr ptr;
-    CBuildingType* buildingType = GetBuildingType(type);
     build_shared_ptr building = std::make_shared<CBuilding>(type, x, y, owner);
-    if(building->isInBlockedLocation()){
+    if(building->IsInBlockedLocation()){
         return ptr;
     }
     ptr = build_weak_ptr(building);
-    auto layout = buildingType->GetLayout();
-    for(int i = 0; i < building->getH() / CScreen::tileWidth; i++ ){
-        for(int k = 0; k < building->getW() / CScreen::tileWidth; k++ ){
-            GAP.Pathfinder.SetCost(x + k, y + i, layout.at(i).at(k));
-        }
-    }
     buildingCount++;
     building->SetId(buildingCount, ptr);
+    building->ApplyMovementCosts();
 	Buildings.push_back(building);
+	UpdateConnections();
 	return ptr;
 }
 
@@ -96,13 +91,13 @@ void CBuildingManager::DemolishBuilding(int x, int y){
     std::vector<build_shared_ptr>::iterator iter = Buildings.begin();
     while (iter != Buildings.end())
     {
-        if( x >= (*iter)->getTileX() && x < (*iter)->getTileX() + ((*iter)->getW() / CScreen::tileWidth)
-           && y >= (*iter)->getTileY() && y < (*iter)->getTileY() + ((*iter)->getH() / CScreen::tileWidth) ){
-            for(int i = 0; i < ((*iter)->getH() / CScreen::tileWidth); i++ ){
-                for(int k = 0; k < ((*iter)->getW() / CScreen::tileWidth); k++ ){
-                    tile_shared_ptr tile = GAP.ChunkManager.GetTile( (*iter)->getTileX() + k, (*iter)->getTileY() + i).lock();
+        if( x >= (*iter)->GetTileX() && x < (*iter)->GetTileX() + ((*iter)->GetW() / CScreen::tileWidth)
+           && y >= (*iter)->GetTileY() && y < (*iter)->GetTileY() + ((*iter)->GetH() / CScreen::tileWidth) ){
+            for(int i = 0; i < ((*iter)->GetH() / CScreen::tileWidth); i++ ){
+                for(int k = 0; k < ((*iter)->GetW() / CScreen::tileWidth); k++ ){
+                    tile_shared_ptr tile = GAP.ChunkManager.GetTile( (*iter)->GetTileX() + k, (*iter)->GetTileY() + i).lock();
                     if(tile){
-                        GAP.Pathfinder.SetCost((*iter)->getTileX() + k, (*iter)->getTileY() + i, tile->getMoveCost() );
+                        GAP.Pathfinder.SetCost((*iter)->GetTileX() + k, (*iter)->GetTileY() + i, tile->GetMoveCost() );
                     }
                 }
             }
@@ -116,16 +111,16 @@ void CBuildingManager::DemolishBuilding(int x, int y){
 
 build_weak_ptr CBuildingManager::GetBuildingAt(int x, int y){
     for(auto b : Buildings){
-        if(x < b->getTileX()){
+        if(x < b->GetTileX()){
             continue;
         }
-        if(y < b->getTileY()){
+        if(y < b->GetTileY()){
             continue;
         }
-        if(x > b->getTileX() + b->GetTileWidth()){
+        if(x > b->GetTileX() + b->GetTileWidth()){
             continue;
         }
-        if(y > b->getTileY() + b->GetTileHeight()){
+        if(y > b->GetTileY() + b->GetTileHeight()){
             continue;
         }
         return build_weak_ptr(b);
@@ -137,7 +132,7 @@ std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings( int radius
     std::vector<build_weak_ptr> result;
     for(auto b : Buildings){
         if(b->UnderConstruction()){
-            if(b->getTileFlightRoundDistance(x, y) <= radius){
+            if(b->GetTileFlightRoundDistance(x, y) <= radius){
                 result.push_back(build_weak_ptr(b));
             }
         }
@@ -157,24 +152,55 @@ void CBuildingManager::Update(){
         }
         e->Update();
         if(!e->HasEnoughWorkers()){
+            CLog::Write(e->GetName());
+            CLog::Write(
+                        e->BuildArea()
+                        );
 
-            for(auto f : Buildings){
+            for(auto g : e->GetConnections()){
 
-                if(f->MaxPop() > 0){
-
-                    if(f->InRadius(e->getTileX(), e->getTileY())){
+                if(auto f = g.lock()){
+                    if(f->MaxPop() > 0){
 
                         if(auto s = f->GetIdleInhabitant().lock()){
-                            if(e->getResource()){
+                            if(e->GetResource()){
                                 s->SetGatherAssignment(build_weak_ptr(e));
+                                e->AddWorker(unit_weak_ptr(s));
                             }
                             if(e->BuildArea()){
                                 s->SetBuildAssignment(build_weak_ptr(e));
+                                e->AddWorker(unit_weak_ptr(s));
                             }
-                            e->AddWorker(unit_weak_ptr(s));
                             break;
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+void CBuildingManager::UpdateConnections(){
+
+    for(auto e : Buildings){
+        e->ClearConnections();
+    }
+    for(auto e : Buildings){
+        if(e->DistributionRange() > 0){
+            for(auto f : Buildings){
+                if(!f->MaxPop() && !f->MaxWorkers()){
+                    continue;
+                }
+                if(f->DistributionRange() == 0){
+                    if(e->GetTileFlightRoundDistance(f->GetTileX(), f->GetTileY()) <= e->DistributionRange()){
+                        e->AddConnection(build_weak_ptr(f));
+                    }
+                }
+            }
+            for(auto f : e->GetConnections()){
+                if(auto fs = f.lock()){
+                    fs->AddConnections(e->GetConnections());
+                    fs->AddConnection(build_weak_ptr(e));
                 }
             }
         }

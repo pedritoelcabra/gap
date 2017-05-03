@@ -50,10 +50,8 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("tiles", "gfx/tile_sprites.png");
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
     TextureManager.LoadTextureGL("minimap", "gfx/minimap.png");
-    TextureManager.LoadTextureGL("tree1", "gfx/trees/1.png");
-    TextureManager.LoadTextureGL("tree2", "gfx/trees/2.png");
-    TextureManager.LoadTextureGL("tree3", "gfx/trees/3.png");
-    TextureManager.LoadTextureGL("tree4", "gfx/trees/4.png");
+    TextureManager.LoadTextureGL("tree", "gfx/resources/tree.png");
+    TextureManager.LoadTextureGL("rock", "gfx/resources/rock.png");
 
     if( TTF_Init() == -1 )
     {

@@ -16,10 +16,11 @@ public:
 
     static const unsigned int       screen_bpp = 32;       //colour depth
     static const unsigned int       screen_h = 768;        //height in pixel
-    static const unsigned int       screen_half_h = screen_h/2;        //height in pixel
+    static const unsigned int       screen_half_h = screen_h / 2;        //height in pixel
     static const unsigned int       screen_w = 1366;       //width in pixel
-    static const unsigned int       screen_half_w = screen_w/2;       //width in pixel
+    static const unsigned int       screen_half_w = screen_w / 2;       //width in pixel
     static const int                tileWidth = 32;
+    static const int                tileWidthH = tileWidth / 2;
     static const int                unitWidth = 64;
     static const int                tilesPerChunk = 32;
     static constexpr float          diagonalRatio = 1.414;

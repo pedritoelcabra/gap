@@ -5,17 +5,29 @@
 
 extern CGame GAP;
 
-CButton::CButton(int x, int y, int clipnumber, unit_weak_ptr object_) : CGUIObject(x, y){
+CButton::CButton(int x, int y, int clipnumber, unit_weak_ptr unit) : CGUIObject(x, y){
     box.h = 30;
     box.w = 151;
     fontSize = int(box.h / 4)*2;
     clip = spriteClip(clipnumber);
     name = "menusprites";
-    if(auto obj = object_.lock()){
-        caption = "View ";
-        // caption = (obj->getAssignment() != CAction::followUnit ? "Recruit " : "Leave ");
-        caption.append(obj->getName());
-        this->object = unit_weak_ptr(obj);
+    if(auto obj = unit.lock()){
+        caption.append(obj->GetName());
+        unitPtr = unit;
+    }
+    box.x = x;
+    box.y = y;
+}
+
+CButton::CButton(int x, int y, int clipnumber, build_weak_ptr building) : CGUIObject(x, y){
+    box.h = 30;
+    box.w = 151;
+    fontSize = int(box.h / 4)*2;
+    clip = spriteClip(clipnumber);
+    name = "menusprites";
+    if(auto obj = building.lock()){
+        caption.append(obj->GetName());
+        buildingPtr = building;
     }
     box.x = x;
     box.y = y;
@@ -61,6 +73,13 @@ bool CButton::Render(){
     return 1;
 }
 
+void CButton::SetPosition(int x, int y, int w, int h){
+    box.h = h;
+    box.w = w;
+    box.x = x;
+    box.y = y;
+}
+
 GPU_Rect CButton::spriteClip(int clipnumber){
     GPU_Rect spriteClip = GPU_Rect();
     switch(clipnumber){
@@ -97,8 +116,12 @@ void CButton::CenterCaption(){
     return;
 }
 
-unit_weak_ptr CButton::GetObject(){
-    return object;
+unit_weak_ptr CButton::GetUnit(){
+    return unitPtr;
+}
+
+build_weak_ptr CButton::GetBuilding(){
+    return buildingPtr;
 }
 
 int CButton::GetAction(){

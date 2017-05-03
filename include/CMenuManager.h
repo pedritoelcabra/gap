@@ -33,6 +33,7 @@ class CMenuManager
         void                        MousePointerDemolition();
         void                        SetHighLightCirce(build_weak_ptr ptr);
         void                        ShowInfoUnit(unit_weak_ptr ptr);
+        void                        ShowInfoBuilding(build_weak_ptr ptr);
     protected:
 
     private:
@@ -58,7 +59,9 @@ class CMenuManager
         int                                         highLightX;
         int                                         highLightY;
         int                                         highLightRadius;
+        int                                         highLightRadius2;
         SDL_Color                                   highLightColor;
+        SDL_Color                                   highLightColor2;
 };
 
 #endif // CMENUMANAGER_H

@@ -17,7 +17,7 @@ CBuilding::CBuilding(int type, int x, int y, int owner){
     typePtr = GAP.BuildingManager.GetBuildingType(type);
     box.w = typePtr->GetW();
     box.h = typePtr->GetH();
-    workToComplete = typePtr->GetCost(CAction::work);
+    workToComplete = typePtr->GetCost(CGood::work);
     clip = typePtr->GetClip();
     if(workToComplete){
         clip.y = clip.h;
@@ -25,10 +25,13 @@ CBuilding::CBuilding(int type, int x, int y, int owner){
     box.x = this->x;
     box.y = this->y;
     popProgress = 0;
-    door = typePtr->getDoor();
+    door = typePtr->GetDoor();
     door.first += tileX;
     door.second += tileY;
     isBeingDestroyed = false;
+    for(auto p : CGood::GetResources() ){
+        Inventory[p.first] = 0;
+    }
     //ctor
 }
 
@@ -49,7 +52,7 @@ bool CBuilding::Render(){
 
 bool CBuilding::RenderOnTooltip(){
     GPU_Image* tex = GAP.TextureManager.GetTexture(typePtr->GetName());
-    if(isInBlockedLocation()){
+    if(IsInBlockedLocation()){
         GPU_SetRGBA(tex, 255, 100, 100, 100);
     }else{
         GPU_SetRGBA(tex, 255, 255, 255, 100);
@@ -62,27 +65,23 @@ bool CBuilding::RenderOnTooltip(){
     return 1;
 }
 
-int CBuilding::setX(int x){
+int CBuilding::SetX(int x){
     this->tileX = x;
     this->x = x * CScreen::tileWidth;
     box.x = this->x;
-    door.first = (x + typePtr->getDoor().first);
+    door.first = (x + typePtr->GetDoor().first);
     return x;
 }
 
-int CBuilding::setY(int y){
+int CBuilding::SetY(int y){
     this->tileY = y;
     this->y = y * CScreen::tileWidth;
     box.y = this->y;
-    door.second = (y + typePtr->getDoor().second);
+    door.second = (y + typePtr->GetDoor().second);
     return y;
 }
 
-int CBuilding::getType(){
-    return type;
-}
-
-bool CBuilding::isInBlockedLocation(){
+bool CBuilding::IsInBlockedLocation(){
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
             if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) >= 3){
@@ -94,42 +93,6 @@ bool CBuilding::isInBlockedLocation(){
         }
     }
     return false;
-}
-
-vec2i CBuilding::getDoor(){
-    return door;
-}
-
-int CBuilding::getResource(){
-    return typePtr->getResource();
-}
-
-int CBuilding::GetTileWidth(){
-    return getW() / CScreen::tileWidth;
-}
-
-int CBuilding::GetTileHeight(){
-    return getH() / CScreen::tileWidth;
-}
-
-int CBuilding::PopRange(){
-    return typePtr->PopRange();
-}
-
-int CBuilding::BuildArea(){
-    return typePtr->BuildArea();
-}
-
-int CBuilding::DistributionRange(){
-    return typePtr->DistributionRange();
-}
-
-int CBuilding::ResourceArea(){
-    return typePtr->ResourceArea();
-}
-
-int CBuilding::MaxPop(){
-    return typePtr->MaxPop();
 }
 
 void CBuilding::Update(){
@@ -177,7 +140,12 @@ void CBuilding::AddConnection(build_weak_ptr ptr){
     ConnectedBuildings.push_back(ptr);
 }
 
-void CBuilding::RemoveConnection(int id){
+void CBuilding::AddConnections(std::vector<build_weak_ptr> connections){
+    ConnectedBuildings.insert( ConnectedBuildings.end(), connections.begin(), connections.end() );
+    RemoveConnection(id);
+}
+
+void CBuilding::RemoveConnection(int id_){
     if(isBeingDestroyed){
         return;
     }
@@ -185,7 +153,7 @@ void CBuilding::RemoveConnection(int id){
     while (iter != ConnectedBuildings.end())
     {
         if(auto s = (*iter).lock()){
-            if(s->GetId() == id){
+            if(s->GetId() == id_){
                 ConnectedBuildings.erase(iter);
                 return;
             }
@@ -193,6 +161,10 @@ void CBuilding::RemoveConnection(int id){
         iter++;
     }
     CLog::Write("Trying to remove nonexistant building from building connections?");
+}
+
+void CBuilding::ClearConnections(){
+    ConnectedBuildings.clear();
 }
 
 void CBuilding::RemoveInhabitant(int id){
@@ -215,7 +187,7 @@ void CBuilding::RemoveInhabitant(int id){
 
 bool CBuilding::InRadius(int x, int y){
     if(typePtr->PopRange() > 0){
-        if(getTileFlightRoundDistance(x, y) <= typePtr->PopRange()){
+        if(GetTileFlightRoundDistance(x, y) <= typePtr->PopRange()){
             return true;
         }
     }
@@ -225,7 +197,7 @@ bool CBuilding::InRadius(int x, int y){
 unit_weak_ptr CBuilding::GetIdleInhabitant(){
     for(auto e : Inhabitants)    {
         if(auto s = e.lock()){
-            if(s->getAssignment() == CAction::idleAssignment){
+            if(s->GetAssignment() == CAction::idleAssignment){
                 return e;
             }
         }
@@ -247,25 +219,40 @@ void CBuilding::Destroy(){
     }
 }
 
-int CBuilding::UnderConstruction(){
-    return workToComplete;
-}
-
 bool CBuilding::AddWork(int amount){
     workToComplete -= amount;
     if(workToComplete <= 0){
         clip.y = 0;
         workToComplete = 0;
+        ApplyMovementCosts();
         return true;
     }
     return false;
 }
 
-std::string CBuilding::GetName(){
-    return typePtr->GetName();
+void CBuilding::AddToInventory(int resource, int amount){
+    Inventory.at(resource) += amount;
 }
 
-
-std::string CBuilding::GetDescription(){
-    return typePtr->GetDescription();
+int CBuilding::TakeFromInventory(int resource, int amount){
+    if(Inventory.at(resource) >= amount){
+        Inventory.at(resource) -= amount;
+        return amount;
+    }
+    int rest = Inventory.at(resource);
+    Inventory.at(resource) = 0;
+    return rest;
 }
+
+void CBuilding::ApplyMovementCosts(){
+    auto layout = typePtr->GetLayout();
+    for(int i = 0; i < GetTileHeight(); i++ ){
+        for(int k = 0; k < GetTileWidth(); k++ ){
+            if(layout.at(i).at(k) < CScreen::flatMoveCost && workToComplete > 0){
+                continue;
+            }
+            GAP.Pathfinder.SetCost(tileX + k, tileY + i, layout.at(i).at(k));
+        }
+    }
+}
+

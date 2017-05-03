@@ -21,6 +21,7 @@ bool CMenuManager::HandleRClick(int x, int y){
     mouseHasDraggable = false;
     draggedPlanted = false;
     highLightRadius = 0;
+    highLightRadius2 = 0;
     HideContextMenus();
     HideBuildingMenus();
     InfoMenus.clear();
@@ -45,12 +46,13 @@ bool CMenuManager::HandleLClick(int x, int y){
             mouseHasDraggable = false;
             draggedPlanted = false;
             highLightRadius = 0;
+            highLightRadius2 = 0;
             return true;
         }
     }
 
     if(mouseIsDemolition){
-        GAP.BuildingManager.DemolishBuilding(GAP.getMouseTileX(), GAP.getMouseTileY());
+        GAP.BuildingManager.DemolishBuilding(GAP.GetMouseTileX(), GAP.GetMouseTileY());
         return true;
     }
 
@@ -58,21 +60,21 @@ bool CMenuManager::HandleLClick(int x, int y){
         if(draggedPlanted){
             if(dragPath.size()){
                 for(auto b : dragPath){
-                    GAP.BuildingManager.AddBuilding(mouseBuilding->getType(),b.x,b.y,1);
+                    GAP.BuildingManager.AddBuilding(mouseBuilding->GetType(),b.x,b.y,1);
                     dragStartX = dragEndX;
                     dragStartY = dragEndY;
                 }
             }
         }else{
             draggedPlanted = true;
-            dragStartX = dragEndX = GAP.getMouseTileX();
-            dragStartY = dragEndY = GAP.getMouseTileY();
+            dragStartX = dragEndX = GAP.GetMouseTileX();
+            dragStartY = dragEndY = GAP.GetMouseTileY();
         }
         return true;
     }
 
     if(mouseHasBuilding){
-        GAP.BuildingManager.AddBuilding(mouseBuilding->getType(),mouseBuilding->getTileX(),mouseBuilding->getTileY(),1);
+        GAP.BuildingManager.AddBuilding(mouseBuilding->GetType(),mouseBuilding->GetTileX(),mouseBuilding->GetTileY(),1);
         return true;
     }
 
@@ -81,6 +83,7 @@ bool CMenuManager::HandleLClick(int x, int y){
             return true;
         }
     }
+    HideContextMenus();
 
     for(CBuildingMenu& e : BuildingMenus)    {
         if(e.HandleLClick( x,  y)){
@@ -88,50 +91,64 @@ bool CMenuManager::HandleLClick(int x, int y){
         }
     }
 
-    auto w = GAP.BuildingManager.FindCollision(GAP.TranslateXStoW(x) , GAP.TranslateYStoW(y));
-    if(w.lock()){
-        SetHighLightCirce(w);
-        InfoMenus.clear();
-        CInfoMenu infoMenu = CInfoMenu(w);
-        InfoMenus.push_back(infoMenu);
+    for(CInfoMenu& e : InfoMenus)    {
+        if(e.HandleLClick( x,  y)){
+            return true;
+        }
     }
 
-    HideContextMenus();
+    auto uv = GAP.UnitManager.FindCollision(GAP.TranslateXStoW(x) , GAP.TranslateYStoW(y));
+    if(uv.size() > 0){
+        if(auto u = uv.back().lock()){
+            ShowInfoUnit(u);
+            return true;
+        }
+    }
+
+    auto w = GAP.BuildingManager.FindCollision(GAP.TranslateXStoW(x) , GAP.TranslateYStoW(y));
+    if(w.lock()){
+        ShowInfoBuilding(w);
+        return true;
+    }
+
     return false;
 }
 
 void CMenuManager::Render(){
 
     if(mouseHasBuilding){
-        mouseBuilding->setX(GAP.getMouseTileX() - (mouseBuilding->GetTileWidth() / 2));
-        mouseBuilding->setY(GAP.getMouseTileY() - (mouseBuilding->GetTileHeight() / 2));
+        mouseBuilding->SetX(GAP.GetMouseTileX() - (mouseBuilding->GetTileWidth() / 2));
+        mouseBuilding->SetY(GAP.GetMouseTileY() - (mouseBuilding->GetTileHeight() / 2));
         mouseBuilding->RenderOnTooltip();
         SetHighLightCirce(build_weak_ptr(mouseBuilding));
     }
 
     if(mouseHasDraggable){
-        mouseBuilding->setX(GAP.getMouseTileX());
-        mouseBuilding->setY(GAP.getMouseTileY());
+        mouseBuilding->SetX(GAP.GetMouseTileX());
+        mouseBuilding->SetY(GAP.GetMouseTileY());
         mouseBuilding->RenderOnTooltip();
 
         if(draggedPlanted){
-            if(dragEndX != GAP.getMouseTileX() || dragEndY != GAP.getMouseTileY()){
-                dragEndX = GAP.getMouseTileX();
-                dragEndY = GAP.getMouseTileY();
+            if(dragEndX != GAP.GetMouseTileX() || dragEndY != GAP.GetMouseTileY()){
+                dragEndX = GAP.GetMouseTileX();
+                dragEndY = GAP.GetMouseTileY();
                 dragPath = GAP.Pathfinder.FindPath(
                       Coord(dragStartX, dragStartY),
-                      Coord(GAP.getMouseTileX(), GAP.getMouseTileY()),
+                      Coord(GAP.GetMouseTileX(), GAP.GetMouseTileY()),
                       0.0f, 3.0f, false );
             }
 
             for(auto b : dragPath){
-                mouseBuilding->setX(b.x);
-                mouseBuilding->setY(b.y);
+                mouseBuilding->SetX(b.x);
+                mouseBuilding->SetY(b.y);
                 mouseBuilding->RenderOnTooltip();
             }
         }
     }
 
+    if(highLightRadius2 > 0){
+        GAP.TextureManager.DrawHighLightCircle(highLightX, highLightY, highLightRadius2, highLightColor2);
+    }
     if(highLightRadius > 0){
         GAP.TextureManager.DrawHighLightCircle(highLightX, highLightY, highLightRadius, highLightColor);
     }
@@ -151,13 +168,13 @@ void CMenuManager::Render(){
 }
 
 void CMenuManager::SetHighLightCirce(build_weak_ptr ptr){
-
+    highLightRadius = 0;
     if(auto s = ptr.lock()){
-        highLightX = s->getDoor().first;
-        highLightY = s->getDoor().second;
+        highLightX = s->GetDoor().first;
+        highLightY = s->GetDoor().second;
 
         if(s->DistributionRange()){
-            highLightColor = {255, 255, 255, 50};
+            highLightColor = {255, 255, 255, 80};
             highLightRadius = s->DistributionRange();
         }
         if(s->PopRange()){
@@ -171,6 +188,10 @@ void CMenuManager::SetHighLightCirce(build_weak_ptr ptr){
         if(s->ResourceArea()){
             highLightColor = {100, 100, 255, 50};
             highLightRadius = s->ResourceArea();
+        }
+        if(s->TransportRange()){
+            highLightColor2 = {255, 255, 255, 30};
+            highLightRadius2 = s->TransportRange();
         }
     }
 }
@@ -204,8 +225,8 @@ void CMenuManager::HideContextMenus(){
 void CMenuManager::MousePointerBuilding(int type){
 
     GAP.MenuManager.HideBuildingMenus();
-    mouseBuilding = std::make_shared<CBuilding>(type, GAP.getMouseTileX(), GAP.getMouseTileY(), -1);
-    if(GAP.BuildingManager.GetBuildingType(type)->isDraggable()){
+    mouseBuilding = std::make_shared<CBuilding>(type, GAP.GetMouseTileX(), GAP.GetMouseTileY(), -1);
+    if(GAP.BuildingManager.GetBuildingType(type)->IsDraggable()){
         mouseHasDraggable = true;
         draggedPlanted = false;
         return;
@@ -220,6 +241,14 @@ void CMenuManager::MousePointerDemolition(){
 
 void CMenuManager::ShowInfoUnit(unit_weak_ptr ptr){
     InfoMenus.clear();
+    SetHighLightCirce(build_weak_ptr());
+    CInfoMenu infoMenu = CInfoMenu(ptr);
+    InfoMenus.push_back(infoMenu);
+}
+
+void CMenuManager::ShowInfoBuilding(build_weak_ptr ptr){
+    InfoMenus.clear();
+    SetHighLightCirce(ptr);
     CInfoMenu infoMenu = CInfoMenu(ptr);
     InfoMenus.push_back(infoMenu);
 }

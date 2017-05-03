@@ -18,6 +18,7 @@ class CBuildingManager
 
         bool                                Init();
         void                                Update();
+        void                                UpdateConnections();
         build_weak_ptr                      AddBuilding(int type, int x, int y, int owner);
         void                                Render();
         CBuildingType*                      GetBuildingType(int type);

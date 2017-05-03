@@ -26,8 +26,8 @@ void CChunkManager::Init(){
 void CChunkManager::UpdateChunks(){
     int oldChunkX = currentChunkX;
     int oldChunkY = currentChunkY;
-    currentChunkX = GetChunk(GAP.Player->getTileX());
-    currentChunkY = GetChunk(GAP.Player->getTileY());
+    currentChunkX = GetChunk(GAP.Player->GetTileX());
+    currentChunkY = GetChunk(GAP.Player->GetTileY());
 
     if(currentChunkX != oldChunkX || currentChunkY != oldChunkY){
         for(int i = currentChunkY - 1; i <= currentChunkY + 1; i++ ){
@@ -44,14 +44,15 @@ void CChunkManager::UpdateChunks(){
 
 void CChunkManager::RenderTiles(){
 
-    if( abs(lastRenderedX - GAP.Player->getTileX()) > 0 || abs(lastRenderedY - GAP.Player->getTileY()) > 0 ){
+    if( abs(lastRenderedX - GAP.Player->GetTileX()) > 0 || abs(lastRenderedY - GAP.Player->GetTileY()) > 0 ){
         renderedTiles.clear();
-        int showWidth = (int)((CScreen::screen_half_w/ CScreen::tileWidth) / GAP.ZoomLvl()) + 2;
+        int showWidth = (int)((CScreen::screen_half_w/ CScreen::tileWidth) / GAP.ZoomLvl()) + 3;
+        int showHeight = (int)((CScreen::screen_half_h/ CScreen::tileWidth) / GAP.ZoomLvl()) + 4;
         renderedTiles = TilesInTileArea(
-                                            GAP.Player->getTileX() - showWidth,
-                                            GAP.Player->getTileY() - showWidth,
-                                            showWidth * 2,
-                                            showWidth * 2
+                                            GAP.Player->GetTileX() - showWidth,
+                                            GAP.Player->GetTileY() - showHeight,
+                                            (showWidth * 2) + 1,
+                                            (showHeight * 2) + 1
                                                      );
     }
 
@@ -73,8 +74,8 @@ void CChunkManager::RenderObjects(){
     {
         if(auto s = e.lock()){
             s->RenderUnits();
-            if(s->getResource()){
-                tree.Set(s->getX(), s->getY(), s->getResource());
+            if(s->GetResource()){
+                tree.Set(s->GetX(), s->GetY(), s->GetResource(), s->GetVariety());
                 tree.Render();
             }
         }
@@ -145,27 +146,38 @@ void CChunkManager::GenerateChunk(int x, int y){
     CLog::Write(chunkX);
     CLog::Write(chunkY);
 
+    utils::NoiseMapBuilderPlane heightMapBuilder;
+
     utils::NoiseMap heightMap;
     noise::module::Perlin myModule;
     myModule.SetSeed(GAP.GetSeed());
-    utils::NoiseMapBuilderPlane heightMapBuilder;
     heightMapBuilder.SetSourceModule (myModule);
-    heightMapBuilder.SetDestNoiseMap (heightMap);
     heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
+
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
+    heightMapBuilder.SetDestNoiseMap (heightMap);
     heightMapBuilder.Build ();
 
+    utils::NoiseMap heightMapForest;
+    noise::module::Perlin myModuleForest;
+    myModuleForest.SetFrequency (5.0);
+    myModuleForest.SetSeed(GAP.GetSeed());
+    heightMapBuilder.SetSourceModule (myModuleForest);
+    heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX + 220, chunkX + chunkPortion + 220);
+    heightMapBuilder.SetDestNoiseMap (heightMapForest);
+    heightMapBuilder.Build ();
+
+    utils::NoiseMap heightMapStones;
+    noise::module::Perlin myModuleStones;
+    myModuleStones.SetFrequency (3.0);
+    myModuleStones.SetSeed(GAP.GetSeed());
+    heightMapBuilder.SetSourceModule (myModuleStones);
+    heightMapBuilder.SetBounds (chunkY + 220, chunkY + chunkPortion + 220,chunkX, chunkX + chunkPortion);
+    heightMapBuilder.SetDestNoiseMap (heightMapStones);
+    heightMapBuilder.Build ();
 
     Matrix[y][x] = CChunk();
-    Matrix.at(y).at(x).Init(x, y, &heightMap);
-}
-
-int CChunkManager::getX(){
-    return currentChunkX;
-}
-
-int CChunkManager::getY(){
-    return currentChunkY;
+    Matrix.at(y).at(x).Init(x, y, &heightMap, &heightMapForest, &heightMapStones);
 }
 
 std::vector<tile_weak_ptr> CChunkManager::TilesInTileArea(int tileX, int tileY, int tileW, int tileH){
@@ -184,7 +196,7 @@ std::vector<tile_weak_ptr> CChunkManager::GetResources(int resourceType, int res
     std::vector<tile_weak_ptr> resources;
     for(auto e : tiles){
         if(auto s = e.lock()){
-            if(s->getResource() == resourceType){
+            if(s->GetResource() == resourceType){
                 resources.push_back(e);
             }
         }
@@ -193,8 +205,8 @@ std::vector<tile_weak_ptr> CChunkManager::GetResources(int resourceType, int res
         tiles = TilesInTileArea(centerX - resourceRadius, centerY - resourceRadius, (resourceRadius * 2) + 1, (resourceRadius * 2) + 1);
         for(auto e : tiles){
             if(auto s = e.lock()){
-                if(s->getResource() == resourceType){
-                    if(s->getTileFlightRoundDistance(centerX, centerY) <= resourceRadius){
+                if(s->GetResource() == resourceType){
+                    if(s->GetTileFlightRoundDistance(centerX, centerY) <= resourceRadius){
                         resources.push_back(e);
                     }
                 }

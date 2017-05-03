@@ -27,19 +27,6 @@ void CTextureManager::Init(){
     }
 }
 
-bool CTextureManager::LoadTexture(std::string name, std::string path){
-    Textures[name] = CSurface::OnLoad(path.c_str());
-    CLog::Write(name);
-    if (Textures[name]  == NULL){
-        CLog::Write("Could not load texture: ");
-        CLog::Write(name);
-        CLog::Write("\n");
-        return false;
-    }
-
-    return true;
-}
-
 int CTextureManager::LoadTextureGL(std::string name, std::string path){
     TexturesGL[name] = GPU_LoadImage(path.c_str());
     CLog::Write(name);
@@ -107,10 +94,22 @@ GPU_Rect* CTextureManager::GetClip(int frame){
 }
 
 void CTextureManager::DrawHighLightCircle(int tileX, int tileY, int tileRadius, SDL_Color  color){
-    GPU_CircleFilled	(	GAP.MainGLWindow,
+    GPU_CircleFilled	(
+        GAP.MainGLWindow,
         ((tileX * CScreen::tileWidth) - GAP.MainViewport.x)* GAP.ZoomLvl(),
         ((tileY * CScreen::tileWidth) - GAP.MainViewport.y)* GAP.ZoomLvl(),
         ((tileRadius * CScreen::tileWidth))* GAP.ZoomLvl(),
         color
         )	;
+}
+
+void CTextureManager::DrawConnectionLine(int t1X, int t1Y, int t2X, int t2Y, SDL_Color color){
+    GPU_Line	(
+        GAP.MainGLWindow,
+        ((t1X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)* GAP.ZoomLvl(),
+        ((t1Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)* GAP.ZoomLvl(),
+        ((t2X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)* GAP.ZoomLvl(),
+        ((t2Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)* GAP.ZoomLvl(),
+        color
+        );
 }

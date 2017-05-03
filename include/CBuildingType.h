@@ -10,6 +10,7 @@
 #include "SDL2/SDL_gpu.h"
 #include "CScreen.h"
 #include "CAction.h"
+#include "CGood.h"
 
 class CBuildingType
 {
@@ -18,24 +19,26 @@ class CBuildingType
         virtual ~CBuildingType();
 
         void                                LoadLine(std::string key, std::string value);
-        std::vector< std::vector<float> >   GetLayout();
-        int                                 GetW();
-        int                                 GetH();
-        std::string                         GetName();
-        std::string                         GetDescription();
-        GPU_Rect                            GetClip();
-        vec2i                               getDoor();
-        int                                 MaxPop();
-        int                                 WorkerCount();
-        int                                 WorkerPriority();
-        int                                 PopCost();
-        int                                 PopRange();
-        int                                 BuildArea();
-        int                                 ResourceArea();
-        int                                 DistributionRange();
-        int                                 getResource();
-        bool                                isDraggable();
         int                                 GetCost(int type);
+
+        std::vector< std::vector<float> >   GetLayout(){            return Layout;};
+        int                                 GetW(){                 return w;};
+        int                                 GetH(){                 return h;};
+        std::string                         GetName(){              return name;};
+        std::string                         GetDescription(){       return description;};
+        GPU_Rect                            GetClip(){              return clip;};
+        vec2i                               GetDoor(){              return door;};
+        int                                 MaxPop(){               return popMax;};
+        int                                 WorkerCount(){          return workerCount;};
+        int                                 WorkerPriority(){       return workerPriority;};
+        int                                 PopCost(){              return popCost;};
+        int                                 PopRange(){             return popRange;};
+        int                                 BuildArea(){            return buildArea;};
+        int                                 ResourceArea(){         return resourceRadius;};
+        int                                 DistributionRange(){    return distributionRange;};
+        int                                 TransportRange(){       return transportRange;};
+        int                                 GetResource(){          return resource;};
+        bool                                IsDraggable(){          return draggable;};
     protected:
 
     private:
@@ -55,6 +58,7 @@ class CBuildingType
         int                                     resourceRadius;
         int                                     buildArea;
         int                                     distributionRange;
+        int                                     transportRange;
 
         int                                     popMax;
         int                                     popCost;

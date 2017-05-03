@@ -7,10 +7,6 @@ void CGame::OnEvent(SDL_Event* event){
     CEvent::OnEvent(event);
 }
 
-SDL_Renderer* CGame::getRenderer(){
-    return TheScreenRen;
-}
-
 void CGame::OnRenderGL(){
     GPU_Clear(MainGLWindow);
 
@@ -31,10 +27,10 @@ void CGame::ShowDebugInfo(){
 
 
     std::stringstream tmp;
-    tmp << "PlayerX: " << Player->getX() << " PlayerY: " << Player->getY();
+    tmp << "PlayerX: " << Player->GetX() << " PlayerY: " << Player->GetY();
     DisplayText(tmp.str().c_str(), 0);
     tmp.str(std::string());
-    tmp << "ChunkX: " << ChunkManager.getX() << " ChunkY: " << ChunkManager.getY();
+    tmp << "ChunkX: " << ChunkManager.GetX() << " ChunkY: " << ChunkManager.GetY();
     DisplayText(tmp.str().c_str(), 15);
     tmp.str(std::string());
     tmp << "Zoom: " << zoom;
@@ -52,7 +48,7 @@ void CGame::ShowDebugInfo(){
     tmp << "Tick: " << tick;
     DisplayText(tmp.str().c_str(), 90);
     tmp.str(std::string());
-    tmp << "Player TileX: " << Player->getTileX() << " Player TileY: " << Player->getTileY();
+    tmp << "Player TileX: " << Player->GetTileX() << " Player TileY: " << Player->GetTileY();
     DisplayText(tmp.str().c_str(), 105);
     tmp.str(std::string());
     tmp << "Mouse Tile X: " << mouseTileX << "     Y: " << mouseTileY;
@@ -86,29 +82,18 @@ void CGame::OnProcessTick(){
 
 
     ChunkManager.UpdateChunks();
-    BuildingManager.Update();
+    if((tick%60) == 0){
+        BuildingManager.Update();
+    }
     UnitManager.Update();
     tick++;
 }
 
-float CGame::ZoomLvl(){
-
-    return zoom;
-}
-
-int CGame::getMouseTileX(){
-    return mouseTileX;
-}
-
-int CGame::getMouseTileY(){
-    return mouseTileY;
-}
-
-int CGame::tileToPixel(int tile){
+int CGame::TileToPixel(int tile){
     return CScreen::tileWidth * tile;
 }
 
-int CGame::pixelToTile(int pixel){
+int CGame::PixelToTile(int pixel){
     return pixel / CScreen::tileWidth;
 }
 
@@ -126,10 +111,6 @@ int CGame::TranslateYWtoS(int y){
 
 int CGame::TranslateYStoW(int y){
     return (y / zoom ) + MainViewport.y;
-}
-
-Uint32 CGame::getTick(){
-    return tick;
 }
 
 void CGame::SetViewPort(float x, float y){
@@ -235,8 +216,8 @@ bool CGame::OnRButtonDown(int x, int y){
 
 void CGame::UpdatePlayerPosition(){
     if(!Player->GetBusyTime() || Player->IsIdle()){
-        int tx = Player->getTileX();
-        int ty = Player->getTileY();
+        int tx = Player->GetTileX();
+        int ty = Player->GetTileY();
         const Uint8 *keystate = SDL_GetKeyboardState(NULL);
         if (keystate[SDL_SCANCODE_LEFT] ) {
             tx--;
@@ -262,14 +243,14 @@ void CGame::UpdatePlayerPosition(){
         if (keystate[SDL_SCANCODE_S] ) {
             ty++;
         }
-        if( tx != Player->getTileX() || ty != Player->getTileY()){
+        if( tx != Player->GetTileX() || ty != Player->GetTileY()){
             Player->ClearActions();
             Player->AddAction(CAction(CAction::moveTile, tx, ty));
         }
     }
 
     SetViewPort(
-        Player->getX() - (CScreen::screen_half_w / ZoomLvl()) + (Player->getW() / 2),
-        Player->getY() - (CScreen::screen_half_h / ZoomLvl()) +  (Player->getH() / 2));
+        Player->GetX() - (CScreen::screen_half_w / ZoomLvl()) + (Player->GetW() / 2),
+        Player->GetY() - (CScreen::screen_half_h / ZoomLvl()) +  (Player->GetH() / 2));
 }
 

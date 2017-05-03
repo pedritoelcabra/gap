@@ -25,19 +25,9 @@ class CBuilding : public CGUIObject
         void                Update();
         bool                Render();
         bool                RenderOnTooltip();
-        int                 setX(int x);
-        int                 setY(int y);
-        int                 getType();
-        bool                isInBlockedLocation();
-        vec2i               getDoor();
-        int                 PopRange();
-        int                 MaxPop();
-        int                 BuildArea();
-        int                 DistributionRange();
-        int                 ResourceArea();
-        int                 getResource();
-        int                 GetTileWidth();
-        int                 GetTileHeight();
+        int                 SetX(int x);
+        int                 SetY(int y);
+        bool                IsInBlockedLocation();
         void                AddWorker(unit_weak_ptr ptr);
         void                GenerateInhabitant();
         void                RemoveWorker(int id);
@@ -46,12 +36,34 @@ class CBuilding : public CGUIObject
         bool                InRadius(int x, int y);
         bool                HasEnoughWorkers();
         void                Destroy();
-        int                 UnderConstruction();
         bool                AddWork(int amount);
         void                AddConnection(build_weak_ptr ptr);
+        void                AddConnections(std::vector<build_weak_ptr> connections);
         void                RemoveConnection(int id);
-        std::string         GetName();
-        std::string         GetDescription();
+        void                ClearConnections();
+        void                AddToInventory(int resource, int amount);
+        int                 TakeFromInventory(int resource, int amount);
+        void                ApplyMovementCosts();
+
+        std::map<int, int>              GetInventory(){                         return Inventory;};
+        std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
+        std::vector<unit_weak_ptr>      GetInhabitants(){                       return Inhabitants;};
+        std::vector<unit_weak_ptr>      GetWorkers(){                           return Workers;};
+        int                             GetResource(){                          return typePtr->GetResource();};
+        int                             GetTileWidth(){                         return GetW() / CScreen::tileWidth;};
+        int                             GetTileHeight(){                        return GetH() / CScreen::tileWidth;};
+        int                             PopRange(){                             return typePtr->PopRange(); };
+        int                             MaxPop(){                               return typePtr->MaxPop(); };
+        int                             MaxWorkers(){                           return typePtr->WorkerCount(); };
+        int                             BuildArea(){                            return typePtr->BuildArea(); };
+        int                             DistributionRange(){                    return typePtr->DistributionRange(); };
+        int                             TransportRange(){                       return typePtr->TransportRange(); };
+        int                             ResourceArea(){                         return typePtr->ResourceArea(); };
+        vec2i                           GetDoor(){                              return door; };
+        int                             GetType(){                              return type;};
+        int                             UnderConstruction(){                    return workToComplete;};
+        std::string                     GetName(){                              return typePtr->GetName();};
+        std::string                     GetDescription(){                       return typePtr->GetDescription();};
     protected:
 
     private:
@@ -68,7 +80,7 @@ class CBuilding : public CGUIObject
 
         std::vector<unit_weak_ptr>      Workers;
         std::vector<unit_weak_ptr>      Inhabitants;
-        std::vector<int>                Inventory;
+        std::map<int, int>              Inventory;
         std::vector<build_weak_ptr>     ConnectedBuildings;
         build_weak_ptr                  myPtr;
 

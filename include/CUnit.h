@@ -27,16 +27,10 @@ class CUnit : public CGUIObject
         virtual ~CUnit();
 
         bool                Render();
-        void                setAnimation(std::string);
+        void                SetAnimation(std::string);
         void                Update();
-        std::string         getName() const;
-        void                setFacing(int direction);
-        void                setMoving(bool);
-        void                setId(int id_, std::weak_ptr<CUnit> myPtr_);
-        std::weak_ptr<CUnit>       GetPtr();
 
         bool                IsIdle();
-        int                 GetBusyTime();
 
         void                AddAction(CAction action_);
         void                ClearActions();
@@ -47,24 +41,45 @@ class CUnit : public CGUIObject
         bool                MoveToAdyacent(int x_, int y_);
         void                StopMovement();
         void                Idle(int time);
-        float               getMoveSpeed();
-        float               GetMinCollision();
-        float               GetMaxCollision();
+        void                UpdateAssignment();
+        void                GatherResource(int resource);
+        void                Destroy();
+        void                CarryItem(int resource);
+        int                 GetCarriedItem(bool takeIt = false);
+
+        float               GetMinCollision(){          return minCollision;};
+        float               GetMaxCollision(){          return maxCollision;};
+        build_weak_ptr      GetHome(){                  return homeBuildingPtr;};
+        build_weak_ptr      GetWorkplace(){             return workBuildingPtr;};
+        int                 GetAssignment() {           return assignment; };
+        int                 GetBusyTime(){              return busyTime; };
+        std::weak_ptr<CUnit>GetPtr(){                   return myPtr;};
+        std::string         GetName() const{            return name;};
+        std::string         GetThought() const{         return thought;};
+        std::string         GetAssignmentName() const;
+        float               GetMoveSpeed();
 
         void                SetIdleAssignment();
         void                SetFollowAssignment(unit_weak_ptr ptr);
         void                SetGatherAssignment(build_weak_ptr ptr);
         void                SetBuildAssignment(build_weak_ptr ptr);
-        void                UpdateAssignment();
-        int                 getAssignment();
-        void                GatherResource(int resource);
-        void                DropBackpack();
         void                SetHome(build_weak_ptr ptr);
+        void                SetFacing(int direction);
+        void                SetMoving(bool);
+        void                SetId(int id_, std::weak_ptr<CUnit> myPtr_);
 
-        void                Destroy();
 
     protected:
+
+        int                 SetFrameCount();
+        int                 SetFrameOffset();
+        int                 SetFrameSpeed();
+        int                 BaseOffset();
+        int                 FrameSpeed();
+        void                ResetFrames();
+
         std::string         name;
+        std::string         thought;
         unit_weak_ptr       myPtr;
         int                 currentAnimation;
         Uint32              currentFrame;
@@ -81,13 +96,6 @@ class CUnit : public CGUIObject
         int                 baseSpeed;
         int                 xoff;
         int                 yoff;
-
-        int                 setFrameCount();
-        int                 setFrameOffset();
-        int                 setFrameSpeed();
-        int                 baseOffset();
-        int                 frameSpeed();
-        void                resetFrames();
 
         int                 busyTime;
         bool                isIdle;
@@ -110,7 +118,8 @@ class CUnit : public CGUIObject
         CAction             currentAction;
 
         std::vector<CAction>    ActionQueue;
-        std::vector<int>        BackPack;
+        std::map<int, int>      Inventory;
+        int                     carriedItem;
 
         static const int        resourceRadius = 20;
 };
