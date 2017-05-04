@@ -2,23 +2,9 @@
 #include "CScreen.h"
 
 CBuildingType::CBuildingType(){
-    w = -1;
-    h = -1;
-    draggable = false;
-    connects = false;
-    resource = 0;
-    popMax = 0;
-    popCost = 0;
-    popRange = 0;
-    workerCount = 0;
-    buildArea = 0;
-    resourceRadius = 0;
-    distributionRange = 0;
-    //ctor
 }
 
 CBuildingType::~CBuildingType(){
-    //dtor
 }
 
 void CBuildingType::LoadLine(std::string key, std::string value){
