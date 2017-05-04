@@ -41,9 +41,10 @@ class CBuilding : public CGUIObject
         void                AddConnections(std::vector<build_weak_ptr> connections);
         void                RemoveConnection(int id);
         void                ClearConnections();
-        void                AddToInventory(int resource, int amount);
+        int                 AddToInventory(int resource, int amount);
         int                 TakeFromInventory(int resource, int amount);
         void                ApplyMovementCosts();
+        int                 GetMaxStorage(int resource);
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
