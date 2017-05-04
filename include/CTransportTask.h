@@ -30,6 +30,7 @@ class CTransportTask
         unit_weak_ptr       GetPorter() { return porter ;};
         void                SetId(int id_) { id = id_;};
         int                 GetId(){ return id;};
+        int                 GetResource(){ return resource;};
 
     private:
         
