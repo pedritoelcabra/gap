@@ -13,8 +13,8 @@ typedef std::weak_ptr<CUnit> unit_weak_ptr;
 class CUnitManager
 {
     public:
-        CUnitManager();
-        virtual ~CUnitManager();
+        CUnitManager(){};
+        virtual ~CUnitManager(){};
 
         std::vector<unit_weak_ptr>*         Render();
         void                                Update();
@@ -28,7 +28,7 @@ class CUnitManager
     protected:
     private:
         std::vector<unit_shared_ptr>        NPCS;
-        int                                 unitCount;
+        int                                 unitCount = 0;
         std::vector<unit_weak_ptr>          renderedUnits;
 };
 
