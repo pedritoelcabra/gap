@@ -314,24 +314,44 @@ int CBuilding::GetMaxStorage(int resource_){
     return 0;
 }
 
+int CBuilding::GetResourcePrio(int resource_){
+    if(typePtr->GetStorage()){
+        return 1;
+    }
+    if(workToComplete && typePtr->BuildCost(resource_)){
+        return 10;
+    }
+    return -1;
+}
+
 build_weak_ptr CBuilding::FindNearestStorage(int resource_){
     build_weak_ptr storage;
+    int prioBest = 0;
+    int prioHere = 0;
     int distBest = 999;
     int distHere = 0;
     for(auto w : ConnectedBuildings){
         if(auto s = w.lock()){
             if( s->GetMaxStorage(int resource_) ){
-                distHere = GAP.Pathfinder.FindPath(
-                        Coord( DoorX(), DoorY() ),
-                        Coord( s->DoorX(), s->DoorY() ),
-                        0.0f, 2.0f
-                );
-                if(distHere < distBest){
-                    storage = w;
-                    distBest = distHere;
+                prioHere = GetResourcePrio(resource_);
+                if( prioHere >= prioBest){
+                    if( prioHere > prioBest){
+                        distBest = 999;
+                        prioBest = prioHere;
+                    }
+                    distHere = GAP.Pathfinder.FindPath(
+                            Coord( DoorX(), DoorY() ),
+                            Coord( s->DoorX(), s->DoorY() ),
+                            0.0f, 2.0f
+                    );
+                    if(distHere < distBest){
+                        storage = w;
+                        distBest = distHere;
+                    }
                 }
             }
         }
     }
+    return storage;
 }
 
