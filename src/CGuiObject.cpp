@@ -5,12 +5,9 @@
 
 extern CGame GAP;
 
-CGUIObject::CGUIObject(int x, int y){
-    this->x = x;
-    this->y = y;
-    box.x = this->x;
-    box.y = this->y;
-    z = rand() % 1000;
+CGUIObject::CGUIObject(int x_, int y_){
+    box.x = x = x_;
+    box.y = y = y_;
 }
 
 bool CGUIObject::FindCollision(int x, int y){
