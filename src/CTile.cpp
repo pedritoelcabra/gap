@@ -3,13 +3,6 @@
 
 extern CGame GAP;
 
-CTile::CTile(){
-}
-
-CTile::~CTile(){
-    //dtor
-}
-
 void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, int resourceVariety_){
     x = tx * tileWidth;
     y = ty * tileWidth;
