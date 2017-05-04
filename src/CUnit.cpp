@@ -484,8 +484,12 @@ void CUnit::UpdateAssignment(){
         }
         if(GetCarriedItem()){
             if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
-                workBuildingPtrS->AddToInventory(GetCarriedItem(true), 1);
-                thought = "Dropping off goods.";
+                if(workBuildingPtrS->AddToInventory(GetCarriedItem(), 1) == 0){
+                    GetCarriedItem(true), 1;
+                    thought = "Dropped off goods.";
+                    return;
+                }
+                thought = "Can't drop off goods at home!";
                 return;
             }
             MoveTo(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
