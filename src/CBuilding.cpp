@@ -101,6 +101,22 @@ void CBuilding::GenerateInhabitant(){
     Inhabitants.push_back(iw);
 }
 
+void CBuilding::AddIncoming(task_weak_ptr ptr){
+    Incoming.push_back(ptr);
+}
+
+void CBuilding::RemoveIncoming(int id){
+
+}
+
+void CBuilding::AddOutgoing(task_weak_ptr ptr){
+    Outgoing.push_back(ptr);
+}
+
+void CBuilding::RemoveOutgoing(int id){
+
+}
+
 void CBuilding::AddWorker(unit_weak_ptr ptr){
     Workers.push_back(ptr);
 }
