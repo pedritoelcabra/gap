@@ -8,18 +8,11 @@
 
 extern CGame GAP;
 
-CChunkManager::CChunkManager(){
-    lastRenderedX = -999999;
-    lastRenderedY = -999999;
-}
-
-CChunkManager::~CChunkManager(){
-    //dtor
-}
-
 void CChunkManager::Init(){
     currentChunkX = 999999;
     currentChunkY = 999999;
+    lastRenderedX = 999999;
+    lastRenderedY = 999999;
     UpdateChunks();
 }
 
