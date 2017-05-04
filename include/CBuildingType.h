@@ -38,6 +38,7 @@ class CBuildingType
         int                                 DistributionRange(){    return distributionRange;};
         int                                 TransportRange(){       return transportRange;};
         int                                 GetResource(){          return resource;};
+        int                                 GetStorage(){           return maxStorage;};
         bool                                IsDraggable(){          return draggable;};
     protected:
 
@@ -65,6 +66,7 @@ class CBuildingType
         int                                     popRange = 0;
         int                                     workerCount = 0;
         int                                     workerPriority = 0;
+        int                                     maxStorage = 0;
 
         void            LoadCosts(std::string value);
         void            LoadLayout(std::string value);
