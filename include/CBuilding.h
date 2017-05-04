@@ -17,9 +17,9 @@ typedef std::weak_ptr<CBuilding> build_weak_ptr;
 class CBuilding : public CGUIObject
 {
     public:
-        CBuilding();
+        CBuilding(){};
         CBuilding(int type, int x, int y, int owner);
-        virtual ~CBuilding();
+        virtual ~CBuilding(){};
 
         void                SetId(int id_, build_weak_ptr ptr);
         void                Update();
@@ -67,7 +67,7 @@ class CBuilding : public CGUIObject
     protected:
 
     private:
-        bool                isBeingDestroyed;
+        bool                isBeingDestroyed = false;
 
         int                 owner = 0;
         int                 type;
