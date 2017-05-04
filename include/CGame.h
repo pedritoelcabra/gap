@@ -47,6 +47,7 @@ public:
     CMenuManager        MenuManager;
     CUnitManager        UnitManager;
     CBuildingManager    BuildingManager;
+    CTaskManager        TaskManager;
     CPathfinder         Pathfinder;
 
 
