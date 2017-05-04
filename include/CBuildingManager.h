@@ -13,8 +13,8 @@ typedef std::weak_ptr<CBuilding> build_weak_ptr;
 class CBuildingManager
 {
     public:
-        CBuildingManager();
-        virtual ~CBuildingManager();
+        CBuildingManager(){};
+        virtual ~CBuildingManager(){};
 
         bool                                Init();
         void                                Update();
