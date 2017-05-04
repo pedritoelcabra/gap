@@ -24,7 +24,7 @@ class CTransportTask
         virtual ~CTransportTask(){};
         
         void                AssignPorter(unit_weak_ptr porter_){ porter = porter_; };
-        bool                PorterIsAlive() { return(auto s = porter.lock() ); }
+        bool                PorterIsAlive() { return(auto s = porter.lock() ); };
         build_weak_ptr      GetPickUp() { return pickUp ;};
         build_weak_ptr      GetDropOff() { return dropOff ;};
         unit_weak_ptr       GetPorter() { return porter ;};
