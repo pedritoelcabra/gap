@@ -6,21 +6,13 @@ CGame GAP;
 
 
 CGame::CGame(){
-    running = true;
-    paused = false;
     seed =  time(0);
 }
 
 int CGame::OnExecute(){
 
-    tick = 0;
     Uint32 thisFrame = SDL_GetTicks();
     Uint32 frameTime = 0;
-    frameCount = 0;
-    framesUntilLastSecond = 0;
-    currentSecond = 0;
-    fps = 0;
-
 
     if (OnInit() == false) {
         return -1;
