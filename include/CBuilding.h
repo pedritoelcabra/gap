@@ -69,13 +69,13 @@ class CBuilding : public CGUIObject
     private:
         bool                isBeingDestroyed;
 
-        int                 owner;
+        int                 owner = 0;
         int                 type;
-        int                 popProgress;
+        int                 popProgress = 0;;
         vec2i               door;
         CBuildingType*      typePtr;
         GPU_Rect            clip;
-        int                 workToComplete;
+        int                 workToComplete = 0;
 
 
         std::vector<unit_weak_ptr>      Workers;
