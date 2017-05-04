@@ -4,44 +4,27 @@
 extern CGame GAP;
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
 
-CUnit::CUnit(int x, int y, std::string myName){
-    this->tileX = x;
-    this->x = x * CScreen::tileWidth ;
-    this->tileY = y;
-    this->y = y * CScreen::tileWidth ;
-    z = 1000 + (rand() % 1000);
-    z = 1000 + (rand() % 1000);
+CUnit::CUnit(int x_, int y_, std::string myName){
+    tileX = x_;
+    x = x_ * CScreen::tileWidth ;
+    tileY = y_;
+    y = y_ * CScreen::tileWidth ;
     xoff = - ((CScreen::unitWidth - CScreen::tileWidth) / 2);
     yoff = - (CScreen::unitWidth / 2);
     name = myName;
     box.h = CScreen::unitWidth;
     box.w = CScreen::unitWidth;
-    moveSpeed = baseSpeed = 16;
-    currentFrame = 0;
-    currentFrameStarted = 0;
-    facing = 2;
-    moveDirection = 4;
-    currentAnimation = 7;
-    moving = false;
-    busyTime = 0;
-    minCollision = 0.0f;
-    maxCollision = 3.0f;
     assignment = CAction::idleAssignment;
     for(auto p : CGood::GetResources() ){
         Inventory[p.first] = 0;
     }
-    carriedItem = 0;
     this->ResetFrames();
-}
-
-CUnit::~CUnit(){
-    //dtor
 }
 
 bool CUnit::Render(){
 
-    box.x = this->x + xoff;
-    box.y = this->y + yoff;
+    box.x = x + xoff;
+    box.y = y + yoff;
     if(currentFrameStarted + currentFrameSpeed < GAP.GetTick() ){
         currentFrameStarted = GAP.GetTick();
         currentFrame++;
