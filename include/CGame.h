@@ -25,6 +25,7 @@
 #include "CMenuManager.h"
 #include "CUnitManager.h"
 #include "CBuildingManager.h"
+#include "CTaskManager.h"
 #include "CPathfinder.h"
 #include "CTree.h"
 
