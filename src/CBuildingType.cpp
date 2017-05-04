@@ -151,3 +151,11 @@ int CBuildingType::GetCost(int type){
     return 0;
 }
 
+
+int CBuildingType::BuildCost(int res_){    
+    if(BuildCosts.count(res_)){
+	return BuildCosts.at(res_);
+    }
+    return 0;
+};
+
