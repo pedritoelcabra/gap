@@ -24,7 +24,6 @@ CBuilding::CBuilding(int type, int x, int y, int owner){
     }
     box.x = this->x;
     box.y = this->y;
-    popProgress = 0;
     door = typePtr->GetDoor();
     door.first += tileX;
     door.second += tileY;
@@ -32,7 +31,6 @@ CBuilding::CBuilding(int type, int x, int y, int owner){
     for(auto p : CGood::GetResources() ){
         Inventory[p.first] = 0;
     }
-    //ctor
 }
 
 CBuilding::~CBuilding(){
