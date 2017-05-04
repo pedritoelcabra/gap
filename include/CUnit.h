@@ -24,7 +24,7 @@ class CUnit : public CGUIObject
 
         CUnit(){};
         CUnit(int x, int y, std::string name) ;
-        virtual ~CUnit();
+        virtual ~CUnit(){};
 
         bool                Render();
         void                SetAnimation(std::string);
@@ -81,26 +81,26 @@ class CUnit : public CGUIObject
         std::string         name;
         std::string         thought;
         unit_weak_ptr       myPtr;
-        int                 currentAnimation;
-        Uint32              currentFrame;
+        int                 currentAnimation = 7;
+        Uint32              currentFrame = 0;
         Uint32              currentFrameSpeed;
-        Uint32              currentFrameStarted;
+        Uint32              currentFrameStarted = 0;
         Uint32              frameCount;
         Uint32              frameOffset;
-        int                 facing;
-        int                 moveDirection;
-        bool                moving;
-        Uint32              moveSpeed;
+        int                 facing = 2;
+        int                 moveDirection = 4;
+        bool                moving = false;
+        int                 baseSpeed = 16;
+        Uint32              moveSpeed = baseSpeed;
         float               currentSpeed;
         float               carryOverPixels;
-        int                 baseSpeed;
         int                 xoff;
         int                 yoff;
 
-        int                 busyTime;
+        int                 busyTime = 0;
         bool                isIdle;
-        float               minCollision;
-        float               maxCollision;
+        float               minCollision = 0.0f;
+        float               maxCollision = 3.0f;
 
         int                 assignment;
 
@@ -119,7 +119,7 @@ class CUnit : public CGUIObject
 
         std::vector<CAction>    ActionQueue;
         std::map<int, int>      Inventory;
-        int                     carriedItem;
+        int                     carriedItem = 0;
 
         static const int        resourceRadius = 20;
 };
