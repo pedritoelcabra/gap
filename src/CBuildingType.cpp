@@ -17,6 +17,10 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		resource = std::stoi(value);
 		return;
 	}
+	if(!key.compare("maxStorage")){
+		maxStorage = std::stoi(value);
+		return;
+	}
 	if(!key.compare("populationMax")){
 		popMax = std::stoi(value);
 		return;
