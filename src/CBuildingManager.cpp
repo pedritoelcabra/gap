@@ -3,12 +3,6 @@
 
 extern CGame GAP;
 
-CBuildingManager::CBuildingManager(){
-}
-
-CBuildingManager::~CBuildingManager(){
-}
-
 bool CBuildingManager::Init(){
     CLog::Write("Loading Buildings");
     DIR* dir = opendir("defines/buildings");
