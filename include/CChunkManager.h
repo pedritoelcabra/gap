@@ -14,8 +14,8 @@ typedef std::unordered_map<int, std::unordered_map<int, CChunk>> matrix_type;
 class CChunkManager
 {
     public:
-        CChunkManager();
-        virtual ~CChunkManager();
+        CChunkManager(){};
+        virtual ~CChunkManager(){};
 
         void                        UpdateChunks();
         void                        RenderTiles();
