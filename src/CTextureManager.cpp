@@ -3,16 +3,6 @@
 
 extern CGame GAP;
 
-CTextureManager::CTextureManager()
-{
-    textureCount = 0;
-}
-
-CTextureManager::~CTextureManager()
-{
-    //dtor
-}
-
 void CTextureManager::Init(){
 
     int v = 0;
