@@ -180,10 +180,7 @@ void CBuildingManager::UpdateConnections(){
     for(auto e : Buildings){
         if(e->DistributionRange() > 0){
             for(auto f : Buildings){
-                if(!f->MaxPop() && !f->MaxWorkers()){
-                    continue;
-                }
-                if(f->DistributionRange() == 0){
+                if(f->DistributionRange() == 0 && !f->IsRoad()){
                     if(e->GetTileFlightRoundDistance(f->GetTileX(), f->GetTileY()) <= e->DistributionRange()){
                         e->AddConnection(build_weak_ptr(f));
                     }

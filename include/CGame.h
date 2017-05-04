@@ -17,7 +17,6 @@
 #include "CEvent.h"
 #include "CLog.h"
 #include "CScreen.h"
-#include "CSurface.h"
 #include "CGuiObject.h"
 #include "CCharacter.h"
 #include "CTextureManager.h"

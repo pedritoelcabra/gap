@@ -7,15 +7,18 @@
 #include <CBuilding.h>
 #include <CGood.h>
 #include "CTile.h"
+#include "CTransportTask.h"
 
 class CUnit;
 class CBuilding;
 class CTile;
+class CTransportTask;
 
 
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
 typedef std::weak_ptr<CBuilding> build_weak_ptr;
 typedef std::weak_ptr<CTile> tile_weak_ptr;
+typedef std::weak_ptr<CTransportTask> task_weak_ptr;
 
 class CUnit : public CGUIObject
 {
@@ -114,6 +117,7 @@ class CUnit : public CGUIObject
         build_weak_ptr      homeBuildingPtr;
         build_weak_ptr      workBuildingPtr;
         tile_weak_ptr       resourceTilePtr;
+        task_weak_ptr       taskPtr;
 
         CAction             currentAction;
 

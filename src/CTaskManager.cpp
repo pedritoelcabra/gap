@@ -20,3 +20,14 @@ void CTaskManager::DestroyTask(int id){
         iter++;
     }
 }
+
+void CTaskManager::Update(){
+    std::vector<task_shared_ptr>::iterator iter = Tasks.begin();
+    while (iter != Tasks.end()){
+        if((*iter)->GetCompleted()){
+            Tasks.erase(iter);
+        }else{
+            iter++;
+        }
+    }
+}

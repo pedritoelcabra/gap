@@ -48,6 +48,7 @@ bool CMenuManager::HandleLClick(int x, int y){
     if(mouseHasDraggable){
         if(draggedPlanted){
             if(dragPath.size()){
+                GAP.BuildingManager.AddBuilding(mouseBuilding->GetType(),dragStartX,dragStartY,1);
                 for(auto b : dragPath){
                     GAP.BuildingManager.AddBuilding(mouseBuilding->GetType(),b.x,b.y,1);
                     dragStartX = dragEndX;

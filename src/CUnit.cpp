@@ -333,12 +333,12 @@ bool CUnit::MoveToAdyacent(int x_, int y_){
         return false;
     }
     moveSpeed = baseSpeed;
-    if(moveCost < 2.0f){
-        moveSpeed = 11;
-    }
-    if(moveCost < 1.0f){
-        moveSpeed = 8;
-    }
+//    if(moveCost < 2.0f){
+//        moveSpeed = 14;
+//    }
+//    if(moveCost < 1.0f){
+//        moveSpeed = 10;
+//    }
     SetMoving(true);
     SetFacing(GetTileDirection(x_, y_));
     GAP.ChunkManager.MoveUnit(tileX, tileY, x_, y_, myPtr, id);
@@ -407,6 +407,7 @@ void CUnit::Idle(int time){
 void CUnit::SetIdleAssignment(){
     ClearActions();
     assignment = CAction::idleAssignment;
+    maxCollision = 2.0f;
     UpdateAssignment();
 }
 
@@ -416,6 +417,7 @@ void CUnit::SetFollowAssignment(unit_weak_ptr targetPtr_){
         targetUnitPtr = targetPtr_;
         assignment = CAction::followUnit;
     }
+    maxCollision = 3.0f;
     UpdateAssignment();
 }
 
@@ -426,6 +428,7 @@ void CUnit::SetGatherAssignment(build_weak_ptr targetPtr_){
         resourceTilePtr.reset();
         assignment = CAction::gatherResources;
     }
+    maxCollision = 3.0f;
     UpdateAssignment();
 }
 
@@ -436,6 +439,7 @@ void CUnit::SetBuildAssignment(build_weak_ptr targetPtr_){
         targetBuildingPtr.reset();
         assignment = CAction::builderAssignment;
     }
+    maxCollision = 2.0f;
     UpdateAssignment();
 }
 
@@ -445,6 +449,53 @@ void CUnit::UpdateAssignment(){
     switch(assignment){
     case CAction::idleAssignment:
         if(auto s = homeBuildingPtr.lock()){
+            if(auto taskPtrS = taskPtr.lock()){
+                if(GetCarriedItem()){
+                    if(auto destS = taskPtrS->GetDropOff().lock()){
+                        if(destS->DoorX() == tileX && destS->DoorY() == tileY){
+                            if(destS->AddToInventory(GetCarriedItem(), 1) == 0){
+                                GetCarriedItem(true);
+                                taskPtrS->MarkComplete();
+                                taskPtr.reset();
+                                thought = "Dropped off goods.";
+                                return;
+                            }
+                            thought = "Can't drop off goods at task destination!";
+                            return;
+                        }
+                        MoveTo(destS->DoorX(), destS->DoorY());
+                        thought = "Going to drop off goods.";
+                        return;
+                    }
+                    Idle(60);
+                    thought =  "My task has no destination";
+                    return;
+                }
+                if(auto destS = taskPtrS->GetPickUp().lock()){
+                    if(destS->DoorX() == tileX && destS->DoorY() == tileY){
+                        if(destS->TakeFromInventory(taskPtrS->GetResource(), 1) == 1){
+                            CarryItem(taskPtrS->GetResource());
+                            thought = "Picked up goods.";
+                            return;
+                        }
+                        thought = "Can't pick up goods!";
+                        return;
+                    }
+                    MoveTo(destS->DoorX(), destS->DoorY());
+                    thought = "Going to pick up goods.";
+                    return;
+                }
+                Idle(60);
+                thought =  "My task has no destination";
+                return;
+            }
+            taskPtr = s->FindConnectedTask(myPtr);
+            if(auto taskPtrS = taskPtr.lock()){
+                taskPtrS->AssignPorter(myPtr);
+                thought =  "Found a task";
+                Idle(1);
+                return;
+            }
             if(s->GetDoor().first == tileX && s->GetDoor().second == tileY){
                 Idle(600);
                 thought =  "Idling at home.";
@@ -485,7 +536,7 @@ void CUnit::UpdateAssignment(){
         if(GetCarriedItem()){
             if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
                 if(workBuildingPtrS->AddToInventory(GetCarriedItem(), 1) == 0){
-                    GetCarriedItem(true), 1;
+                    GetCarriedItem(true);
                     thought = "Dropped off goods.";
                     return;
                 }

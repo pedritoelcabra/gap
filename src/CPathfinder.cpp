@@ -131,6 +131,9 @@ CoordList CPathfinder::FindPath(Coord source_, Coord target_, float minv_, float
                 }
         	}
     	}
+        if (!(current->coords == target_)) {
+            return path;
+        }
 
     	while (current != nullptr) {
         	path.push_back(current->coords);

@@ -1,5 +1,6 @@
 #include "CBuilding.h"
 #include "CGame.h"
+#include "CTaskManager.h"
 
 extern CGame GAP;
 
@@ -83,11 +84,29 @@ bool CBuilding::IsInBlockedLocation(){
 }
 
 void CBuilding::Update(){
+    if(workToComplete){
+        return;
+    }
     if(typePtr->MaxPop() > static_cast<int>(Inhabitants.size())){
         popProgress++;
         if(popProgress >= typePtr->PopCost()){
             popProgress = 0;
             GenerateInhabitant();
+        }
+    }
+    int outgoinTasks;
+    for (auto const& item : Inventory){
+        outgoinTasks = OutgoingByResource(item.first);
+        while(item.second > outgoinTasks){
+            build_weak_ptr w = FindNearestStorage(item.first);
+            if(auto s = w.lock()){
+                task_shared_ptr ts = std::make_shared<CTransportTask>(myPtr, w, item.first);
+                task_weak_ptr tw = task_weak_ptr(ts);
+                GAP.TaskManager.AddTask(ts);
+                s->AddIncoming(tw);
+                AddOutgoing(tw);
+            }
+            outgoinTasks++;
         }
     }
 }
@@ -98,6 +117,7 @@ void CBuilding::GenerateInhabitant(){
 
     GAP.UnitManager.AddNPC(is);
     is->SetHome(myPtr);
+    is->SetIdleAssignment();
     Inhabitants.push_back(iw);
 }
 
@@ -281,7 +301,7 @@ void CBuilding::ApplyMovementCosts(){
     auto layout = typePtr->GetLayout();
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
-            if(layout.at(i).at(k) < CScreen::flatMoveCost && workToComplete > 0){
+            if(typePtr->IsRoad() && workToComplete > 0){
                 continue;
             }
             GAP.Pathfinder.SetCost(tileX + k, tileY + i, layout.at(i).at(k));
@@ -291,22 +311,16 @@ void CBuilding::ApplyMovementCosts(){
 
 int CBuilding::GetMaxStorage(int resource_){
     if(typePtr->GetStorage()){
-        return 999;
+        return typePtr->GetStorage();
     }
     int availableStorage = 0;
     if(workToComplete){
         availableStorage = typePtr->BuildCost(resource_);
-    }else if(resource == resource_){
+    }else if(GetResource() == resource_){
         availableStorage = 10;
     }
     if(availableStorage){
-        for(auto w : Incoming)    {
-            if(auto s = w.lock()){
-                if(s->GetResource() == resource_){
-                    availableStorage--;
-                }
-            }
-        }
+        availableStorage -= IncomingByResource(resource_);
     }
     if(availableStorage > 0){
         return availableStorage;
@@ -326,14 +340,14 @@ int CBuilding::GetResourcePrio(int resource_){
 
 build_weak_ptr CBuilding::FindNearestStorage(int resource_){
     build_weak_ptr storage;
-    int prioBest = 0;
+    int prioBest = GetResourcePrio(resource_);
     int prioHere = 0;
     int distBest = 999;
     int distHere = 0;
     for(auto w : ConnectedBuildings){
         if(auto s = w.lock()){
-            if( s->GetMaxStorage(int resource_) ){
-                prioHere = GetResourcePrio(resource_);
+            if( s->GetMaxStorage(resource_) ){
+                prioHere = s->GetResourcePrio(resource_);
                 if( prioHere >= prioBest){
                     if( prioHere > prioBest){
                         distBest = 999;
@@ -343,7 +357,7 @@ build_weak_ptr CBuilding::FindNearestStorage(int resource_){
                             Coord( DoorX(), DoorY() ),
                             Coord( s->DoorX(), s->DoorY() ),
                             0.0f, 2.0f
-                    );
+                    ).size();
                     if(distHere < distBest){
                         storage = w;
                         distBest = distHere;
@@ -353,5 +367,53 @@ build_weak_ptr CBuilding::FindNearestStorage(int resource_){
         }
     }
     return storage;
+}
+
+int CBuilding::IncomingByResource(int res){
+    int amount = 0;
+    for(auto w : Incoming)    {
+        if(auto s = w.lock()){
+            if(s->GetResource() == res){
+                amount++;
+            }
+        }
+    }
+    return amount;
+}
+
+int CBuilding::OutgoingByResource(int res){
+    int amount = 0;
+    for(auto w : Outgoing)    {
+        if(auto s = w.lock()){
+            if(s->GetResource() == res){
+                amount++;
+            }
+        }
+    }
+    return amount;
+}
+
+task_weak_ptr CBuilding::FindConnectedTask(unit_weak_ptr worker){
+    auto workerSPtr = worker.lock();
+    task_weak_ptr bestTask;
+    int bestDist = 999, thisDist;
+    for(auto w : ConnectedBuildings){
+        if(auto s = w.lock()){
+            for(auto wt : s->GetOutgoing()){
+                if(auto st = wt.lock()){
+                    if(!st->GetPorter().lock()){
+                        if(auto pickUpS = st->GetPickUp().lock()){
+                            thisDist = workerSPtr->GetTileFlightRoundDistance(pickUpS->DoorX(), pickUpS->DoorY());
+                            if(thisDist < bestDist){
+                                bestDist = thisDist;
+                                bestTask = wt;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return bestTask;
 }
 

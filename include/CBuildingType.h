@@ -40,7 +40,8 @@ class CBuildingType
         int                                 GetResource(){          return resource;};
         int                                 GetStorage(){           return maxStorage;};
         bool                                IsDraggable(){          return draggable;};
-    
+        bool                                IsRoad(){               return connects;};
+
         int                                 BuildCost(int res_);
     protected:
 
@@ -51,7 +52,7 @@ class CBuildingType
         std::vector<std::string>                Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
-        int                                     w = -1
+        int                                     w = -1;
         int                                     h = -1;
         bool                                    draggable = false;
         bool                                    connects = false;

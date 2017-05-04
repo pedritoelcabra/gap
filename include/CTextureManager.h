@@ -10,7 +10,6 @@
 #include "gl/glew.h"
 #include <SDL2/SDL_opengl.h>
 #include "SDL2/SDL_gpu.h"
-#include "CSurface.h"
 
 typedef std::map<std::string, SDL_Texture*>     TextureMap;
 typedef std::map<std::string, GPU_Image*>     TextureMapGL;

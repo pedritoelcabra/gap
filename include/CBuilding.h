@@ -8,11 +8,16 @@
 #include "CBuildingType.h"
 #include "CUnit.h"
 
+#include "CTransportTask.h"
+#include "CTaskManager.h"
+
 class CUnit;
 class CBuilding;
+class CTransportTask;
 
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
 typedef std::weak_ptr<CBuilding> build_weak_ptr;
+typedef std::weak_ptr<CTransportTask> task_weak_ptr;
 
 class CBuilding : public CGUIObject
 {
@@ -51,11 +56,15 @@ class CBuilding : public CGUIObject
         int                 GetMaxStorage(int resource);
         int                 GetResourcePrio(int resource_);
         build_weak_ptr      FindNearestStorage(int resource_);
+        int                 IncomingByResource(int res);
+        int                 OutgoingByResource(int res);
+        task_weak_ptr       FindConnectedTask(unit_weak_ptr worker);
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
         std::vector<unit_weak_ptr>      GetInhabitants(){                       return Inhabitants;};
         std::vector<unit_weak_ptr>      GetWorkers(){                           return Workers;};
+        std::vector<task_weak_ptr>      GetOutgoing(){                          return Outgoing;};
         int                             GetResource(){                          return typePtr->GetResource();};
         int                             GetTileWidth(){                         return GetW() / CScreen::tileWidth;};
         int                             GetTileHeight(){                        return GetH() / CScreen::tileWidth;};
@@ -73,6 +82,7 @@ class CBuilding : public CGUIObject
         int                             UnderConstruction(){                    return workToComplete;};
         std::string                     GetName(){                              return typePtr->GetName();};
         std::string                     GetDescription(){                       return typePtr->GetDescription();};
+        bool                            IsRoad(){                               return typePtr->IsRoad();};
     protected:
 
     private:

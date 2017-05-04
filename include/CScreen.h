@@ -25,6 +25,8 @@ public:
     static const int                tilesPerChunk = 32;
     static constexpr float          diagonalRatio = 1.414;
     static constexpr float          flatMoveCost = 2.0f;
+    static constexpr float          pathMoveCost = 1.0f;
+    static constexpr float          roadMoveCost = 0.0f;
 
 };
 

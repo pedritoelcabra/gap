@@ -17,10 +17,12 @@ class CTaskManager
 
         void                                AddTask(task_shared_ptr ptr);
         void                                DestroyTask(int id);
+        int                                 TaskCount(){ return Tasks.size(); };
+        void                                Update();
 
     protected:
     private:
-        std::vector<unit_shared_ptr>        Tasks;
+        std::vector<task_shared_ptr>        Tasks;
         int                                 taskCount = 0;
 };
 

@@ -12,7 +12,6 @@
 #include "SDL2/SDL_ttf.h"
 #include "SDL2/SDL_gpu.h"
 #include "CScreen.h"
-#include "CSurface.h"
 #include "CAction.h"
 #include "CPathfinder.h"
 

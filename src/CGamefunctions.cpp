@@ -53,6 +53,9 @@ void CGame::ShowDebugInfo(){
     tmp.str(std::string());
     tmp << "Mouse Tile X: " << mouseTileX << "     Y: " << mouseTileY;
     DisplayText(tmp.str().c_str(), 120);
+    tmp.str(std::string());
+    tmp << "Amount of tasks: " << TaskManager.TaskCount();
+    DisplayText(tmp.str().c_str(), 135);
 
 }
 
@@ -86,6 +89,7 @@ void CGame::OnProcessTick(){
         BuildingManager.Update();
     }
     UnitManager.Update();
+    TaskManager.Update();
     tick++;
 }
 
