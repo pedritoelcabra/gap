@@ -3,32 +3,13 @@
 
 extern CGame GAP;
 
-CUnitManager::CUnitManager(){
-    //ctor
-    unitCount = 0;
-}
-
-CUnitManager::~CUnitManager(){
-    //dtor
-}
-
 std::vector<unit_weak_ptr>* CUnitManager::Render(){
-
-//    renderedUnits.clear();
-//
-//    renderedUnits.push_back(&GAP.Player);
-//
-//    for(auto &e : NPCS)
-//    {
-//        renderedUnits.push_back(&e.second);
-//    }
     return &renderedUnits;
 }
 
 void CUnitManager::Update(){
 
-    for(auto e : NPCS)
-    {
+    for(auto e : NPCS)    {
         e->Update();
     }
 }
@@ -48,8 +29,7 @@ void CUnitManager::AddNPC(unit_shared_ptr npc){
 std::vector<unit_weak_ptr>  CUnitManager::FindCollision(int x, int y){
 
     std::vector<unit_weak_ptr> npcs;
-    for(auto e : NPCS)
-    {
+    for(auto e : NPCS){
         if(e->FindCollision(x, y)){
             npcs.push_back( unit_weak_ptr(e) );
         }
@@ -60,8 +40,7 @@ std::vector<unit_weak_ptr>  CUnitManager::FindCollision(int x, int y){
 std::vector<unit_weak_ptr>  CUnitManager::FindTileCollision(int x, int y){
 
     std::vector<unit_weak_ptr> npcs;
-    for(auto e : NPCS)
-    {
+    for(auto e : NPCS){
         if(e->FindTileCollision(x, y)){
             npcs.push_back( unit_weak_ptr(e) );
         }
@@ -75,8 +54,7 @@ unit_weak_ptr CUnitManager::GetUnit(int target){
 
 void CUnitManager::DestroyUnit(int id){
     std::vector<unit_shared_ptr>::iterator iter = NPCS.begin();
-    while (iter != NPCS.end())
-    {
+    while (iter != NPCS.end()){
         if((*iter)->GetId() == id){
             NPCS.erase(iter);
             return;
