@@ -19,8 +19,8 @@ typedef std::map<int, TTF_Font*>                FontMap;
 class CTextureManager
 {
     public:
-        CTextureManager();
-        virtual ~CTextureManager();
+        CTextureManager(){};
+        virtual ~CTextureManager(){};
 
         int                 LoadTextureGL(std::string name, std::string path);
         void                DrawTextureGL(std::string name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos = false);
@@ -43,7 +43,7 @@ class CTextureManager
         TextureMapGL        TexturesGL;
         FontMap             Fonts;
         GLuint              texture[500];
-        int                 textureCount;
+        int                 textureCount = 0;
 };
 
 #endif // TEXTUREMANAGER_H
