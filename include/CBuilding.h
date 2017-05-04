@@ -61,6 +61,8 @@ class CBuilding : public CGUIObject
         int                             TransportRange(){                       return typePtr->TransportRange(); };
         int                             ResourceArea(){                         return typePtr->ResourceArea(); };
         vec2i                           GetDoor(){                              return door; };
+        int                             DoorX(){                                return door.first; };
+        int                             DoorY(){                                return door.second; };
         int                             GetType(){                              return type;};
         int                             UnderConstruction(){                    return workToComplete;};
         std::string                     GetName(){                              return typePtr->GetName();};
