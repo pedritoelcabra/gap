@@ -34,7 +34,7 @@ class CBuildingManager
         void                                LoadBuildingType(std::string fileName);
         std::vector<CBuildingType>          BuildingTypes;
         std::vector<build_shared_ptr>       Buildings;
-        int                                 buildingCount;
+        int                                 buildingCount = 0;
 };
 
 #endif // CBUILDINGMANAGER_H
