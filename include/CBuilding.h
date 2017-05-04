@@ -49,6 +49,8 @@ class CBuilding : public CGUIObject
         int                 TakeFromInventory(int resource, int amount);
         void                ApplyMovementCosts();
         int                 GetMaxStorage(int resource);
+        int                 GetResourcePrio(int resource_);
+        build_weak_ptr      FindNearestStorage(int resource_);
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
