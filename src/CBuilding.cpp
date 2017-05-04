@@ -106,7 +106,19 @@ void CBuilding::AddIncoming(task_weak_ptr ptr){
 }
 
 void CBuilding::RemoveIncoming(int id){
-
+    if(isBeingDestroyed){
+        return;
+    }
+    std::vector<task_weak_ptr>::iterator iter = Incoming.begin();
+    while (iter != Incoming.end())    {
+        if(auto s = (*iter).lock()){
+            if(s->GetId() == id){
+                Incoming.erase(iter);
+                return;
+            }
+        }
+        iter++;
+    }
 }
 
 void CBuilding::AddOutgoing(task_weak_ptr ptr){
@@ -114,7 +126,19 @@ void CBuilding::AddOutgoing(task_weak_ptr ptr){
 }
 
 void CBuilding::RemoveOutgoing(int id){
-
+    if(isBeingDestroyed){
+        return;
+    }
+    std::vector<task_weak_ptr>::iterator iter = Outgoing.begin();
+    while (iter != Outgoing.end())    {
+        if(auto s = (*iter).lock()){
+            if(s->GetId() == id){
+                Outgoing.erase(iter);
+                return;
+            }
+        }
+        iter++;
+    }
 }
 
 void CBuilding::AddWorker(unit_weak_ptr ptr){
@@ -266,10 +290,28 @@ void CBuilding::ApplyMovementCosts(){
 }
 
 int CBuilding::GetMaxStorage(int resource_){
-    if(resource == resource_){
-        return 10;
+    if(typePtr->GetStorage()){
+        return 999;
     }
-    return typePtr->GetStorage();
+    int availableStorage = 0;
+    if(workToComplete){
+        availableStorage = typePtr->BuildCost(resource_);
+    }else if(resource == resource_){
+        availableStorage = 10;
+    }
+    if(availableStorage){
+        for(auto w : Incoming)    {
+            if(auto s = w.lock()){
+                if(s->GetResource() == resource_){
+                    availableStorage--;
+                }
+            }
+        }
+    }
+    if(availableStorage > 0){
+        return availableStorage;
+    }
+    return 0;
 }
 
 build_weak_ptr CBuilding::FindNearestStorage(int resource_){
