@@ -4,11 +4,9 @@
 extern CGame GAP;
 
 CBuildingManager::CBuildingManager(){
-    buildingCount = 1;
 }
 
 CBuildingManager::~CBuildingManager(){
-    //dtor
 }
 
 bool CBuildingManager::Init(){
