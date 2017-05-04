@@ -3,17 +3,6 @@
 
 extern CGame GAP;
 
-CMenuManager::CMenuManager(){
-    mouseHasBuilding = false;
-    highLightX = 0;
-    highLightY = 0;
-    highLightRadius = 0;
-}
-
-CMenuManager::~CMenuManager(){
-    //dtor
-}
-
 bool CMenuManager::HandleRClick(int x, int y){
 
     mouseHasBuilding = false;
