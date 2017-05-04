@@ -217,8 +217,14 @@ bool CBuilding::AddWork(int amount){
     return false;
 }
 
-void CBuilding::AddToInventory(int resource, int amount){
-    Inventory.at(resource) += amount;
+int CBuilding::AddToInventory(int resource, int amount){
+    if(amount <= GetMaxStorage(resource)){
+        Inventory.at(resource) += amount;
+        return 0;
+    }
+    int amountAdded = GetMaxStorage(resource) - Inventory.at(resource);
+    Inventory.at(resource) += amountAdded;
+    return amount - amountAdded;
 }
 
 int CBuilding::TakeFromInventory(int resource, int amount){
@@ -243,3 +249,9 @@ void CBuilding::ApplyMovementCosts(){
     }
 }
 
+int CBuilding::GetMaxStorage(int resource){
+    if(resource){
+        return 10;
+    }
+    return typePtr->GetStorage();
+}
