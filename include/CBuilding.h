@@ -81,6 +81,8 @@ class CBuilding : public CGUIObject
         int                 workToComplete = 0;
 
 
+        std::vector<task_weak_ptr>      Outgoing;
+        std::vector<task_weak_ptr>      Incoming;
         std::vector<unit_weak_ptr>      Workers;
         std::vector<unit_weak_ptr>      Inhabitants;
         std::map<int, int>              Inventory;
