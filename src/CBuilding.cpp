@@ -249,9 +249,31 @@ void CBuilding::ApplyMovementCosts(){
     }
 }
 
-int CBuilding::GetMaxStorage(int resource){
-    if(resource){
+int CBuilding::GetMaxStorage(int resource_){
+    if(resource == resource_){
         return 10;
     }
     return typePtr->GetStorage();
 }
+
+build_weak_ptr CBuilding::FindNearestStorage(int resource_){
+    build_weak_ptr storage;
+    int distBest = 999;
+    int distHere = 0;
+    for(auto w : ConnectedBuildings){
+        if(auto s = w.lock()){
+            if( s->GetMaxStorage(int resource_) ){
+                distHere = GAP.Pathfinder.FindPath(
+                        Coord( DoorX(), DoorY() ),
+                        Coord( s->DoorX(), s->DoorY() ),
+                        0.0f, 2.0f
+                );
+                if(distHere < distBest){
+                    storage = w;
+                    distBest = distHere;
+                }
+            }
+        }
+    }
+}
+
