@@ -40,6 +40,8 @@ class CBuildingType
         int                                 GetResource(){          return resource;};
         int                                 GetStorage(){           return maxStorage;};
         bool                                IsDraggable(){          return draggable;};
+    
+        int                                 BuildCost(int res_);
     protected:
 
     private:
