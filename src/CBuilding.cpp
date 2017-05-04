@@ -3,17 +3,13 @@
 
 extern CGame GAP;
 
-CBuilding::CBuilding(){
-    isBeingDestroyed = false;
-}
-
-CBuilding::CBuilding(int type, int x, int y, int owner){
-    this->tileX = x;
-    this->x = (x * CScreen::tileWidth) ;
-    this->tileY = y;
-    this->y = (y * CScreen::tileWidth) ;
-    this->type = type;
-    this->owner = owner;
+CBuilding::CBuilding(int type_, int x_, int y_, int owner_){
+    tileX = x_;
+    box.x = x = (x_ * CScreen::tileWidth) ;
+    tileY = y_;
+    box.y = y = (y_ * CScreen::tileWidth) ;
+    type = type_;
+    owner = owner_;
     typePtr = GAP.BuildingManager.GetBuildingType(type);
     box.w = typePtr->GetW();
     box.h = typePtr->GetH();
@@ -22,19 +18,12 @@ CBuilding::CBuilding(int type, int x, int y, int owner){
     if(workToComplete){
         clip.y = clip.h;
     }
-    box.x = this->x;
-    box.y = this->y;
     door = typePtr->GetDoor();
     door.first += tileX;
     door.second += tileY;
-    isBeingDestroyed = false;
     for(auto p : CGood::GetResources() ){
         Inventory[p.first] = 0;
     }
-}
-
-CBuilding::~CBuilding(){
-    //dtor
 }
 
 void CBuilding::SetId(int id_, build_weak_ptr ptr){
