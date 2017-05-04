@@ -115,13 +115,13 @@ private:
     int                 mouseTileX;
     int                 mouseY;
     int                 mouseTileY;
-    int                 frameCount;
-    Uint32              tick;
-    int                 framesUntilLastSecond;
-    int                 currentSecond;
-    int                 fps;
-    bool                running;
-    bool                paused;
+    int                 frameCount = 0;
+    Uint32              tick = 0;
+    int                 framesUntilLastSecond = 0;
+    int                 currentSecond = 0;
+    int                 fps = 0;
+    bool                running = true;
+    bool                paused = false;
     int                 seed;
 
 
