@@ -48,23 +48,23 @@ class CBuildingType
         std::vector<std::string>                Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
-        int                                     w;
-        int                                     h;
-        bool                                    draggable;
-        bool                                    connects;
+        int                                     w = -1
+        int                                     h = -1;
+        bool                                    draggable = false;
+        bool                                    connects = false;
         GPU_Rect                                clip;
         vec2i                                   door;
-        int                                     resource;
-        int                                     resourceRadius;
-        int                                     buildArea;
-        int                                     distributionRange;
-        int                                     transportRange;
+        int                                     resource = 0;
+        int                                     resourceRadius = 0;
+        int                                     buildArea = 0;
+        int                                     distributionRange = 0;
+        int                                     transportRange = 0;
 
-        int                                     popMax;
-        int                                     popCost;
-        int                                     popRange;
-        int                                     workerCount;
-        int                                     workerPriority;
+        int                                     popMax = 0;
+        int                                     popCost = 0;
+        int                                     popRange = 0;
+        int                                     workerCount = 0;
+        int                                     workerPriority = 0;
 
         void            LoadCosts(std::string value);
         void            LoadLayout(std::string value);
