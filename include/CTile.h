@@ -11,8 +11,8 @@ typedef std::weak_ptr<CUnit> unit_weak_ptr;
 class CTile : public CGUIObject
 {
     public:
-        CTile();
-        virtual ~CTile();
+        CTile(){};
+        virtual ~CTile(){};
         void                        SetTerrain(int terrain);
         bool                        Render();
         bool                        RenderUnits();
