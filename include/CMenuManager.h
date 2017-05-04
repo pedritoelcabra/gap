@@ -19,8 +19,8 @@ typedef std::weak_ptr<CBuilding> build_weak_ptr;
 class CMenuManager
 {
     public:
-        CMenuManager();
-        virtual ~CMenuManager();
+        CMenuManager(){};
+        virtual ~CMenuManager(){};
 
         bool                        HandleRClick(int x, int y);
         bool                        HandleLClick(int x, int y);
@@ -46,20 +46,20 @@ class CMenuManager
         bool                                        buildingOpen;
 
         build_shared_ptr                            mouseBuilding;
-        bool                                        mouseHasBuilding;
-        bool                                        mouseIsDemolition;
-        bool                                        mouseHasDraggable;
-        bool                                        draggedPlanted;
-        int                                         dragStartX;
-        int                                         dragStartY;
-        int                                         dragEndX;
-        int                                         dragEndY;
+        bool                                        mouseHasBuilding = false;
+        bool                                        mouseIsDemolition = false;
+        bool                                        mouseHasDraggable = false;
+        bool                                        draggedPlanted = false;
+        int                                         dragStartX = 0;
+        int                                         dragStartY = 0;
+        int                                         dragEndX = 0;
+        int                                         dragEndY = 0;
         std::vector<Coord>                          dragPath;
 
-        int                                         highLightX;
-        int                                         highLightY;
-        int                                         highLightRadius;
-        int                                         highLightRadius2;
+        int                                         highLightX = 0;
+        int                                         highLightY = 0;
+        int                                         highLightRadius = 0;
+        int                                         highLightRadius2 = 0;
         SDL_Color                                   highLightColor;
         SDL_Color                                   highLightColor2;
 };
