@@ -6,14 +6,6 @@
 
 extern CGame GAP;
 
-CChunk::CChunk(){
-
-}
-
-CChunk::~CChunk(){
-    //dtor
-}
-
 void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones){
     cx = chunkX;
     cy = chunkY;
