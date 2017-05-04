@@ -37,6 +37,10 @@ class CBuilding : public CGUIObject
         bool                HasEnoughWorkers();
         void                Destroy();
         bool                AddWork(int amount);
+        void                AddIncoming(task_weak_ptr ptr);
+        void                RemoveIncoming(int id);
+        void                AddOutgoing(task_weak_ptr ptr);
+        void                RemoveOutgoing(int id);
         void                AddConnection(build_weak_ptr ptr);
         void                AddConnections(std::vector<build_weak_ptr> connections);
         void                RemoveConnection(int id);
