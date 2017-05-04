@@ -28,9 +28,12 @@ class CTransportTask
         build_weak_ptr      GetPickUp() { return pickUp ;};
         build_weak_ptr      GetDropOff() { return dropOff ;};
         unit_weak_ptr       GetPorter() { return porter ;};
+        void                SetId(int id_) { id = id_;};
+        int                 GetId(){ return id;};
 
     private:
         
+        int                 id;
         int                 resource;
         build_weak_ptr      pickUp;
         build_weak_ptr      dropOff;
