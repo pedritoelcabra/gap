@@ -21,8 +21,8 @@ typedef std::unordered_map<int, std::unordered_map<int, tile_shared_ptr>> tilema
 class CChunk
 {
     public:
-        CChunk();
-        virtual ~CChunk();
+        CChunk(){};
+        virtual ~CChunk(){};
 
         void                            Init(int x, int y, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones);
         tile_weak_ptr                   GetTile(int x, int y);
