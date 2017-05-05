@@ -443,178 +443,192 @@ void CUnit::SetBuildAssignment(build_weak_ptr targetPtr_){
     UpdateAssignment();
 }
 
-void CUnit::UpdateAssignment(){
-    moveSpeed = baseSpeed;
-    busyTime = 0;
-    switch(assignment){
-    case CAction::idleAssignment:
-        if(auto s = homeBuildingPtr.lock()){
-            if(auto taskPtrS = taskPtr.lock()){
-                if(GetCarriedItem()){
-                    if(auto destS = taskPtrS->GetDropOff().lock()){
-                        if(destS->DoorX() == tileX && destS->DoorY() == tileY){
-                            if(destS->AddToInventory(GetCarriedItem(), 1) == 0){
-                                GetCarriedItem(true);
-                                taskPtrS->MarkComplete();
-                                taskPtr.reset();
-                                thought = "Dropped off goods.";
-                                return;
-                            }
-                            thought = "Can't drop off goods at task destination!";
-                            return;
-                        }
-                        MoveTo(destS->DoorX(), destS->DoorY());
-                        thought = "Going to drop off goods.";
-                        return;
-                    }
-                    Idle(60);
-                    thought =  "My task has no destination";
-                    return;
-                }
-                if(auto destS = taskPtrS->GetPickUp().lock()){
+void CUnit::UpdateIdleAssignment(){
+    if(auto s = homeBuildingPtr.lock()){
+        if(auto taskPtrS = taskPtr.lock()){
+            if(GetCarriedItem()){
+                if(auto destS = taskPtrS->GetDropOff().lock()){
                     if(destS->DoorX() == tileX && destS->DoorY() == tileY){
-                        if(destS->TakeFromInventory(taskPtrS->GetResource(), 1) == 1){
-                            CarryItem(taskPtrS->GetResource());
-                            thought = "Picked up goods.";
+                        if(destS->AddToInventory(GetCarriedItem(), 1) == 0){
+                            GetCarriedItem(true);
+                            taskPtrS->MarkComplete();
+                            taskPtr.reset();
+                            thought = "Dropped off goods";
                             return;
                         }
-                        thought = "Can't pick up goods!";
+                        Idle(10);
+                        thought = "Waiting to drop off goods!";
                         return;
                     }
                     MoveTo(destS->DoorX(), destS->DoorY());
-                    thought = "Going to pick up goods.";
+                    thought = "Going to drop off goods";
                     return;
                 }
                 Idle(60);
                 thought =  "My task has no destination";
                 return;
             }
-            taskPtr = s->FindConnectedTask(myPtr);
-            if(auto taskPtrS = taskPtr.lock()){
-                taskPtrS->AssignPorter(myPtr);
-                thought =  "Found a task";
-                Idle(1);
-                return;
-            }
-            if(s->GetDoor().first == tileX && s->GetDoor().second == tileY){
-                Idle(600);
-                thought =  "Idling at home.";
-                return;
-            }
-            MoveTo(s->GetDoor().first, s->GetDoor().second);
-            thought = "Going home.";
-            return;
-        }
-        Idle(600);
-        thought = "I have no home...";
-        break;
-    case CAction::followUnit:{
-        auto targetUnitPtrS = targetUnitPtr.lock();
-        if(!targetUnitPtrS){
-            SetIdleAssignment();
-            return;
-        }
-        if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) < 5){
-            Idle(60);
-            thought = "My leader is close by.";
-            return;
-        }
-        if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) > 10){
-            moveSpeed = baseSpeed / 2;
-            thought = "I better hurry to catch up.";
-        }
-        MoveTo(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY(), 3);
-        thought = "Following leader.";
-        return;
-    }
-    case CAction::gatherResources:{
-        auto workBuildingPtrS = workBuildingPtr.lock();
-        if(!workBuildingPtrS){
-            SetIdleAssignment();
-            return;
-        }
-        if(GetCarriedItem()){
-            if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
-                if(workBuildingPtrS->AddToInventory(GetCarriedItem(), 1) == 0){
-                    GetCarriedItem(true);
-                    thought = "Dropped off goods.";
+            if(auto destS = taskPtrS->GetPickUp().lock()){
+                if(destS->DoorX() == tileX && destS->DoorY() == tileY){
+                    if(destS->TakeFromInventory(taskPtrS->GetResource(), 1) == 1){
+                        CarryItem(taskPtrS->GetResource());
+                        thought = "Picked up goods";
+                        return;
+                    }
+                    Idle(10);
+                    thought = "Waiting to pick up goods!";
                     return;
                 }
-                thought = "Can't drop off goods at home!";
+                MoveTo(destS->DoorX(), destS->DoorY());
+                thought = "Going to pick up goods";
                 return;
             }
-            MoveTo(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
-            thought = "Going to drop off goods.";
+            Idle(60);
+            thought =  "My task has no destination";
             return;
         }
-        if(auto s = resourceTilePtr.lock()){
-            if(GetTileFlightSquareDistance(s->GetTileX(), s->GetTileY()) <= 1 ){
-                CAction action = CAction(CAction::gatherResource, 240, s->GetResource());
-                AddAction(action);
-                thought = "Gathering resource.";
-                return;
-            }
-            if(!MoveNextTo(s->GetTileX(), s->GetTileY())){
-                Idle(60);
-                resourceTilePtr.reset();
-                thought = "Can't reach my resource.";
-            }
-            thought = "Moving to reach resource.";
+        taskPtr = s->FindConnectedTask(myPtr);
+        if(auto taskPtrS = taskPtr.lock()){
+            taskPtrS->AssignPorter(myPtr);
+            thought =  "Found a task";
+            Idle(1);
             return;
         }
-        int factor = 4;
-        while(factor > 0){
-            std::vector<tile_weak_ptr> nearestResource = GAP.ChunkManager.GetResources(workBuildingPtrS->GetResource(),
-                      workBuildingPtrS->ResourceArea() / factor, workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
-            if(nearestResource.size() > 0){
-                std::random_shuffle ( nearestResource.begin(), nearestResource.end() );
-                resourceTilePtr = nearestResource.back();
-                thought = "Found a resource.";
-                return;
-            }
-            factor--;
+        if(s->DoorX() == tileX && s->DoorY() == tileY){
+            Idle(600);
+            thought =  "Idling at home";
+            return;
         }
-        thought = "No resources in area.";
-        Idle(300);
+        MoveTo(s->DoorX(), s->DoorY());
+        thought = "Going home";
         return;
     }
-    case CAction::builderAssignment:
-        auto workBuildingPtrS = workBuildingPtr.lock();
-        if(!workBuildingPtrS){
-            SetIdleAssignment();
-            return;
-        }
-        if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
-            if(GetTileFlightSquareDistance(targetBuildingPtrS->GetDoor().first, targetBuildingPtrS->GetDoor().second) < 1 ){
-                CAction action = CAction(CAction::buildBuilding, 240, 1);
-                AddAction(action);
-                thought = "Building!.";
+    Idle(600);
+    thought = "I have no home...";
+}
+
+void CUnit::UpdateFollowAssignment(){
+    auto targetUnitPtrS = targetUnitPtr.lock();
+    if(!targetUnitPtrS){
+        SetIdleAssignment();
+        return;
+    }
+    if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) < 5){
+        Idle(60);
+        thought = "My leader is close by";
+        return;
+    }
+    if(GetTileFlightSquareDistance(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY()) > 10){
+        moveSpeed = baseSpeed / 2;
+    }
+    MoveTo(targetUnitPtrS->GetTileX(), targetUnitPtrS->GetTileY(), 3);
+    thought = "Following leader";
+    return;
+}
+
+void CUnit::UpdateGatherAssignment(){
+    auto workBuildingPtrS = workBuildingPtr.lock();
+    if(!workBuildingPtrS){
+        SetIdleAssignment();
+        return;
+    }
+    if(GetCarriedItem()){
+        if(GetTileFlightSquareDistance(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY()) < 1 ){
+            if(workBuildingPtrS->AddToInventory(GetCarriedItem(), 1) == 0){
+                GetCarriedItem(true);
+                thought = "Dropped off goods";
                 return;
             }
-            thought = "Going to building site.";
-            MoveTo(targetBuildingPtrS->GetDoor().first, targetBuildingPtrS->GetDoor().second);
+            thought = "Can't drop off goods at home!";
             return;
         }
-        std::vector<build_weak_ptr> nearestSites = GAP.BuildingManager.GetUnfinishedBuildings(
-                              workBuildingPtrS->BuildArea() , workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second);
-        if(nearestSites.size() > 0){
-            std::random_shuffle ( nearestSites.begin(), nearestSites.end() );
-            targetBuildingPtr = nearestSites.back();
-            thought = "Found a site.";
-            return;
-        }
-        if(GetTileFlightSquareDistance(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second) < 1 ){
-            Idle(60);
-            thought = "Nothing to build.";
-            return;
-        }
-        if(MoveTo(workBuildingPtrS->GetDoor().first, workBuildingPtrS->GetDoor().second)){
-            thought = "Nothing to build, going home.";
-            return;
-        }
-        thought = "Can't find a way home...";
-        Idle(60);
+        MoveTo(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY());
+        thought = "Going to drop off goods";
         return;
+    }
+    if(auto s = resourceTilePtr.lock()){
+        if(GetTileFlightSquareDistance(s->GetTileX(), s->GetTileY()) <= 1 ){
+            CAction action = CAction(CAction::gatherResource, 240, s->GetResource());
+            AddAction(action);
+            thought = "Gathering resource";
+            return;
+        }
+        if(!MoveNextTo(s->GetTileX(), s->GetTileY())){
+            Idle(60);
+            resourceTilePtr.reset();
+            thought = "Can't reach my resource";
+        }
+        thought = "Moving to reach resource";
+        return;
+    }
+    int factor = 4;
+    while(factor > 0){
+        std::vector<tile_weak_ptr> nearestResource = GAP.ChunkManager.GetResources(workBuildingPtrS->GetResource(),
+                  workBuildingPtrS->ResourceArea() / factor, workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY());
+        if(nearestResource.size() > 0){
+            std::random_shuffle ( nearestResource.begin(), nearestResource.end() );
+            resourceTilePtr = nearestResource.back();
+            thought = "Found a resource";
+            return;
+        }
+        factor--;
+    }
+    thought = "No resources in area";
+    Idle(300);
+    return;
+}
+
+void CUnit::UpdateBuildAssignment(){
+    auto workBuildingPtrS = workBuildingPtr.lock();
+    if(!workBuildingPtrS){
+        SetIdleAssignment();
+        return;
+    }
+    if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
+        if(GetTileFlightSquareDistance(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY()) < 1 ){
+            CAction action = CAction(CAction::buildBuilding, 240, 1);
+            AddAction(action);
+            thought = "Building!";
+            return;
+        }
+        thought = "Going to building site";
+        MoveTo(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY());
+        return;
+    }
+    std::vector<build_weak_ptr> nearestSites = GAP.BuildingManager.GetUnfinishedBuildings(
+                          workBuildingPtrS->BuildArea() , workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY());
+    if(nearestSites.size() > 0){
+        std::random_shuffle ( nearestSites.begin(), nearestSites.end() );
+        targetBuildingPtr = nearestSites.back();
+        thought = "Found a site";
+        return;
+    }
+    if(GetTileFlightSquareDistance(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY()) < 1 ){
+        Idle(60);
+        thought = "Nothing to build";
+        return;
+    }
+    if(MoveTo(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY())){
+        thought = "Nothing to build, going home";
+        return;
+    }
+    thought = "Can't find a way home...";
+    Idle(60);
+    return;
+}
+
+void CUnit::UpdateAssignment(){
+    moveSpeed = baseSpeed;
+    busyTime = 0;
+    switch(assignment){
+    case CAction::idleAssignment:
+        UpdateIdleAssignment(); break;
+    case CAction::followUnit:
+        UpdateFollowAssignment(); break;
+    case CAction::gatherResources:
+        UpdateGatherAssignment(); break;
+    case CAction::builderAssignment:
+        UpdateBuildAssignment(); break;
     }
 }
 
