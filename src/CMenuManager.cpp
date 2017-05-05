@@ -55,6 +55,7 @@ bool CMenuManager::HandleLClick(int x, int y){
                     dragStartY = dragEndY;
                 }
             }
+            draggedPlanted = false;
         }else{
             draggedPlanted = true;
             dragStartX = dragEndX = GAP.GetMouseTileX();
@@ -128,6 +129,9 @@ void CMenuManager::Render(){
                       0.0f, 3.0f, false );
             }
 
+            mouseBuilding->SetX(dragStartX);
+            mouseBuilding->SetY(dragStartY);
+            mouseBuilding->RenderOnTooltip();
             for(auto b : dragPath){
                 mouseBuilding->SetX(b.x);
                 mouseBuilding->SetY(b.y);
