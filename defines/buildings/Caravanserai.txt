@@ -1,0 +1,11 @@
+slug=caravanserai
+name=Caravanserai
+description=Enables long distance caravans
+buildCost=Wood:5
+buildCost=Stone:5
+buildCost=Work:5
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3

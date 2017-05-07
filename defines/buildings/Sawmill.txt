@@ -1,0 +1,14 @@
+slug=sawmill
+name=Sawmill
+description=Makes planks out of logs
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:0
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3
+buildCost=Work:1
+workerCount=1
+workerPriority=90
+resourceInput=Wood:1
+resourceInput=Work:2
+resourceOutput=Plank:1

@@ -1,0 +1,6 @@
+slug=path
+name=Path
+description=Connects Buildings
+layoutLine=0
+draggable
+connects

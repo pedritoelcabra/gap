@@ -1,0 +1,13 @@
+slug=stonecutter
+name=Stonecutter
+description=Works surface quarries for blocks
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:10
+resourceGatherer=2
+resourceRadius=20
+workerCount=1
+workerPriority=100

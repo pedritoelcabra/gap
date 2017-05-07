@@ -1,0 +1,14 @@
+slug=hut
+name=Hut
+description=The most basic dwelling
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:0:3:3:3
+buildCost=Wood:1
+buildCost=Work:3
+upgrade=smallhouse
+populationMax=1
+populationCost=2
+populationRange=15;
