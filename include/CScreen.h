@@ -24,9 +24,15 @@ public:
     static const int                unitWidth = 64;
     static const int                tilesPerChunk = 32;
     static constexpr float          diagonalRatio = 1.414;
+    static constexpr float          impassableCost = 3.0f;
     static constexpr float          flatMoveCost = 2.0f;
     static constexpr float          pathMoveCost = 1.0f;
     static constexpr float          roadMoveCost = 0.0f;
+    static constexpr float          waterLevel = -0.5f;
+    static constexpr float          beachLevel = -0.4f;
+    static constexpr float          grassLevel = 0.1f;
+    static constexpr float          dryLandLevel = 0.6f;
+    static const int                buildingUpdateFrequency = 60;
 
 };
 

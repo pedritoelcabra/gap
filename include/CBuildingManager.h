@@ -19,7 +19,7 @@ class CBuildingManager
         bool                                Init();
         void                                Update();
         void                                UpdateConnections();
-        build_weak_ptr                      AddBuilding(int type, int x, int y, int owner);
+        build_weak_ptr                      AddBuilding(int type, int x, int y, int owner, bool ignoreBlocked = false);
         void                                Render();
         CBuildingType*                      GetBuildingType(int type);
         std::vector<CBuildingType>          GetBuildingTypes();
@@ -27,7 +27,8 @@ class CBuildingManager
         build_weak_ptr                      GetBuildingAt(int x, int y);
         build_weak_ptr                      GetBuilding(int id);
         build_weak_ptr                      FindCollision(int x, int y);
-        std::vector<build_weak_ptr>         GetUnfinishedBuildings( int radius, int x, int y);
+        std::vector<build_weak_ptr>         GetUnfinishedBuildings( build_weak_ptr ptr );
+        std::vector<build_weak_ptr>         GetWorkPositions( build_weak_ptr ptr );
     protected:
 
     private:

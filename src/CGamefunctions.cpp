@@ -8,18 +8,29 @@ void CGame::OnEvent(SDL_Event* event){
 }
 
 void CGame::OnRenderGL(){
-    GPU_Clear(MainGLWindow);
 
-    ChunkManager.RenderTiles();
-    BuildingManager.Render();
-    ChunkManager.RenderObjects();
-    MenuManager.Render();
+    if(!mapView){
+        GPU_Clear(MainGLWindow);
 
-    if(Settings.at("ShowDebug")){
-         ShowDebugInfo();
+        ChunkManager.RenderTiles();
+        BuildingManager.Render();
+        ChunkManager.RenderObjects();
+        MenuManager.Render();
+
+        if(Settings.at("ShowDebug")){
+             ShowDebugInfo();
+        }
+
+        GPU_Flip(MainGLWindow);
+    }else if(!(tick%2)){
+        GPU_Clear(MainGLWindow);
+
+        ChunkManager.RenderMinimap();
+        BuildingManager.Render();
+
+        GPU_Flip(MainGLWindow);
     }
 
-    GPU_Flip(MainGLWindow);
     return;
 }
 
@@ -56,6 +67,9 @@ void CGame::ShowDebugInfo(){
     tmp.str(std::string());
     tmp << "Amount of tasks: " << TaskManager.TaskCount();
     DisplayText(tmp.str().c_str(), 135);
+    tmp.str(std::string());
+    tmp << "Move Cost: " << Pathfinder.GetCost(mouseTileX, mouseTileY);
+    DisplayText(tmp.str().c_str(), 150);
 
 }
 
@@ -85,7 +99,7 @@ void CGame::OnProcessTick(){
 
 
     ChunkManager.UpdateChunks();
-    if((tick%60) == 0){
+    if((tick%CScreen::buildingUpdateFrequency) == 0){
         BuildingManager.Update();
     }
     UnitManager.Update();
@@ -144,13 +158,16 @@ bool CGame::OnMouseMove(int x, int y){
 
 void CGame::OnKeyDown(SDL_Keycode key){
 
-    switch( key )
-    {
+    switch( key )    {
         case SDLK_SPACE:
             paused = !paused;
         break;
 
         case SDLK_ESCAPE:
+            if(mapView){
+                mapView = false;
+                break;
+            }
             running = false;
         break;
 
@@ -187,6 +204,12 @@ void CGame::OnKeyDown(SDL_Keycode key){
         case SDLK_d:
         break;
 
+        case SDLK_m:
+            mapView = !mapView;
+            mapX = Player->GetX() + ((Player->GetW() / ZoomLvl())/2);
+            mapY = Player->GetY() + ((Player->GetH() / ZoomLvl())/2);
+        break;
+
         default:
         break;
     }
@@ -219,42 +242,62 @@ bool CGame::OnRButtonDown(int x, int y){
 }
 
 void CGame::UpdatePlayerPosition(){
-    if(!Player->GetBusyTime() || Player->IsIdle()){
-        int tx = Player->GetTileX();
-        int ty = Player->GetTileY();
-        const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-        if (keystate[SDL_SCANCODE_LEFT] ) {
-            tx--;
-        }
-        if (keystate[SDL_SCANCODE_A] ) {
-            tx--;
-        }
-        if (keystate[SDL_SCANCODE_RIGHT] ) {
-            tx++;
-        }
-        if (keystate[SDL_SCANCODE_D] ) {
-            tx++;
-        }
-        if (keystate[SDL_SCANCODE_UP] ) {
-            ty--;
-        }
-        if (keystate[SDL_SCANCODE_W] ) {
-            ty--;
-        }
-        if (keystate[SDL_SCANCODE_DOWN] ) {
-            ty++;
-        }
-        if (keystate[SDL_SCANCODE_S] ) {
-            ty++;
-        }
-        if( tx != Player->GetTileX() || ty != Player->GetTileY()){
-            Player->ClearActions();
-            Player->AddAction(CAction(CAction::moveTile, tx, ty));
-        }
+    int txOff = 0;
+    int tyOff = 0;
+    const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+    if (keystate[SDL_SCANCODE_LEFT] ) {
+        txOff--;
+    }
+    if (keystate[SDL_SCANCODE_A] ) {
+        txOff--;
+    }
+    if (keystate[SDL_SCANCODE_RIGHT] ) {
+        txOff++;
+    }
+    if (keystate[SDL_SCANCODE_D] ) {
+        txOff++;
+    }
+    if (keystate[SDL_SCANCODE_UP] ) {
+        tyOff--;
+    }
+    if (keystate[SDL_SCANCODE_W] ) {
+        tyOff--;
+    }
+    if (keystate[SDL_SCANCODE_DOWN] ) {
+        tyOff++;
+    }
+    if (keystate[SDL_SCANCODE_S] ) {
+        tyOff++;
     }
 
-    SetViewPort(
-        Player->GetX() - (CScreen::screen_half_w / ZoomLvl()) + (Player->GetW() / 2),
-        Player->GetY() - (CScreen::screen_half_h / ZoomLvl()) +  (Player->GetH() / 2));
+    int viewX = 0;
+    int viewY = 0;
+    if(!mapView){
+        if(!Player->GetBusyTime() || Player->IsIdle()){
+            if( txOff != 0 || tyOff != 0 ){
+                Player->ClearActions();
+                Player->AddAction(CAction(CAction::moveTile, Player->GetTileX() + txOff, Player->GetTileY() + tyOff));
+            }
+        }
+        viewX = Player->GetX() + ((Player->GetW() / ZoomLvl())/2);
+        viewY = Player->GetY() + ((Player->GetH() / ZoomLvl())/2);
+    }else{
+        if( txOff != 0 || tyOff != 0 ){
+            mapX += txOff*(50/ZoomLvl());
+            mapY += tyOff*(50/ZoomLvl());
+        }
+        viewX = mapX;
+        viewY = mapY;
+    }
+    SetViewPort( viewX - (CScreen::screen_half_w / ZoomLvl()),
+        viewY - (CScreen::screen_half_h / ZoomLvl()) );
 }
+
+float CGame::ZoomLvl(){
+    if(mapView){
+        return zoom / 2;
+    }
+    return zoom;
+};
+
 

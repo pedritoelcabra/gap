@@ -14,21 +14,21 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
     int terrain = 0;
     int x, y, resource, resourceRand, resourceAmount;
     float moveCost = 0.0f;
-    for(int k = 0; k <= tilesPerChunk; k++){
-        for(int i = 0; i <= tilesPerChunk; i++){
+    for(int k = 0; k < tilesPerChunk; k++){
+        for(int i = 0; i < tilesPerChunk; i++){
             x = (chunkX * tilesPerChunk) + i;
             y = (chunkY * tilesPerChunk) + k;
             height = heightMap->GetValue(k, i);
-            if(height < -0.5){
+            if(height < CScreen::waterLevel){
                 terrain = 92;
                 moveCost = 4.0f;
-            }else if(height < -0.4){
+            }else if(height < CScreen::beachLevel){
                 terrain = 93;
                 moveCost = CScreen::flatMoveCost;
-            }else if(height < 0.0){
+            }else if(height < CScreen::grassLevel){
                 terrain = 94;
                 moveCost = CScreen::flatMoveCost;
-            }else if(height < 0.7){
+            }else if(height < CScreen::dryLandLevel){
                 terrain = 95;
                 moveCost = CScreen::flatMoveCost;
             }else{
@@ -49,7 +49,7 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
                     moveCost = 3.0f;
                 }
             }
-            Tiles[y][x] = std::make_shared<CTile>(CTile());
+            Tiles[y][x] = std::make_shared<CTile>();
             Tiles[y][x]->Init(terrain, x, y, resource, resourceAmount, rand() % 4);
             Tiles[y][x]->SetMoveCost(moveCost);
             GAP.Pathfinder.SetCost(x,y,moveCost);
@@ -67,8 +67,7 @@ void CChunk::AddUnit( unit_weak_ptr ptr){
 
 void CChunk::RemoveUnit(int id){
     std::vector<unit_weak_ptr>::iterator iter = Units.begin();
-    while (iter != Units.end())
-    {
+    while (iter != Units.end())    {
         if(auto s = (*iter).lock()){
             if(s->GetId() == id){
                 Units.erase(iter);
@@ -76,5 +75,14 @@ void CChunk::RemoveUnit(int id){
             }
         }
         iter++;
+    }
+}
+
+void CChunk::RenderChunk(){
+    for(int k = 0; k < tilesPerChunk; k++){
+        for(int i = 0; i < tilesPerChunk; i++){
+            Tiles[(cy * tilesPerChunk) + k][(cx * tilesPerChunk) + i]->Render();
+            Tiles[(cy * tilesPerChunk) + k][(cx * tilesPerChunk) + i]->RenderResource();
+        }
     }
 }

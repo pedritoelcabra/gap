@@ -47,6 +47,9 @@ void CInfoMenu::Render(){
             RenderLine(tmp.str().c_str(), 16);
             tmp.str(std::string());
         }
+        tmp << "Actions queued: " << s->GetActionCount();
+        RenderLine(tmp.str().c_str(), 16);
+        tmp.str(std::string());
         RenderLine("Home:", 16);
         if(auto homeb = s->GetHome().lock()){
             CButton button = CButton(x + 10, yOff, 1, s->GetHome() );
@@ -73,11 +76,19 @@ void CInfoMenu::Render(){
         tmp.str(std::string());
         RenderLine("Inventory:", 16);
         for(auto const& x : s->GetInventory() ){
-            if(x.second > 0){
+            if(x.second > 0 || ( s->UnderConstruction() && s->GetMaxStorage(x.first, true) ) ){
                 tmp << CGood::GetResourceName(x.first) << ": " << x.second;
+                if(s->UnderConstruction() && s->GetMaxStorage(x.first, true)){
+                    tmp << " ("<< s->GetMaxStorage(x.first, true) << " needed)";
+                }
                 RenderLine(tmp.str().c_str(), 16);
                 tmp.str(std::string());
             }
+        }
+        if(s->UnderConstruction()){
+            tmp << "Work needed: " << s->UnderConstruction();
+            RenderLine(tmp.str().c_str(), 16);
+            tmp.str(std::string());
         }
         for(auto wb : s->GetConnections()){
             if(auto sb = wb.lock()){

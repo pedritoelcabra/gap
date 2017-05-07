@@ -31,7 +31,7 @@ class CTransportTask
         int                 GetId(){ return id;};
         int                 GetResource(){ return resource;};
         bool                GetCompleted(){ return completed;};
-        void                MarkComplete(){ completed = true;};
+        void                MarkComplete(){ completed = true; };
 
     private:
 

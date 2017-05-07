@@ -28,6 +28,7 @@ class CChunk
         tile_weak_ptr                   GetTile(int x, int y);
         void                            AddUnit(unit_weak_ptr ptr);
         void                            RemoveUnit(int id);
+        void                            RenderChunk();
     protected:
     private:
         tilemap_type                    Tiles;

@@ -20,6 +20,7 @@ bool CGame::OnInit(){
     InitGL();
 
     Player = std::make_shared<CUnit>(CScreen::tilesPerChunk / 2, CScreen::tilesPerChunk / 2 , "sky_god");
+    Player->SetSpeed(8);
 
     ChunkManager.Init();
     BuildingManager.Init();
@@ -28,6 +29,33 @@ bool CGame::OnInit(){
     UnitManager.AddNPC(Player);
 
     MenuManager.BuildMenus();
+
+    for(int y = 0; y < CScreen::tilesPerChunk; y++){
+        for(int x = 0; x < CScreen::tilesPerChunk; x++){
+            tile_weak_ptr tile = ChunkManager.GetTile(x,y);
+            if(auto s = tile.lock()){
+                s->HarvestResource(1000);
+            }
+        }
+    }
+
+    auto buildingTypes = BuildingManager.GetBuildingTypes();
+    int buildingCount = 0;
+    int chiefW = 8, chiefH = 8;
+    for(auto bType : buildingTypes){
+        if(bType.DistributionRange()){
+            auto w = BuildingManager.AddBuilding(buildingCount,
+                                        Player->GetTileX() - (chiefW/2) + 1,
+                                        Player->GetTileY() - chiefH ,
+                                        1);
+            if(auto s = w.lock()){
+                s->AddToInventory(CGood::wood, 20);
+            }
+        }
+        buildingCount++;
+    }
+
+
 
     return true;
 }
@@ -49,6 +77,7 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("death_god", "gfx/chars/death_god.png");
     TextureManager.LoadTextureGL("tiles", "gfx/tile_sprites.png");
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
+    TextureManager.LoadTextureGL("icons", "gfx/icons.png");
     TextureManager.LoadTextureGL("minimap", "gfx/minimap.png");
     TextureManager.LoadTextureGL("tree", "gfx/resources/tree.png");
     TextureManager.LoadTextureGL("rock", "gfx/resources/rock.png");

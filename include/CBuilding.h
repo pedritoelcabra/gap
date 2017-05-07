@@ -40,6 +40,7 @@ class CBuilding : public CGUIObject
         unit_weak_ptr       GetIdleInhabitant();
         bool                InRadius(int x, int y);
         bool                HasEnoughWorkers();
+        bool                HasWorkToDo();
         void                Destroy();
         bool                AddWork(int amount);
         void                AddIncoming(task_weak_ptr ptr);
@@ -52,13 +53,14 @@ class CBuilding : public CGUIObject
         void                ClearConnections();
         int                 AddToInventory(int resource, int amount);
         int                 TakeFromInventory(int resource, int amount);
-        void                ApplyMovementCosts();
-        int                 GetMaxStorage(int resource);
+        void                ApplyMovementCosts(bool destroy = false);
+        int                 GetMaxStorage(int resource, bool excludingOrders = false);
         int                 GetResourcePrio(int resource_);
         build_weak_ptr      FindNearestStorage(int resource_);
         int                 IncomingByResource(int res);
         int                 OutgoingByResource(int res);
         task_weak_ptr       FindConnectedTask(unit_weak_ptr worker);
+        bool                HasBuildingResources();
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
@@ -83,6 +85,11 @@ class CBuilding : public CGUIObject
         std::string                     GetName(){                              return typePtr->GetName();};
         std::string                     GetDescription(){                       return typePtr->GetDescription();};
         bool                            IsRoad(){                               return typePtr->IsRoad();};
+        int                             ConsumesResource(int res_ = 0){         return typePtr->ConsumesResource(res_);};
+
+        bool                            CanProduce();
+        bool                            DoProduce();
+        int                             StartProduction();
     protected:
 
     private:

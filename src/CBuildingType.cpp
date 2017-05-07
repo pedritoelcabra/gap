@@ -74,7 +74,15 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		return;
 	}
 	if(!key.compare("buildCost")){
-		LoadCosts(value);
+		LoadCosts(BuildCosts, value);
+		return;
+	}
+	if(!key.compare("resourceInput")){
+		LoadCosts(Input, value);
+		return;
+	}
+	if(!key.compare("resourceOutput")){
+		LoadCosts(Output, value);
 		return;
 	}
 	if(!key.compare("buildRequirement")){
@@ -87,21 +95,37 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 	}
 }
 
-void CBuildingType::LoadCosts(std::string value){
+int CBuildingType::ConsumesResource(int res_){
+    if(res_ == 0){
+        return Input.size();
+    }
+    if (Input.count(res_)){
+        return Input.at(res_);
+    }
+    return 0;
+}
+
+int CBuildingType::ProducesResource(int res_){
+    if(res_ == 0){
+        return Output.size();
+    }
+    if (Output.count(res_)){
+        return Output.at(res_);
+    }
+    return 0;
+}
+
+void CBuildingType::LoadCosts(std::map< int, int > & container, std::string value){
 
 	std::istringstream is_value(value);
 	std::string type;
 	if( std::getline(is_value, type, ':') ) {
 		std::string amount;
 		if( std::getline(is_value, amount) ) {
-            if(type.compare("wood") == 0){
-                BuildCosts[CGood::wood] = std::stoi( amount );
-            }
-            if(type.compare("stone") == 0){
-                BuildCosts[CGood::stone] = std::stoi( amount );
-            }
-            if(type.compare("work") == 0){
-                BuildCosts[CGood::work] = std::stoi( amount );
+            for(auto const &item : CGood::GetResources()){
+                if(type.compare(item.second) == 0){
+                    container[item.first] = std::stoi( amount );
+                }
             }
 		}
 	}
@@ -152,7 +176,7 @@ int CBuildingType::GetCost(int type){
 }
 
 
-int CBuildingType::BuildCost(int res_){    
+int CBuildingType::BuildCost(int res_){
     if(BuildCosts.count(res_)){
 	return BuildCosts.at(res_);
     }

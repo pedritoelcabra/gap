@@ -24,7 +24,7 @@ class CChunkManager
         void                        Init();
         tile_weak_ptr               GetTile(int x, int y);
         int                         GetChunk(int tile);
-        std::vector<tile_weak_ptr>    GetResources(int resourceType, int resourceRadius, int tileX, int tileY);
+        std::vector<tile_weak_ptr>  GetResources(int resourceType, int resourceRadius, int tileX, int tileY);
         void                        MoveUnit(int x, int y, int nx, int ny, unit_weak_ptr ptr, int id, bool removeUnit = false);
 
         int                         GetX(){             return currentChunkX;};
@@ -44,6 +44,20 @@ class CChunkManager
         std::vector<tile_weak_ptr>        renderedTiles;
         int                             lastRenderedX;
         int                             lastRenderedY;
+
+
+        utils::NoiseMapBuilderPlane             heightMapBuilder;
+        utils::NoiseMap                         heightMap;
+        noise::module::Perlin                   myModule;
+        utils::NoiseMap                         heightMapForest;
+        noise::module::Perlin                   myModuleForest;
+        utils::NoiseMap                         heightMapStones;
+        noise::module::Perlin                   myModuleStones;
+
+        float                                   chunkPortion;
+
+        int                                     xOff = 0;
+        int                                     yOff = 0;
 };
 
 #endif // CCHUNKMANAGER_H

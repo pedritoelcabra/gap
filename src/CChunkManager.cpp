@@ -13,6 +13,44 @@ void CChunkManager::Init(){
     currentChunkY = 999999;
     lastRenderedX = 999999;
     lastRenderedY = 999999;
+    chunkPortion = 10000 * CScreen::tilesPerChunk;
+    chunkPortion = chunkPortion / 1000000;
+
+    CLog::Write("Seed:");
+    CLog::Write(GAP.GetSeed());
+
+    heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
+
+    myModule.SetFrequency (1.0);
+    myModule.SetSeed(GAP.GetSeed());
+
+    myModuleForest.SetFrequency (5.0);
+    myModuleForest.SetSeed(GAP.GetSeed());
+
+    myModuleStones.SetFrequency (3.0);
+    myModuleStones.SetSeed(GAP.GetSeed());
+
+    bool findingStartingPlace = true;
+    xOff = -1;
+    while(findingStartingPlace){
+        xOff++;
+        float chunkY = 0;
+        float chunkX = chunkPortion * xOff;
+        heightMapBuilder.SetSourceModule (myModule);
+        heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
+        heightMapBuilder.SetDestNoiseMap (heightMap);
+        heightMapBuilder.Build ();
+
+        findingStartingPlace = false;
+        for(int k = 0; k < tilesPerChunk ; k++){
+            for(int i = 0; i < tilesPerChunk ; i++){
+                if(heightMap.GetValue(k, i) < CScreen::waterLevel || heightMap.GetValue(k, i) >= CScreen::dryLandLevel){
+                    findingStartingPlace = true;
+                }
+            }
+        }
+    }
+
     UpdateChunks();
 }
 
@@ -50,8 +88,7 @@ void CChunkManager::RenderTiles(){
     }
 
 
-    for(auto e : renderedTiles)
-    {
+    for(auto e : renderedTiles)    {
         if(auto s = e.lock()){
             s->Render();
         }
@@ -63,14 +100,10 @@ void CChunkManager::RenderTiles(){
 void CChunkManager::RenderObjects(){
 
     CTree tree;
-    for(auto e : renderedTiles)
-    {
+    for(auto e : renderedTiles)    {
         if(auto s = e.lock()){
             s->RenderUnits();
-            if(s->GetResource()){
-                tree.Set(s->GetX(), s->GetY(), s->GetResource(), s->GetVariety());
-                tree.Render();
-            }
+            s->RenderResource();
         }
     }
 
@@ -78,47 +111,16 @@ void CChunkManager::RenderObjects(){
 }
 
 void CChunkManager::RenderMinimap(){
-
-//    int showWidth =  10;
-//    if(GAP.getTick() % 60){
-//        SDL_DestroyTexture(GAP.TextureManager.GetTexture("minimap"));
-//        SDL_Texture* texture = SDL_CreateTexture
-//            (
-//            GAP.getRenderer(),
-//            SDL_PIXELFORMAT_ARGB8888,
-//            SDL_TEXTUREACCESS_STREAMING,
-//            showWidth, showWidth
-//            );
-//
-//        std::vector< unsigned char > pixels( showWidth * showWidth * 4, 0 );
-//        std::vector<gui_pointer> tiles = TilesInTileArea(
-//                                            GAP.Player->getTileX() - (showWidth/2),
-//                                            GAP.Player->getTileY() - (showWidth/2),
-//                                            showWidth ,
-//                                            showWidth);
-//
-//        unsigned int tileCount = 0;
-//        unsigned int offset;
-//        SDL_Color color;
-//        for(CGUIObject* e : tiles)
-//        {
-//            color = e->GetMinimapColor();
-//            offset = ( showWidth * 4 * (tileCount / showWidth) ) + (tileCount % showWidth) * 4;
-//            pixels[ offset + 0 ] = color.b;        // b
-//            pixels[ offset + 1 ] = color.g;        // g
-//            pixels[ offset + 2 ] = color.r;        // r
-//            pixels[ offset + 3 ] = SDL_ALPHA_OPAQUE;    // a
-//            tileCount++;
-//        }
-//
-//        SDL_UpdateTexture(
-//            texture,
-//            NULL,
-//            &pixels[0],
-//            showWidth * 4);
-//        GAP.TextureManager.SetTexture(texture, "minimap");
-//    }
-
+    int viewDist = 2 / GAP.ZoomLvl();
+    int mapViewChunkX = GetChunk(GAP.PixelToTile(GAP.MainViewport.x));
+    int mapViewChunkY = GetChunk(GAP.PixelToTile(GAP.MainViewport.y));
+    for(int i = mapViewChunkY - viewDist; i <= mapViewChunkY + viewDist; i++ ){
+        for(int k = mapViewChunkX - viewDist; k <= mapViewChunkX + viewDist; k++ ){
+            if(ChunkExists(k, i)){
+                Matrix.at(i).at(k).RenderChunk();
+            }
+        }
+    }
 }
 
 bool CChunkManager::ChunkExists(int x, int y){
@@ -131,39 +133,22 @@ bool CChunkManager::ChunkExists(int x, int y){
 }
 
 void CChunkManager::GenerateChunk(int x, int y){
-    float chunkPortion = 10000 * CScreen::tilesPerChunk;
-    chunkPortion = chunkPortion / 1000000;
     float chunkY = chunkPortion * y;
-    float chunkX = chunkPortion * x;
+    float chunkX = chunkPortion * (x + xOff);
     CLog::Write("Generating chunk:");
     CLog::Write(chunkX);
     CLog::Write(chunkY);
 
-    utils::NoiseMapBuilderPlane heightMapBuilder;
-
-    utils::NoiseMap heightMap;
-    noise::module::Perlin myModule;
-    myModule.SetSeed(GAP.GetSeed());
     heightMapBuilder.SetSourceModule (myModule);
-    heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
-
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMap);
     heightMapBuilder.Build ();
 
-    utils::NoiseMap heightMapForest;
-    noise::module::Perlin myModuleForest;
-    myModuleForest.SetFrequency (5.0);
-    myModuleForest.SetSeed(GAP.GetSeed());
     heightMapBuilder.SetSourceModule (myModuleForest);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX + 220, chunkX + chunkPortion + 220);
     heightMapBuilder.SetDestNoiseMap (heightMapForest);
     heightMapBuilder.Build ();
 
-    utils::NoiseMap heightMapStones;
-    noise::module::Perlin myModuleStones;
-    myModuleStones.SetFrequency (3.0);
-    myModuleStones.SetSeed(GAP.GetSeed());
     heightMapBuilder.SetSourceModule (myModuleStones);
     heightMapBuilder.SetBounds (chunkY + 220, chunkY + chunkPortion + 220,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapStones);

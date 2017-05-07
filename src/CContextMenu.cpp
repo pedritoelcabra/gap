@@ -10,8 +10,7 @@ CContextMenu::CContextMenu(int x, int y){
 
     std::vector<unit_weak_ptr> npcs = GAP.UnitsAtTile(GAP.GetMouseTileX(),GAP.GetMouseTileY());
 
-    for(auto e : npcs)
-    {
+    for(auto e : npcs){
         if(auto s = e.lock()){
             CButton button = CButton(x, offset, 1, unit_weak_ptr(s) );
             offset += button.GetH();

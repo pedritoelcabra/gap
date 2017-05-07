@@ -83,7 +83,7 @@ public:
     Uint32              GetTick(){return tick;};
     int                 GetMouseTileX(){return mouseTileX;};
     int                 GetMouseTileY(){return mouseTileY;};
-    float               ZoomLvl(){return zoom;};
+    float               ZoomLvl();
 
     build_weak_ptr                          Building(int id);
     build_weak_ptr                          BuildingAt(int x, int y);
@@ -123,6 +123,9 @@ private:
     int                 fps = 0;
     bool                running = true;
     bool                paused = false;
+    bool                mapView = false;
+    int                 mapX = 0;
+    int                 mapY = 0;
     int                 seed;
 
 

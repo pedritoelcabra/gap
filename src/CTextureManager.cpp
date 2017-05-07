@@ -15,6 +15,17 @@ void CTextureManager::Init(){
             v++;
         }
     }
+
+    v = 0;
+    for(int i = 0; i<iconSheet32H; i++){
+        for(int k = 0; k < iconSheet32W; k++){
+            IconClips32[ v ].x = k*32;
+            IconClips32[ v ].y = i*32;
+            IconClips32[ v ].w = 32;
+            IconClips32[ v ].h = 32;
+            v++;
+        }
+    }
 }
 
 int CTextureManager::LoadTextureGL(std::string name, std::string path){
@@ -79,6 +90,13 @@ TTF_Font* CTextureManager::GetFont(int fontSize){
 GPU_Rect* CTextureManager::GetClip(int frame){
     if(frame > 0 && frame < (spriteCount-1)){
         return &SpriteClips[frame];
+    }
+    std::terminate();
+}
+
+GPU_Rect* CTextureManager::GetIconClip32(int icon){
+    if(icon > 0 && icon < (iconCount32-1)){
+        return &IconClips32[icon];
     }
     std::terminate();
 }

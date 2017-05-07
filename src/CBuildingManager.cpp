@@ -49,12 +49,14 @@ void CBuildingManager::LoadBuildingType(std::string fileName){
 	BuildingTypes.push_back(buildingType);
 }
 
-build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner){
+build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner, bool ignoreBlocked){
 
     build_weak_ptr ptr;
     build_shared_ptr building = std::make_shared<CBuilding>(type, x, y, owner);
     if(building->IsInBlockedLocation()){
-        return ptr;
+        if(!ignoreBlocked){
+            return ptr;
+        }
     }
     ptr = build_weak_ptr(building);
     buildingCount++;
@@ -85,14 +87,6 @@ void CBuildingManager::DemolishBuilding(int x, int y){
     {
         if( x >= (*iter)->GetTileX() && x < (*iter)->GetTileX() + ((*iter)->GetW() / CScreen::tileWidth)
            && y >= (*iter)->GetTileY() && y < (*iter)->GetTileY() + ((*iter)->GetH() / CScreen::tileWidth) ){
-            for(int i = 0; i < ((*iter)->GetH() / CScreen::tileWidth); i++ ){
-                for(int k = 0; k < ((*iter)->GetW() / CScreen::tileWidth); k++ ){
-                    tile_shared_ptr tile = GAP.ChunkManager.GetTile( (*iter)->GetTileX() + k, (*iter)->GetTileY() + i).lock();
-                    if(tile){
-                        GAP.Pathfinder.SetCost((*iter)->GetTileX() + k, (*iter)->GetTileY() + i, tile->GetMoveCost() );
-                    }
-                }
-            }
             (*iter)->Destroy();
             Buildings.erase(iter);
             return;
@@ -120,12 +114,28 @@ build_weak_ptr CBuildingManager::GetBuildingAt(int x, int y){
     return build_weak_ptr();
 }
 
-std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings( int radius, int x, int y){
+std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings(build_weak_ptr ptr){
     std::vector<build_weak_ptr> result;
-    for(auto b : Buildings){
-        if(b->UnderConstruction()){
-            if(b->GetTileFlightRoundDistance(x, y) <= radius){
-                result.push_back(build_weak_ptr(b));
+    if(auto s = ptr.lock()){
+        for(auto wc : s->GetConnections()){
+            if(auto sc = wc.lock()){
+                if(sc->UnderConstruction() && sc->HasBuildingResources() && sc->GetWorkers().size() < 1){
+                    result.push_back(build_weak_ptr(wc));
+                }
+            }
+        }
+    }
+    return result;
+}
+
+std::vector<build_weak_ptr> CBuildingManager::GetWorkPositions(build_weak_ptr ptr){
+    std::vector<build_weak_ptr> result;
+    if(auto s = ptr.lock()){
+        for(auto wc : s->GetConnections()){
+            if(auto sc = wc.lock()){
+                if(!sc->HasEnoughWorkers() && sc->HasWorkToDo()){
+                    result.push_back(build_weak_ptr(wc));
+                }
             }
         }
     }
@@ -137,37 +147,9 @@ build_weak_ptr CBuildingManager::GetBuilding(int id){
 }
 
 void CBuildingManager::Update(){
-
     for(auto e : Buildings){
-        if(e->UnderConstruction()){
-            continue;
-        }
-        e->Update();
-        if(!e->HasEnoughWorkers()){
-            CLog::Write(e->GetName());
-            CLog::Write(
-                        e->BuildArea()
-                        );
-
-            for(auto g : e->GetConnections()){
-
-                if(auto f = g.lock()){
-                    if(f->MaxPop() > 0){
-
-                        if(auto s = f->GetIdleInhabitant().lock()){
-                            if(e->GetResource()){
-                                s->SetGatherAssignment(build_weak_ptr(e));
-                                e->AddWorker(unit_weak_ptr(s));
-                            }
-                            if(e->BuildArea()){
-                                s->SetBuildAssignment(build_weak_ptr(e));
-                                e->AddWorker(unit_weak_ptr(s));
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
+        if(!e->UnderConstruction()){
+            e->Update();
         }
     }
 }
@@ -190,6 +172,18 @@ void CBuildingManager::UpdateConnections(){
                 if(auto fs = f.lock()){
                     fs->AddConnections(e->GetConnections());
                     fs->AddConnection(build_weak_ptr(e));
+                }
+            }
+        }
+    }
+    for(auto e : Buildings){
+        if( e->PopRange() > 0){
+            for(auto f : Buildings){
+                if( !f->IsRoad() && f->PopRange() == 0 ){
+                    if(e->GetTileFlightRoundDistance(f->GetTileX(), f->GetTileY()) <= e->PopRange()){
+                        e->AddConnection(build_weak_ptr(f));
+                        f->AddConnection(build_weak_ptr(e));
+                    }
                 }
             }
         }

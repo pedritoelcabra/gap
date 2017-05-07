@@ -43,8 +43,14 @@ class CUnit : public CGUIObject
         int                 FinishAction(CAction action_);
         bool                MoveToAdyacent(int x_, int y_);
         void                StopMovement();
-        void                Idle(int time);
+        void                Idle(int time, bool addOnly = false);
         void                UpdateAssignment();
+        void                UpdateBuildAssignment();
+        void                UpdateGatherAssignment();
+        void                UpdateFollowAssignment();
+        void                UpdateIdleAssignment();
+        void                UpdateProductionAssignment();
+        void                UpdateTransportAssignment();
         void                GatherResource(int resource);
         void                Destroy();
         void                CarryItem(int resource);
@@ -56,9 +62,12 @@ class CUnit : public CGUIObject
         build_weak_ptr      GetWorkplace(){             return workBuildingPtr;};
         int                 GetAssignment() {           return assignment; };
         int                 GetBusyTime(){              return busyTime; };
+        int                 GetActionCount(){           return ActionQueue.size(); };
         std::weak_ptr<CUnit>GetPtr(){                   return myPtr;};
         std::string         GetName() const{            return name;};
         std::string         GetThought() const{         return thought;};
+        void                SetSpeed(int speed){        baseSpeed = speed; };
+
         std::string         GetAssignmentName() const;
         float               GetMoveSpeed();
 
@@ -66,6 +75,7 @@ class CUnit : public CGUIObject
         void                SetFollowAssignment(unit_weak_ptr ptr);
         void                SetGatherAssignment(build_weak_ptr ptr);
         void                SetBuildAssignment(build_weak_ptr ptr);
+        void                SetProductionAssignment(build_weak_ptr ptr);
         void                SetHome(build_weak_ptr ptr);
         void                SetFacing(int direction);
         void                SetMoving(bool);
@@ -124,8 +134,7 @@ class CUnit : public CGUIObject
         std::vector<CAction>    ActionQueue;
         std::map<int, int>      Inventory;
         int                     carriedItem = 0;
-
-        static const int        resourceRadius = 20;
+        GPU_Rect                itemBox;
 };
 
 #endif // CUNIT_H

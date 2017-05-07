@@ -22,6 +22,9 @@ class CBuildingType
         int                                 GetCost(int type);
 
         std::vector< std::vector<float> >   GetLayout(){            return Layout;};
+        std::map< int, int >                GetBuildCosts(){        return BuildCosts;};
+        std::map< int, int >                GetInput(){             return Input;};
+        std::map< int, int >                GetOutput(){            return Output;};
         int                                 GetW(){                 return w;};
         int                                 GetH(){                 return h;};
         std::string                         GetName(){              return name;};
@@ -42,7 +45,10 @@ class CBuildingType
         bool                                IsDraggable(){          return draggable;};
         bool                                IsRoad(){               return connects;};
 
+
         int                                 BuildCost(int res_);
+        int                                 ConsumesResource(int res_ = 0);
+        int                                 ProducesResource(int res_ = 0);
     protected:
 
     private:
@@ -52,6 +58,8 @@ class CBuildingType
         std::vector<std::string>                Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
+        std::map< int, int >                    Input;
+        std::map< int, int >                    Output;
         int                                     w = -1;
         int                                     h = -1;
         bool                                    draggable = false;
@@ -71,7 +79,7 @@ class CBuildingType
         int                                     workerPriority = 0;
         int                                     maxStorage = 0;
 
-        void            LoadCosts(std::string value);
+        void            LoadCosts(std::map< int, int > & container, std::string value);
         void            LoadLayout(std::string value);
         void            InitLayout();
 };

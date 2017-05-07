@@ -7,6 +7,8 @@ CGame GAP;
 
 CGame::CGame(){
     seed =  time(0);
+    //seed = 1494098034;
+
 }
 
 int CGame::OnExecute(){

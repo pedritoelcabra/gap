@@ -16,6 +16,10 @@ void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, i
     resource = resource_;
     resourceAmount = resourceAmount_;
     resourceVariety = resourceVariety_;
+    if(resource_){
+        resourcePtr = tree_uniq_ptr(new CTree());
+        resourcePtr->Set(x, y, resource_, resourceVariety_);
+    }
 }
 
 void CTile::SetTerrain(int type){
@@ -63,6 +67,14 @@ bool CTile::Render(){
     return 1;
 }
 
+bool CTile::RenderResource(){
+    if(!resource){
+        return false;
+    }
+    resourcePtr->Render();
+    return true;
+}
+
 bool CTile::RenderUnits(){
     for(auto e : Units){
         if(auto s = e.lock()){
@@ -91,19 +103,25 @@ void CTile::RemoveUnit(int id){
     CLog::Write("Trying to remove nonexistant unit from tile?");
 }
 
-int CTile::HarvestResource(){
+int CTile::HarvestResource(int amount){
+    int harvestedAmount = 0;
     if(!resource){
-        return 0;
+        return harvestedAmount;
     }
-    if(!resourceAmount){
-        return 0;
+    if(resourceAmount == 0){
+        return harvestedAmount;
     }
-    resourceAmount--;
-    if(!resourceAmount){
+    if(resourceAmount < amount){
+        harvestedAmount = resourceAmount;
+    }else{
+        harvestedAmount = amount;
+    }
+    resourceAmount -= harvestedAmount;
+    if(resourceAmount <= 0){
         resource = 0;
         GAP.Pathfinder.SetCost(GetTileX(), GetTileY(), CScreen::flatMoveCost );
     }
-    return 1;
+    return harvestedAmount;
 }
 
 std::vector<unit_weak_ptr> CTile::UnitsAtTile(){

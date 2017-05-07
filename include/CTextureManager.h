@@ -32,11 +32,16 @@ class CTextureManager
         void                SetTexture(SDL_Texture* tex, std::string name);
         TTF_Font*           GetFont(int fontSize);
         GPU_Rect*           GetClip(int frame);
+        GPU_Rect*           GetIconClip32(int frame);
         GLuint              programID;
     protected:
     private:
         const static int    spriteCount = 273;
+        const static int    iconSheet32W = 64;
+        const static int    iconSheet32H = 50;
+        const static int    iconCount32 = iconSheet32W * iconSheet32H;
         GPU_Rect            SpriteClips[spriteCount];
+        GPU_Rect            IconClips32[iconCount32];
         GPU_Rect            DrawRect;
         TextureMap          Textures;
         TextureMapGL        TexturesGL;

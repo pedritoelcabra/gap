@@ -5,8 +5,8 @@ class CAction
 {
 
     public:
-        enum EActions { idleAction , moveTile, dropGoods, pickUpGoods, gatherResource, buildBuilding };
-        enum EAssignments { idleAssignment , followUnit, gatherResources, builderAssignment };
+        enum EActions { idleAction , moveTile, dropGoods, pickUpGoods, gatherResource, buildBuilding, doProduce, doTransport };
+        enum EAssignments { idleAssignment , followUnit, gatherResources, builderAssignment, productionAssignment, transportAssignment };
 
         CAction();
 		CAction(int type, int arga, int argb);
