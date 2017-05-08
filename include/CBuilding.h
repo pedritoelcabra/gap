@@ -105,6 +105,7 @@ class CBuilding : public CGUIObject
         int                 workToComplete = 0;
         CRecipe*            currentProduction = nullptr;
         int                 currentProductionStage = 0;
+        int                 currentProductionCooldown = 0;
 
 
         std::vector<task_weak_ptr>      Outgoing;
