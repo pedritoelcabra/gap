@@ -73,6 +73,10 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		upgrade = value;
 		return;
 	}
+	if(!key.compare("productionRecipe")){
+		Recipes.push_back(GAP.RecipeManager.GetRecipeByName(value));
+		return;
+	}
 	if(!key.compare("buildCost")){
 		LoadCosts(BuildCosts, value);
 		return;
@@ -96,23 +100,23 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 }
 
 int CBuildingType::ConsumesResource(int res_){
-    if(res_ == 0){
-        return Input.size();
-    }
-    if (Input.count(res_)){
-        return Input.at(res_);
-    }
-    return 0;
+	int mostResource = 0;
+	for(auto r : Recipes){
+		if(r.ConsumesResource(res_) > mostResource){
+			mostResource = r.ConsumesResource(res_);
+		}
+	}
+    	return mostResource;
 }
 
 int CBuildingType::ProducesResource(int res_){
-    if(res_ == 0){
-        return Output.size();
-    }
-    if (Output.count(res_)){
-        return Output.at(res_);
-    }
-    return 0;
+	int mostResource = 0;
+	for(auto r : Recipes){
+		if(r.ProducesResource(res_) > mostResource){
+			mostResource = r.ProducesResource(res_);
+		}
+	}
+    	return mostResource;
 }
 
 void CBuildingType::LoadCosts(std::map< int, int > & container, std::string value){
