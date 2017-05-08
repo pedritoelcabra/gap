@@ -25,6 +25,7 @@
 #include "CUnitManager.h"
 #include "CBuildingManager.h"
 #include "CTaskManager.h"
+#include "CRecipeManager.h"
 #include "CPathfinder.h"
 #include "CTree.h"
 
@@ -48,6 +49,7 @@ public:
     CUnitManager        UnitManager;
     CBuildingManager    BuildingManager;
     CTaskManager        TaskManager;
+    CRecipeManager      RecipeManager;
     CPathfinder         Pathfinder;
 
 

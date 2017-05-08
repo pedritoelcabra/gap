@@ -1,5 +1,8 @@
 #include "CBuildingType.h"
 #include "CScreen.h"
+#include "CGame.h"
+
+extern CGame GAP;
 
 CBuildingType::CBuildingType(){
 }
@@ -70,15 +73,15 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		return;
 	}
 	if(!key.compare("productionStages")){
-		productionStages = value;
+		productionStages = std::stoi(value);
 		return;
 	}
 	if(!key.compare("productionCooldown")){
-		productionCooldown = value;
+		productionCooldown = std::stoi(value);
 		return;
 	}
 	if(!key.compare("productionSetback")){
-		productionSetback = value;
+		productionSetback = std::stoi(value);
 		return;
 	}
 	if(!key.compare("description")){
@@ -95,14 +98,6 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 	}
 	if(!key.compare("buildCost")){
 		LoadCosts(BuildCosts, value);
-		return;
-	}
-	if(!key.compare("resourceInput")){
-		LoadCosts(Input, value);
-		return;
-	}
-	if(!key.compare("resourceOutput")){
-		LoadCosts(Output, value);
 		return;
 	}
 	if(!key.compare("buildRequirement")){

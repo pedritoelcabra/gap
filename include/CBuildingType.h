@@ -11,6 +11,7 @@
 #include "CScreen.h"
 #include "CAction.h"
 #include "CGood.h"
+#include "CRecipe.h"
 
 class CBuildingType
 {
@@ -23,6 +24,7 @@ class CBuildingType
 
         std::vector< std::vector<float> >   GetLayout(){            return Layout;};
         std::map< int, int >                GetBuildCosts(){        return BuildCosts;};
+        std::vector<CRecipe>*               GetRecipes(){           return &Recipes;};
         int                                 GetW(){                 return w;};
         int                                 GetH(){                 return h;};
         std::string                         GetName(){              return name;};

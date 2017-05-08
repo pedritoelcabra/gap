@@ -28,6 +28,7 @@ class CBuilding : public CGUIObject
 
         void                SetId(int id_, build_weak_ptr ptr);
         void                Update();
+        void                UpdateTransportTasks();
         bool                Render();
         bool                RenderOnTooltip();
         int                 SetX(int x);
@@ -61,6 +62,12 @@ class CBuilding : public CGUIObject
         int                 OutgoingByResource(int res);
         task_weak_ptr       FindConnectedTask(unit_weak_ptr worker);
         bool                HasBuildingResources();
+        vec2i               GetRandomPassableTile();
+        bool                IsValidWorkLocation(int x, int y);
+        bool                CanProduce();
+        bool                DoProduce();
+        int                 StartProduction();
+        CRecipe*            AvailableRecipe();
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
@@ -87,10 +94,6 @@ class CBuilding : public CGUIObject
         bool                            IsRoad(){                               return typePtr->IsRoad();};
         int                             ConsumesResource(int res_ = 0){         return typePtr->ConsumesResource(res_);};
 
-        vec2i                           GetRandomPassableTile();
-        bool                            CanProduce();
-        bool                            DoProduce();
-        int                             StartProduction();
     protected:
 
     private:

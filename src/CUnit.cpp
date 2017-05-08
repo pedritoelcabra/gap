@@ -516,7 +516,7 @@ void CUnit::UpdateTransportAssignment(){
         if(GetCarriedItem()){
             maxCollision = 2.0f;
             if(auto destS = taskPtrS->GetDropOff().lock()){
-                if(destS->DoorX() == tileX && destS->DoorY() == tileY){
+                if(destS->IsValidWorkLocation(tileX, tileY)){
                     if(destS->AddToInventory(GetCarriedItem(), 1) == 0){
                         GetCarriedItem(true);
                         taskPtrS->MarkComplete();
@@ -530,8 +530,13 @@ void CUnit::UpdateTransportAssignment(){
                     taskPtr.reset();
                     return;
                 }
-                MoveTo(destS->DoorX(), destS->DoorY());
-                thought = "Going to drop off goods";
+                vec2i randomTile = destS->GetRandomPassableTile();
+                if(MoveTo(randomTile.first, randomTile.second)){
+                    thought = "Going to drop off goods";
+                    return;
+                }
+                thought = "No path to drop off goods";
+                Idle(60);
                 return;
             }
             taskPtr.reset();
@@ -540,7 +545,7 @@ void CUnit::UpdateTransportAssignment(){
             return;
         }
         if(auto destS = taskPtrS->GetPickUp().lock()){
-            if(destS->DoorX() == tileX && destS->DoorY() == tileY){
+            if(destS->IsValidWorkLocation(tileX, tileY)){
                 if(destS->TakeFromInventory(taskPtrS->GetResource(), 1) == 1){
                     CarryItem(taskPtrS->GetResource());
                     thought = "Picked up goods";
@@ -551,7 +556,8 @@ void CUnit::UpdateTransportAssignment(){
                 maxCollision = 3.0f;
                 return;
             }
-            if(MoveTo(destS->DoorX(), destS->DoorY())){
+            vec2i randomTile = destS->GetRandomPassableTile();
+            if(MoveTo(randomTile.first, randomTile.second)){
                 thought = "Going to pick up goods";
                 return;
             }
@@ -666,14 +672,19 @@ void CUnit::UpdateProductionAssignment(){
         SetIdleAssignment();
         return;
     }
-    if(GetTileFlightSquareDistance(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY()) < 1 ){
+    if(!workBuildingPtrS->CanProduce()){
+        SetIdleAssignment();
+        return;
+    }
+    if(workBuildingPtrS->IsValidWorkLocation(tileX, tileY)){
         CAction action = CAction(CAction::doProduce, 240, 1);
         AddAction(action);
         thought = "Producing!";
         return;
     }
     thought = "Going to production site";
-    MoveTo(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY());
+    vec2i randomTile = workBuildingPtrS->GetRandomPassableTile();
+    MoveTo(randomTile.first, randomTile.second);
     return;
     return;
 }

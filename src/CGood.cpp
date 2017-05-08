@@ -4,14 +4,16 @@ std::map<int, std::string > CGood::ResourceNames = {
    {1, "Wood"},
    {2, "Stone"},
    {3, "Work"},
-   {4, "Plank"}
+   {4, "Plank"},
+   {5, "Cereal"}
 };
 
 std::map<int, int > CGood::ResourceIcons = {
    {1, 3051},
    {2, 2996},
    {3, 1},
-   {4, 3052}
+   {4, 3052},
+   {5, 3053}
 };
 
 const std::map<int, std::string > CGood::GetResources(){

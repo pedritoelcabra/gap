@@ -23,6 +23,7 @@ bool CGame::OnInit(){
     Player->SetSpeed(8);
 
     ChunkManager.Init();
+    RecipeManager.Init();
     BuildingManager.Init();
 
 
@@ -49,7 +50,8 @@ bool CGame::OnInit(){
                                         Player->GetTileY() - chiefH ,
                                         1);
             if(auto s = w.lock()){
-                s->AddToInventory(CGood::wood, 20);
+                s->AddToInventory(CGood::wood, 5);
+                s->AddToInventory(CGood::stone, 5);
             }
         }
         buildingCount++;

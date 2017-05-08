@@ -1,9 +1,9 @@
 #include "CRecipe.h"
 
-CBuildingType::CRecipe(){
+CRecipe::CRecipe(){
 }
 
-CBuildingType::~CRecipe(){
+CRecipe::~CRecipe(){
 }
 
 void CRecipe::LoadLine(std::string key, std::string value){

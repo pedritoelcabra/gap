@@ -123,6 +123,9 @@ void CBuilding::Update(){
             GenerateInhabitant();
         }
     }
+}
+
+void CBuilding::UpdateTransportTasks(){
     int outgoinTasks;
     for (auto const& item : Inventory){
         outgoinTasks = OutgoingByResource(item.first);
@@ -310,20 +313,20 @@ CRecipe* CBuilding::AvailableRecipe(){
     if(!ConsumesResource(0)){
         return nullptr;
     }
-    for(auto const & recipe : Recipes){
+    for(auto & recipe : *(typePtr->GetRecipes()) ){
         bool canProduce = true;
-        for(auto const &c : recipe->GetInput()){
+        for(auto const & c : *(recipe.GetInput()) ){
             if( c.first != CGood::work && Inventory.at(c.first) < c.second){
                 canProduce = false;
             }
         }
-        for(auto const &c : recipe->GetOutput()){
+        for(auto const &c : *(recipe.GetOutput()) ){
             if( GetMaxStorage(c.first) < c.second){
                 canProduce = false;
             }
         }
         if(canProduce){
-            return recipe;
+            return &recipe;
         }
     }
     return nullptr;
@@ -335,7 +338,7 @@ int CBuilding::StartProduction(){
     if(currentProduction == nullptr){
         return timeRequired;
     }
-    for(auto const &c : currentProduction->GetInput()){
+    for(auto const &c : *(currentProduction->GetInput()) ){
         if( c.first == CGood::work ){
             timeRequired = c.second * CScreen::buildingUpdateFrequency;
         }else{
@@ -349,16 +352,21 @@ bool CBuilding::DoProduce(){
     if(currentProduction == nullptr){
         return false;
     }
+
     currentProductionStage++;
+    clip.x = currentProductionStage * GetW();
+    currentProductionCooldown = typePtr->ProductionCooldown();
+
     if(currentProductionStage < typePtr->ProductionStages()){
         return true;
     }
-    
-    currentProductionCooldown = typePtr->ProductionCooldown();
+
     currentProductionStage -= typePtr->ProductionSetback();
-    for(auto const &c : currentProduction->GetOutput()){
+    clip.x = currentProductionStage * GetW();
+    for(auto const &c : *(currentProduction->GetOutput()) ){
         AddToInventory(c.first, c.second);
     }
+    UpdateTransportTasks();
     return true;
 }
 
@@ -389,10 +397,12 @@ bool CBuilding::AddWork(int amount){
 int CBuilding::AddToInventory(int resource, int amount){
     if(amount <= GetMaxStorage(resource, true)){
         Inventory.at(resource) += amount;
+        UpdateTransportTasks();
         return 0;
     }
     int amountAdded = GetMaxStorage(resource, true) - Inventory.at(resource);
     Inventory.at(resource) += amountAdded;
+    UpdateTransportTasks();
     return amount - amountAdded;
 }
 
@@ -420,17 +430,38 @@ void CBuilding::ApplyMovementCosts(bool destroy){
             if(typePtr->IsRoad() && workToComplete > 0){
                 continue;
             }
-            vec2i passableTile;
-            passableTile.first = tileX + k;
-            passableTile.second = tileY + i;
-            PassableTiles.push_back(passableTile);
+            if(layout.at(i).at(k) < 3.0f){
+                vec2i passableTile;
+                passableTile.first = tileX + k;
+                passableTile.second = tileY + i;
+                PassableTiles.push_back(passableTile);
+            }
             GAP.Pathfinder.SetCost(tileX + k, tileY + i, layout.at(i).at(k));
         }
     }
 }
 
 vec2i CBuilding::GetRandomPassableTile(){
+    if(PassableTiles.size() < 2){
+        return PassableTiles.at(0);
+    }
     return PassableTiles.at(rand() % PassableTiles.size());
+}
+
+bool CBuilding::IsValidWorkLocation(int x, int y){
+    if(x < tileX){
+        return false;
+    }
+    if(y < tileY){
+        return false;
+    }
+    if(x > tileX + GetTileWidth()){
+        return false;
+    }
+    if(y > tileY + GetTileHeight()){
+        return false;
+    }
+    return true;
 }
 
 int CBuilding::GetMaxStorage(int resource_, bool excludingOrders){

@@ -40,7 +40,7 @@ void CRecipeManager::LoadRecipe(std::string fileName){
         }
 	}
 
-	Recipes[recipe.name] = recipe;
+	Recipes[recipe.GetName()] = recipe;
 }
 
 CRecipe CRecipeManager::GetRecipeByName(std::string name){
