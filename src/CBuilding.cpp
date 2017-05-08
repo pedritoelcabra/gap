@@ -294,28 +294,42 @@ bool CBuilding::HasWorkToDo(){
 }
 
 bool CBuilding::CanProduce(){
-    if(!ConsumesResource(0)){
-        return 0;
-    }
-    for(auto const &c : typePtr->GetInput()){
-        if( c.first != CGood::work && Inventory.at(c.first) < c.second){
-            return false;
-        }
-    }
-    for(auto const &c : typePtr->GetOutput()){
-        if( GetMaxStorage(c.first) < c.second){
-            return false;
-        }
+    if(AvailableRecipe() == nullptr){
+        return false;
     }
     return true;
 }
 
+CRecipe* CBuilding::AvailableRecipe(){
+    if(!ConsumesResource(0)){
+        return nullptr;
+    }
+    for(auto const & recipe : Recipes){
+        bool canProduce = true;
+        for(auto const &c : recipe->GetInput()){
+            if( c.first != CGood::work && Inventory.at(c.first) < c.second){
+                canProduce = false;
+            }
+        }
+        for(auto const &c : recipe->GetOutput()){
+            if( GetMaxStorage(c.first) < c.second){
+                canProduce = false;
+            }
+        }
+        if(canProduce){
+            return recipe;
+        }
+    }
+    return nullptr;
+}
+
 int CBuilding::StartProduction(){
     int timeRequired = 0;
-    if(!CanProduce()){
+    currentProduction = AvailableRecipe();
+    if(currentProduction == nullptr){
         return timeRequired;
     }
-    for(auto const &c : typePtr->GetInput()){
+    for(auto const &c : currentProduction->GetInput()){
         if( c.first == CGood::work ){
             timeRequired = c.second * CScreen::buildingUpdateFrequency;
         }else{
@@ -326,7 +340,10 @@ int CBuilding::StartProduction(){
 }
 
 bool CBuilding::DoProduce(){
-    for(auto const &c : typePtr->GetOutput()){
+    if(currentProduction == nullptr){
+        return false;
+    }
+    for(auto const &c : currentProduction->GetOutput()){
         AddToInventory(c.first, c.second);
     }
     return true;
