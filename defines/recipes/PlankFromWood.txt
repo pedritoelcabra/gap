@@ -1,0 +1,3 @@
+inputResource=Wood:1
+inputResource=Work:1
+outputResource=Plank:1
