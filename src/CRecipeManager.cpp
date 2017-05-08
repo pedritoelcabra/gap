@@ -40,6 +40,9 @@ void CRecipeManager::LoadRecipe(std::string fileName){
         }
 	}
 
-	Recipes.push_back(recipe);
+	Recipes[recipe.name] = recipe;
 }
 
+CRecipe* CRecipeManager::GetRecipeByName(std::string name){
+	return Recipes.at(name);
+}
