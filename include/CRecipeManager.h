@@ -12,11 +12,12 @@ class CRecipeManager
         virtual ~CRecipeManager(){};
 
         bool                                Init();
+        CRecipe*                            GetRecipeByName(std::string name);
     protected:
 
     private:
         void                                LoadRecipe(std::string fileName);
-        std::vector<CRecipe>                Recipes;
+        std::map<std::string, CRecipe>      Recipes;
 };
 
 #endif // CRECIPEMANAGER_H
