@@ -58,8 +58,7 @@ class CBuildingType
         std::vector<std::string>                Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
-        std::map< int, int >                    Input;
-        std::map< int, int >                    Output;
+        std::vector<CRecipe>                    Recipes;
         int                                     w = -1;
         int                                     h = -1;
         bool                                    draggable = false;
