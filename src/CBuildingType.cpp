@@ -73,6 +73,10 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		productionStages = value;
 		return;
 	}
+	if(!key.compare("productionCooldown")){
+		productionCooldown = value;
+		return;
+	}
 	if(!key.compare("productionSetback")){
 		productionSetback = value;
 		return;
