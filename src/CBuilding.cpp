@@ -112,6 +112,9 @@ void CBuilding::Update(){
     if(workToComplete){
         return;
     }
+    if(currentProductionCooldown > 0){
+        currentProductionCooldown--;
+    }
     DeleteUnusedWeak(&Workers);
     if(typePtr->MaxPop() > static_cast<int>(Inhabitants.size())){
         popProgress++;
@@ -294,6 +297,9 @@ bool CBuilding::HasWorkToDo(){
 }
 
 bool CBuilding::CanProduce(){
+    if(currentProductionCooldown > 0){
+        return false;
+    }
     if(AvailableRecipe() == nullptr){
         return false;
     }
@@ -343,6 +349,13 @@ bool CBuilding::DoProduce(){
     if(currentProduction == nullptr){
         return false;
     }
+    currentProductionStage++;
+    if(currentProductionStage < typePtr->ProductionStages()){
+        return true;
+    }
+    
+    currentProductionCooldown = typePtr->ProductionCooldown();
+    currentProductionStage -= typePtr->ProductionSetback();
     for(auto const &c : currentProduction->GetOutput()){
         AddToInventory(c.first, c.second);
     }
