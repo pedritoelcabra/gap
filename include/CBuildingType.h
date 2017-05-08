@@ -45,7 +45,6 @@ class CBuildingType
         
 
 
-        vec2i                               GetRandomPassableTile();
         int                                 BuildCost(int res_);
         int                                 ConsumesResource(int res_ = 0);
         int                                 ProducesResource(int res_ = 0);
@@ -59,7 +58,6 @@ class CBuildingType
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
         std::vector<CRecipe>                    Recipes;
-        std::vector<vec2i>                      PassableTiles;
         int                                     w = -1;
         int                                     h = -1;
         bool                                    draggable = false;
