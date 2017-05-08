@@ -1,3 +1,4 @@
-inputResource=Wood:1
-inputResource=Work:1
-outputResource=Plank:1
+name=PlankFromWood
+resourceInput=Wood:1
+resourceInput=Work:2
+resourceOutput=Plank:1
