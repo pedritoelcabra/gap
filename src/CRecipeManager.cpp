@@ -43,6 +43,6 @@ void CRecipeManager::LoadRecipe(std::string fileName){
 	Recipes[recipe.name] = recipe;
 }
 
-CRecipe* CRecipeManager::GetRecipeByName(std::string name){
+CRecipe CRecipeManager::GetRecipeByName(std::string name){
 	return Recipes.at(name);
 }
