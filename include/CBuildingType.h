@@ -23,8 +23,6 @@ class CBuildingType
 
         std::vector< std::vector<float> >   GetLayout(){            return Layout;};
         std::map< int, int >                GetBuildCosts(){        return BuildCosts;};
-        std::map< int, int >                GetInput(){             return Input;};
-        std::map< int, int >                GetOutput(){            return Output;};
         int                                 GetW(){                 return w;};
         int                                 GetH(){                 return h;};
         std::string                         GetName(){              return name;};
