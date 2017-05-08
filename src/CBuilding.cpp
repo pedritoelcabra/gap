@@ -407,9 +407,17 @@ void CBuilding::ApplyMovementCosts(bool destroy){
             if(typePtr->IsRoad() && workToComplete > 0){
                 continue;
             }
+            vec2i passableTile;
+            passableTile.first = tileX + k;
+            passableTile.second = tileY + i;
+            PassableTiles.push_back(passableTile);
             GAP.Pathfinder.SetCost(tileX + k, tileY + i, layout.at(i).at(k));
         }
     }
+}
+
+vec2i CBuilding::GetRandomPassableTile(){
+    return PassableTiles.at(rand() % PassableTiles.size());
 }
 
 int CBuilding::GetMaxStorage(int resource_, bool excludingOrders){
