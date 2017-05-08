@@ -103,7 +103,8 @@ class CBuilding : public CGUIObject
         CBuildingType*      typePtr;
         GPU_Rect            clip;
         int                 workToComplete = 0;
-        CRecipe*            currentProduction;
+        CRecipe*            currentProduction = nullptr;
+        int                 currentProductionStage = 0;
 
 
         std::vector<task_weak_ptr>      Outgoing;
