@@ -42,7 +42,10 @@ class CBuildingType
         int                                 GetStorage(){           return maxStorage;};
         bool                                IsDraggable(){          return draggable;};
         bool                                IsRoad(){               return connects;};
-        
+        int                                 ProductionStages(){     return productionStages;};
+        int                                 ProductionCooldown(){   return productionCooldown;};
+        int                                 ProductionSetback(){    return productionSetback;};
+        bool                                RandomWorkPosition(){   return randomWorkPosition;};
 
 
         int                                 BuildCost(int res_);
@@ -69,6 +72,10 @@ class CBuildingType
         int                                     buildArea = 0;
         int                                     distributionRange = 0;
         int                                     transportRange = 0;
+        int                                     productionStages = 0;
+        int                                     productionSetback = 0;
+        int                                     productionCooldown = 0;
+        bool                                    randomWorkPosition = false;
 
         int                                     popMax = 0;
         int                                     popCost = 0;
