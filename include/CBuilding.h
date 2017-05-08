@@ -87,6 +87,7 @@ class CBuilding : public CGUIObject
         bool                            IsRoad(){                               return typePtr->IsRoad();};
         int                             ConsumesResource(int res_ = 0){         return typePtr->ConsumesResource(res_);};
 
+        vec2i                           GetRandomPassableTile();
         bool                            CanProduce();
         bool                            DoProduce();
         int                             StartProduction();
@@ -111,6 +112,7 @@ class CBuilding : public CGUIObject
         std::vector<unit_weak_ptr>      Inhabitants;
         std::map<int, int>              Inventory;
         std::vector<build_weak_ptr>     ConnectedBuildings;
+        std::vector<vec2i>              PassableTiles;
         build_weak_ptr                  myPtr;
 
 };
