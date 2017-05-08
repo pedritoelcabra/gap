@@ -86,7 +86,7 @@ int CBuilding::SetY(int y){
 bool CBuilding::IsInBlockedLocation(){
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
-            if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) >= 3){
+            if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) != 3.0f){
                 return true;
             }
             if(!typePtr->IsRoad()){
