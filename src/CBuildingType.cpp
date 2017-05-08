@@ -65,6 +65,18 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		connects = true;
 		return;
 	}
+	if(!key.compare("randomWorkPosition")){
+		randomWorkPosition = true;
+		return;
+	}
+	if(!key.compare("productionStages")){
+		productionStages = value;
+		return;
+	}
+	if(!key.compare("productionSetback")){
+		productionSetback = value;
+		return;
+	}
 	if(!key.compare("description")){
 		description = value;
 		return;
