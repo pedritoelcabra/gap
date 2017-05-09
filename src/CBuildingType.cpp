@@ -17,7 +17,7 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		return;
 	}
 	if(!key.compare("resourceGatherer")){
-		resource = std::stoi(value);
+		resource = CGood::GetResourceByName(value);
 		return;
 	}
 	if(!key.compare("maxStorage")){
@@ -137,11 +137,7 @@ void CBuildingType::LoadCosts(std::map< int, int > & container, std::string valu
 	if( std::getline(is_value, type, ':') ) {
 		std::string amount;
 		if( std::getline(is_value, amount) ) {
-            for(auto const &item : CGood::GetResources()){
-                if(type.compare(item.second) == 0){
-                    container[item.first] = std::stoi( amount );
-                }
-            }
+		    container[CGood::GetResourceByName(item.first)] = std::stoi( amount );
 		}
 	}
 
