@@ -1,0 +1,54 @@
+
+////////////////////// RAW
+
+// Environment
+Wood                                                    Building Material 1
+Stone Blocks                                            Building Material 1
+Iron Ore
+Copper Ore
+Tin Ore
+Coal
+Gold Ore
+Silver Ore
+Sand
+Marble Blocks                                           Building Material 3
+Gemstones
+Fish
+Lime
+Clay
+Lapis Lazuli
+
+// Farmed
+Wheat
+Hops
+Grapes
+Apples
+Herbs
+Cotton
+Wool
+Meat
+Bones
+Hides
+Eggs
+Horse
+Donkey
+Gallnuts
+
+////////////////// CRAFTED
+
+Bronze                  Copper + Tin
+
+Ink                     Gallnut + Iron Ore
+Parchment               Hides + Lime
+Books                   Ink + Parchment                 Research
+
+Mortar                  Stone + Lime                    Building Material 3
+Planks                  Wood                            Building Material 2
+Glass                   Sand + Lime                     Building Material 3
+Bricks                  Clay                            Building Material 2
+
+Porcelain               Clay + Lapis Lazuli             Consumable
+Bricks                  Clay                            Consumable
+Garments                Cotton                          Consumable
+
+
