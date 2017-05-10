@@ -4,7 +4,7 @@
 // Environment
 Wood                                                    Building Material 1
 Stone Blocks                                            Building Material 1
-Iron Ore
+Iron Ore                Wood
 Copper Ore
 Tin Ore
 Coal
@@ -17,6 +17,8 @@ Fish
 Lime
 Clay
 Lapis Lazuli
+Salt
+Ebony
 
 // Farmed
 Wheat
@@ -33,22 +35,33 @@ Eggs
 Horse
 Donkey
 Gallnuts
+Nettles
 
 ////////////////// CRAFTED
+
+Gems                    Gemstones
+Leather                 Hides
+Fabric                  Cotton
 
 Bronze                  Copper + Tin
 
 Ink                     Gallnut + Iron Ore
-Parchment               Hides + Lime
+Parchment               Hides + Lime                    
 Books                   Ink + Parchment                 Research
 
 Mortar                  Stone + Lime                    Building Material 3
 Planks                  Wood                            Building Material 2
 Glass                   Sand + Lime                     Building Material 3
 Bricks                  Clay                            Building Material 2
+Reinforced Door         Iron + Wood                     Building Material 3
 
-Porcelain               Clay + Lapis Lazuli             Consumable
-Bricks                  Clay                            Consumable
-Garments                Cotton                          Consumable
+Rude Clothes            Nettles                         Consumable 1
+Basic Furniture         Wood                            Consumable 1
+Earthenware             Clay                            Consumable 1
+Simple Food             Any Food                        Consumable 1
 
+Elegant Clothes         Fabric + Leather + Gems         Consumable 2
+Noble Furniture         Wood + Ebony + Silver           Consumable 2
+Ornate Porcelain        Clay + Lapis Lazuli + Gold      Consumable 2
+Elaborate Food          Simple Food + Salt + Meat/Fish  Consumable 2
 
