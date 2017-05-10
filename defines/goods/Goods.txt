@@ -76,3 +76,39 @@ Noble Furniture         Planks + Ebony + Silver         Consumable 2
 Ornate Porcelain        Clay + Lapis Lazuli + Gold      Consumable 2
 Elaborate Food          Simple Food + Salt + Meat/Fish  Consumable 2
 
+******Military 1
+Padded Armor            Fabric + Wood
+Wooden Shield           Wood
+Wooden Club             Wood
+Wooden Spear            Wood
+Wooden Bow              Wood + Hide
+Stonehead Arrows        Wood + Stone
+
+******Military 2
+Leather Armor           Leather
+Leather Helmet          Leather
+Bronze Shield           Bronze
+Bronze Gladius          Bronze
+Bronze Spear            Bronze + Wood
+Bronzehead Arrows       Wood + Bronze
+
+******Military 3
+Iron Chainmail          Iron + Leather
+Iron Helmet             Iron
+Iron Cuirass            Iron
+Iron Shield             Iron
+Iron Sword              Iron
+Iron Spear              Iron + Wood
+Composite Bow           Ebony + Hide
+Bronzehead Arrows       Wood + Bronze
+
+******Military 4
+Steel Chainmail         Steel + Leather
+Steel Helmet            Steel
+Steel Cuirass           Steel
+Steel Shield            Steel
+Steel Sword             Steel
+Steel Spear             Steel + Wood
+Steelhead Arrows        Steel + Wood
+
+
