@@ -1,0 +1,13 @@
+slug=tgatherer
+name=Tin Gatherer
+description=Collects surface tin
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:1
+resourceGatherer=Tin
+resourceRadius=20
+workerCount=1
+workerPriority=100
