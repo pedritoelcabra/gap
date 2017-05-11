@@ -15,6 +15,6 @@ workerCount=1
 workerPriority=90
 productionRecipe=CerealFromWork
 productionStages=4
-productionSetback=1
+productionSetback=4
 productionCooldown=2
 randomWorkPosition
