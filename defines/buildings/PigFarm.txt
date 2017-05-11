@@ -1,0 +1,20 @@
+slug=pigfarm
+name=Pig Farm
+description=Raises pigs for slaughter
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:0:1:1:1:1
+workerCount=1
+workerPriority=90
+productionRecipe=MeatBonesHidesFromWork
+productionStages=4
+productionSetback=4
+productionCooldown=2
+randomWorkPosition
