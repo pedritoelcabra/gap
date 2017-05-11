@@ -1,0 +1,20 @@
+slug=cottonfield
+name=Cotton Field
+description=Grows cotton
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:1:1:1:1:1
+layoutLine=1:1:1:1:1:0:1:1:1:1
+workerCount=1
+workerPriority=90
+productionRecipe=CottonFromWork
+productionStages=4
+productionSetback=2
+productionCooldown=2
+randomWorkPosition
