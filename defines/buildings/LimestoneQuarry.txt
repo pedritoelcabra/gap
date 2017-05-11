@@ -1,0 +1,13 @@
+slug=limestonequarry
+name=Limestone Quarry
+description=Works surface quarries for limestone blocks
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:1
+resourceGatherer=Limestone
+resourceRadius=20
+workerCount=1
+workerPriority=100
