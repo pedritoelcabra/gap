@@ -2,113 +2,114 @@
 ////////////////////// RAW
 
 ******Environment
-Wood                                                    Building Material 1
-Stone Blocks                                            Building Material 1
-Iron Ore
-Copper Ore
-Tin Ore
-Coal
-Gold Ore
-Silver Ore
-Sand
-Marble Blocks                                           Building Material 3
-Gemstones
-Fish
-Lime
-Clay
-Lapis Lazuli
-Salt
-Ebony
+Wood                                                          Trees                          Building Material 1
+Stone Blocks                                                  Stone blocks                   Building Material 1
+Iron Ore                                                      Iron deposit, Iron Mine
+Copper Ore                                                    Copper deposit, Copper Mine
+Tin Ore                                                       Tin deposit, Tin Mine
+Coal                                                          Coal deposit, Coal Mine
+Gold Ore                                                      Gold deposit, Gold Mine
+Silver Ore                                                    Silver deposit, Silver Mine
+Sand                                                          Sand
+Marble Blocks                                                 Marble quarry                  Building Material 3
+Gemstones                                                     Gemstones
+Fish                                                          Sea
+Lime                                                          Limestones
+Clay                                                          Fertile Ground
+Lapis Lazuli                                                  Lapis Stones
+Salt                                                          Brine Deposit
+Ebony                                                         Ebony Tree
 
 ******Farmed
-Wheat
-Hops
-Grapes
-Apples
-Herbs
-Cotton
-Wool
-Meat
-Bones
-Hides
-Eggs
-Horse
-Donkey
-Gallnuts
+Wheat                                                         Wheat Field
+Hops                                                          Hops Field
+Grapes                                                        Vineyard
+Fruit                                                         Orchard
+Herbs                                                         Herb Garden
+Cotton                                                        Cotton Field
+Wool                                                          Sheep Farm
+Meat                                                          Pig Farm
+Bones                                                         Pig Farm
+Hides                                                         Pig Farm
+Horse                                                         Horse Farm
+Donkey                                                        Donkey Farm
+Gallnuts                                                      Oak Tree
 
 ////////////////// CRAFTED
 
 ******General
-Coal                    Wood
-Gold                    Gold Ore + Coal
-Silver                  Silver Ore + Coal
-Bronze                  Copper Ore + Tin Ore + Coal
-Iron                    Iron Ore + Coal (Bloomery)
-Pig Iron                Iron Ore + Coal (Blast Furnace)
-Iron                    Pig Iron + Coal (Finery Forge)
-Steel                   Pig Iron + Coal (Steel Furnace)
+Coal                    Wood                                  Charcoal Burner
+Gold                    Gold Ore + Coal                       Furnace
+Silver                  Silver Ore + Coal                     Furnace
+Bronze                  Copper Ore + Tin Ore + Coal           Furnace
+Iron                    Iron Ore + Coal                       Bloomery
+Pig Iron                Iron Ore + Coal                       Blast Furnace
+Iron                    Pig Iron + Coal                       Finery Forge
+Steel                   Pig Iron + Coal                       Steel Furnace
 
-Leather                 Hides
-Ink                     Gallnut + Iron Ore
-Parchment               Hides + Lime   
-Fabric                  Cotton
-Gems                    Gemstones
-Glass                   Sand                            Building Material 2
-Planks                  Wood                            Building Material 2
+Leather                 Hides                                 Tannery
+Ink                     Gallnut + Iron Ore                    Bookbinder
+Parchment               Hides + Lime                          Tannery
+Fabric                  Cotton                                Weaver
+Gems                    Gemstones                             Gemcutter
+Glass                   Sand                                  Glass Kiln                  Building Material 2
+Planks                  Wood                                  Sawmill                     Building Material 2
 
 ******Research      
-Basic Instruments       Wood                            Research 1
-Books                   Ink + Parchment                 Research 2
-Advanced Instruments    Glass + Bronze + Ebony          Research 3
+Basic Instruments       Wood + Stone                          Tinkerer                    Research 1
+Advanced Instruments    Bronze + Ebony                        Tinkerer                    Research 2
+Beer                    Hops + Wheat                          Brewery                     Research 2
+Books                   Ink + Parchment                       Bookbinder                  Research 3
+Wine                    Glass + Grapes + Wood                 Winery                      Research 3
 
 ******Construction
-Bricks                  Clay                            Building Material 2
-Mortar                  Stone + Lime                    Building Material 3
-Reinforced Door         Iron + Wood                     Building Material 3
+Bricks                  Clay                                  Kiln                        Building Material 2
+Mortar                  Stone + Lime                          Builder's Workshop          Building Material 3
+Reinforced Door         Iron + Wood                           Carpenter                   Building Material 3
 
 ******Consumable
-Rude Clothes            Wool                            Consumable 1
-Basic Furniture         Wood                            Consumable 1
-Earthenware             Clay                            Consumable 1
-Simple Food             Any Food                        Consumable 1
-Elegant Clothes         Fabric + Leather + Gems         Consumable 2
-Noble Furniture         Planks + Ebony + Silver         Consumable 2
-Ornate Porcelain        Clay + Lapis Lazuli + Gold      Consumable 2
-Elaborate Food          Simple Food + Salt + Meat/Fish  Consumable 2
+Rude Clothes            Wool                                  Weaver                      Consumable 1
+Basic Furniture         Wood                                  Carpenter                   Consumable 1
+Earthenware             Clay                                  Potterer                    Consumable 1
+Simple Food             Any Food                              Castle Kitchen              Consumable 1
+Elegant Clothes         Fabric + Leather + Gems               Clothier                    Consumable 2
+Noble Furniture         Planks + Ebony + Silver               Carpenter                   Consumable 2
+Ornate Porcelain        Clay + Lapis Lazuli + Gold            Potterer                    Consumable 2
+Elaborate Food          Simple Food + Salt + Meat/Fish        Castle Kitchen              Consumable 2
 
 ******Military 1
-Padded Armor            Fabric + Wood
-Wooden Shield           Wood
-Wooden Club             Wood
-Wooden Spear            Wood
-Wooden Bow              Wood + Hide
-Stonehead Arrows        Wood + Stone
+Padded Armor            Fabric + Wood                         Armorer
+Wooden Shield           Wood                                  Armorer
+Wooden Club             Wood                                  Carpenter
+Wooden Spear            Wood                                  Carpenter
+Wooden Bow              Wood + Hide                           Fletcher
+Stonehead Arrows        Wood + Stone                          Fletcher
 
 ******Military 2
-Leather Armor           Leather
-Leather Helmet          Leather
-Bronze Shield           Bronze
-Bronze Gladius          Bronze
-Bronze Spear            Bronze + Wood
-Bronzehead Arrows       Wood + Bronze
+Leather Armor           Leather                               Armorer
+Leather Helmet          Leather                               Armorer
+Bronze Shield           Bronze                                Armorer
+Bronze Gladius          Bronze                                Weaponsmith
+Bronze Spear            Bronze + Wood                         Weaponsmith
+Bronzehead Arrows       Wood + Bronze                         Fletcher
 
 ******Military 3
-Iron Chainmail          Iron + Leather
-Iron Helmet             Iron
-Iron Cuirass            Iron
-Iron Shield             Iron
-Iron Sword              Iron
-Iron Spear              Iron + Wood
-Composite Bow           Ebony + Hide
-Bronzehead Arrows       Wood + Bronze
+Iron Chainmail          Iron + Leather                        Armorer
+Iron Helmet             Iron                                  Armorer
+Iron Cuirass            Iron                                  Armorer
+Iron Shield             Iron                                  Armorer
+Iron Sword              Iron                                  Weaponsmith
+Iron Spear              Iron + Wood                           Weaponsmith
+Composite Bow           Ebony + Hide                          Fletcher
+Bronzehead Arrows       Wood + Bronze                         Fletcher
 
 ******Military 4
-Steel Chainmail         Steel + Leather
-Steel Helmet            Steel
-Steel Cuirass           Steel
-Steel Shield            Steel
-Steel Sword             Steel
-Steel Spear             Steel + Wood
-Steelhead Arrows        Steel + Wood
+Steel Chainmail         Steel + Leather                       Armorer
+Steel Helmet            Steel                                 Armorer
+Steel Cuirass           Steel                                 Armorer
+Steel Shield            Steel                                 Armorer
+Steel Sword             Steel                                 Weaponsmith
+Steel Spear             Steel + Wood                          Weaponsmith
+Steelhead Arrows        Steel + Wood                          Fletcher
 
 
