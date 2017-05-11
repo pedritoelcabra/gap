@@ -41,7 +41,9 @@ Gallnuts                                                      Oak Tree
 Coal                    Wood                                  Charcoal Burner
 Gold                    Gold Ore + Coal                       Furnace
 Silver                  Silver Ore + Coal                     Furnace
-Bronze                  Copper Ore + Tin Ore + Coal           Furnace
+Tin                     Tin Ore + Coal                        Furnace
+Copper                  Copper Ore + Coal                     Furnace
+Bronze                  Copper + Tin + Coal                   Furnace
 Iron                    Iron Ore + Coal                       Bloomery
 Pig Iron                Iron Ore + Coal                       Blast Furnace
 Iron                    Pig Iron + Coal                       Finery Forge
