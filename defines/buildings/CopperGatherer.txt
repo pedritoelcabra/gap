@@ -1,0 +1,13 @@
+slug=coppergatherer
+name=Copper Gatherer
+description=Collects surface copper
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:10
+resourceGatherer=Copper
+resourceRadius=20
+workerCount=1
+workerPriority=100
