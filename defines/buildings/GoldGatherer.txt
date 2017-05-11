@@ -1,13 +1,13 @@
 slug=goldgatherer
 name=Gold Gatherer
-description=Collects surface gold
+description=Collects surface gold ore
 layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:0:3:3
 buildCost=Work:1
-resourceGatherer=Gold
+resourceGatherer=Gold Ore
 resourceRadius=20
 workerCount=1
 workerPriority=100
