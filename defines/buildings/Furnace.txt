@@ -1,0 +1,16 @@
+slug=furnace
+name=Furnace
+description=Smelts different metals
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:1
+workerCount=1
+workerPriority=90
+productionRecipe=CopperFromCopperOre
+productionRecipe=TinFromTinOre
+productionRecipe=BronzeFromCopperTin
+productionRecipe=SilverFromSilverOre
+productionRecipe=GoldFromGoldOre
