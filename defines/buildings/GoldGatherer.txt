@@ -1,0 +1,13 @@
+slug=goldgatherer
+name=Gold Gatherer
+description=Collects surface gold
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:1
+resourceGatherer=Gold
+resourceRadius=20
+workerCount=1
+workerPriority=100
