@@ -17,6 +17,8 @@ typedef std::shared_ptr<CTile> tile_shared_ptr;
 typedef std::weak_ptr<CTile> tile_weak_ptr;
 
 typedef std::unordered_map<int, std::unordered_map<int, tile_shared_ptr>> tilemap_type;
+typedef tile_shared_ptr tile_array[CScreen::tilesPerChunk][CScreen::tilesPerChunk];
+
 
 class CChunk
 {
@@ -28,14 +30,17 @@ class CChunk
         tile_weak_ptr                   GetTile(int x, int y);
         void                            AddUnit(unit_weak_ptr ptr);
         void                            RemoveUnit(int id);
-        void                            RenderChunk();
+        bool                            IsInited(){ return isInited; };
     protected:
     private:
-        tilemap_type                    Tiles;
-        int     cx;
-        int     cy;
+        tile_array                      Tiles;
+        int                             cx;
+        int                             offX;
+        int                             cy;
+        int                             offY;
         const static int                tilesPerChunk = CScreen::tilesPerChunk;
         std::vector<unit_weak_ptr>      Units;
+        bool                            isInited = false;
 };
 
 #endif // CCHUNK_H

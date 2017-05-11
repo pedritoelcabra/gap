@@ -6,11 +6,11 @@
 class CGood
 {
     public:
-        enum EResources { nothing, wood, stone, work };
+        enum EResources { nothing, wood, stone, work, plank, cereal };
 
         static const std::map<int, std::string >    GetResources();
         static const std::string                    GetResourceName(int resource);
-        const int                                   GetResourceByName(std::string resourceName);
+        static const int                            GetResourceByName(std::string resourceName);
         static const int                            GetResourceIcon(int resource);
 
     protected:

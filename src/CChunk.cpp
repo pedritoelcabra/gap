@@ -9,7 +9,8 @@ extern CGame GAP;
 void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones){
     cx = chunkX;
     cy = chunkY;
-    Tiles.clear();
+    offX = (chunkX * tilesPerChunk);
+    offY = (chunkY * tilesPerChunk);
     float height = 0;
     int terrain = 0;
     int x, y, resource, resourceRand, resourceAmount;
@@ -49,23 +50,62 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
                     moveCost = 3.0f;
                 }
             }
-            Tiles[y][x] = std::make_shared<CTile>();
-            Tiles[y][x]->Init(terrain, x, y, resource, resourceAmount, rand() % 4);
-            Tiles[y][x]->SetMoveCost(moveCost);
+            Tiles[k][i] = std::make_shared<CTile>();
+            Tiles[k][i]->Init(terrain, x, y, resource, resourceAmount, rand() % 4);
+            Tiles[k][i]->SetMoveCost(moveCost);
             GAP.Pathfinder.SetCost(x,y,moveCost);
         }
     }
+    // right
+    for(int k = 0; k < tilesPerChunk; k++){
+        for(int i = 0; i < tilesPerChunk - 1; i++){
+            Tiles[k][i]->SetRightNeighbour(tile_weak_ptr(Tiles[k][i+1]));
+        }
+    }
+    for(int k = 0; k < tilesPerChunk - 1; k++){
+        Tiles[k][tilesPerChunk-1]->SetRightNeighbour(GAP.ChunkManager.GetTile(((chunkX + 1) * tilesPerChunk), (chunkY * tilesPerChunk) + k));
+    }
+    for(int k = 0; k < tilesPerChunk; k++){
+        if(auto t = GAP.ChunkManager.GetTile((chunkX * tilesPerChunk) - 1, (chunkY * tilesPerChunk) + k).lock()){
+            t->SetRightNeighbour(tile_weak_ptr(Tiles[k][0]));
+        }
+    }
+    // down
+
+    for(int k = 0; k < tilesPerChunk - 1; k++){
+        for(int i = 0; i < tilesPerChunk; i++){
+            Tiles[k][i]->SetDownNeighbour(tile_weak_ptr(Tiles[k + 1][i]));
+        }
+    }
+    for(int k = 0; k < tilesPerChunk - 1; k++){
+        Tiles[tilesPerChunk-1][k]->SetDownNeighbour(GAP.ChunkManager.GetTile((chunkX * tilesPerChunk) + k, ((chunkY+1) * tilesPerChunk)));
+    }
+    for(int k = 0; k < tilesPerChunk; k++){
+        if(auto t = GAP.ChunkManager.GetTile((chunkX * tilesPerChunk) +k , (chunkY * tilesPerChunk) - 1).lock()){
+            t->SetDownNeighbour(tile_weak_ptr(Tiles[0][k]));
+        }
+    }
+    isInited = true;
 }
 
 tile_weak_ptr CChunk::GetTile(int x, int y){
-    return tile_weak_ptr(Tiles.at(y).at(x));
+    if(!isInited){
+        return tile_weak_ptr();
+    }
+    return tile_weak_ptr(Tiles[y - offY][x - offX]);
 }
 
 void CChunk::AddUnit( unit_weak_ptr ptr){
+    if(!isInited){
+        return;
+    }
     Units.push_back(ptr);
 }
 
 void CChunk::RemoveUnit(int id){
+    if(!isInited){
+        return;
+    }
     std::vector<unit_weak_ptr>::iterator iter = Units.begin();
     while (iter != Units.end())    {
         if(auto s = (*iter).lock()){
@@ -75,14 +115,5 @@ void CChunk::RemoveUnit(int id){
             }
         }
         iter++;
-    }
-}
-
-void CChunk::RenderChunk(){
-    for(int k = 0; k < tilesPerChunk; k++){
-        for(int i = 0; i < tilesPerChunk; i++){
-            Tiles[(cy * tilesPerChunk) + k][(cx * tilesPerChunk) + i]->Render();
-            Tiles[(cy * tilesPerChunk) + k][(cx * tilesPerChunk) + i]->RenderResource();
-        }
     }
 }

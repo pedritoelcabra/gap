@@ -45,3 +45,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Ignored
+bin/*
+gfx/*
+bkp/*
+*.dll
+gmon.out
+SDL*
+libnoise*
+log.txt
+obj/*
+settings.txt

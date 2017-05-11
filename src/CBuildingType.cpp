@@ -137,7 +137,7 @@ void CBuildingType::LoadCosts(std::map< int, int > & container, std::string valu
 	if( std::getline(is_value, type, ':') ) {
 		std::string amount;
 		if( std::getline(is_value, amount) ) {
-		    container[CGood::GetResourceByName(item.first)] = std::stoi( amount );
+		    container[CGood::GetResourceByName(type)] = std::stoi( amount );
 		}
 	}
 

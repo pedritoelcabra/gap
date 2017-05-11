@@ -7,9 +7,11 @@
 #include "CTree.h"
 
 class CUnit;
+class CTile;
 
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
 typedef std::unique_ptr<CTree> tree_uniq_ptr;
+typedef std::weak_ptr<CTile> tile_weak_ptr;
 
 class CTile : public CGUIObject
 {
@@ -17,7 +19,7 @@ class CTile : public CGUIObject
         CTile(){};
         virtual ~CTile(){};
         void                        SetTerrain(int terrain);
-        bool                        Render();
+        bool                        Render(int row = 0, int col = 0);
         bool                        RenderUnits();
         bool                        RenderResource();
         bool                        RenderOnMinimap(int x, int y);
@@ -32,6 +34,12 @@ class CTile : public CGUIObject
         int                         GetResource(){              return resource;};
         int                         GetVariety(){               return resourceVariety;};
         void                        SetMoveCost(float cost_){   moveCost = cost_;};
+        tile_weak_ptr               GetRightNeighbour() {       return rightNeighbour; };
+        void                        SetRightNeighbour(tile_weak_ptr rightNeighbour_){ rightNeighbour = rightNeighbour_; };
+        tile_weak_ptr               GetDownNeighbour() {       return downNeighbour; };
+        void                        SetDownNeighbour(tile_weak_ptr downNeighbour_){ downNeighbour = downNeighbour_; };
+
+        static std::string  spriteSheet;
     protected:
     private:
         int                 cx;
@@ -44,6 +52,9 @@ class CTile : public CGUIObject
         int                 resourceVariety;
         tree_uniq_ptr       resourcePtr;
         float               moveCost;
+
+        tile_weak_ptr       rightNeighbour;
+        tile_weak_ptr       downNeighbour;
 
         static const int    tileWidth = CScreen::tileWidth;
 

@@ -14,7 +14,7 @@ void CGame::OnRenderGL(){
 
         ChunkManager.RenderTiles();
         BuildingManager.Render();
-        ChunkManager.RenderObjects();
+        //ChunkManager.RenderObjects();
         MenuManager.Render();
 
         if(Settings.at("ShowDebug")){
@@ -142,8 +142,10 @@ bool CGame::OnMouseWheel(bool Up, int x, int y){
             zoom = zoom + 0.2;
         }
     }else{
-        if(zoom > 0.6){
+        if(zoom > 1){
             zoom = zoom - 0.2;
+        }else if(zoom > 0.2){
+            zoom = zoom - 0.1;
         }
     }
 

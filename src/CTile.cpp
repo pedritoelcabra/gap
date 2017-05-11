@@ -3,6 +3,8 @@
 
 extern CGame GAP;
 
+std::string CTile::spriteSheet = "tiles";
+
 void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, int resourceVariety_){
     x = tx * tileWidth;
     y = ty * tileWidth;
@@ -62,8 +64,18 @@ SDL_Color CTile::GetMinimapColor(){
     return color;
 }
 
-bool CTile::Render(){
-    GAP.TextureManager.DrawTextureGL("tiles", &clip, &box);
+bool CTile::Render(int row, int col){
+    GAP.TextureManager.DrawTextureGL(&spriteSheet, &clip, &box);
+    if(row){
+        if(auto t = rightNeighbour.lock()){
+            t->Render(row - 1);
+        }
+    }
+    if(col){
+        if(auto t = downNeighbour.lock()){
+            t->Render(row, col - 1);
+        }
+    }
     return 1;
 }
 

@@ -36,7 +36,7 @@ int CGame::OnExecute(){
         // frame control
         frameTime = SDL_GetTicks() - thisFrame;
         if( GAP.frameMS > frameTime){
-            SDL_Delay(GAP.frameMS - frameTime);
+            // SDL_Delay(GAP.frameMS - frameTime);
         }
         frameCount++;
         if(int(thisFrame/1000) > currentSecond){

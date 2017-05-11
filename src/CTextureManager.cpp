@@ -46,6 +46,10 @@ void CTextureManager::DrawTextureGL(std::string name, GPU_Rect* src_rect, GPU_Re
     DrawTextureGL(TexturesGL.at(name), src_rect, dest_rect, absolutePos);
 }
 
+void CTextureManager::DrawTextureGL(std::string* name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos){
+    DrawTextureGL(TexturesGL.at(*name), src_rect, dest_rect, absolutePos);
+}
+
 void CTextureManager::DrawTextureGL(GPU_Image* texture, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos){
     if(absolutePos){
         DrawRect.x = dest_rect->x;

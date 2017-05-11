@@ -9,7 +9,9 @@
 
 typedef std::shared_ptr<CGUIObject> gui_shared_ptr;
 typedef std::weak_ptr<CGUIObject> gui_weak_ptr;
-typedef std::unordered_map<int, std::unordered_map<int, CChunk>> matrix_type;
+typedef std::shared_ptr<CChunk> chunk_shared_ptr;
+typedef std::weak_ptr<CChunk> chunk_weak_ptr;
+typedef std::unordered_map< int, std::unordered_map< int, chunk_shared_ptr > > matrix_type;
 
 class CChunkManager
 {
@@ -34,13 +36,14 @@ class CChunkManager
         int                 currentChunkX;
         int                 currentChunkY;
         matrix_type         Matrix;
+        chunk_shared_ptr    GenericChunk;
         bool                ChunkExists(int x, int y);
         void                GenerateChunk(int x, int y);
 
         const static int    tilesPerChunk = CScreen::tilesPerChunk;
         const static int    chunkWidth = tilesPerChunk * CScreen::tileWidth;
 
-        std::vector<tile_weak_ptr>        TilesInTileArea(int x, int y, int w, int h);
+        void                            TilesInTileArea(std::vector<tile_weak_ptr>* tileVec, int x, int y, int w, int h);
         std::vector<tile_weak_ptr>        renderedTiles;
         int                             lastRenderedX;
         int                             lastRenderedY;
