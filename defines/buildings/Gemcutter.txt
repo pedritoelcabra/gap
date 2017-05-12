@@ -8,4 +8,4 @@ layoutLine=3:3:0:3:3
 buildCost=Work:1
 workerCount=1
 workerPriority=90
-productionRecipe=GemFromGemstone
+productionRecipe=GemsFromGemstone
