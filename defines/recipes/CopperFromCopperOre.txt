@@ -1,4 +1,5 @@
 name=CopperFromCopperOre
 resourceInput=Work:1
 resourceInput=Copper Ore:1
+resourceInput=Coal:1
 resourceOutput=Copper:1
