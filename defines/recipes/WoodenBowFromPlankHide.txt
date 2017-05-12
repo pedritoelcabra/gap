@@ -1,0 +1,5 @@
+name=WoodenBowFromPlankHide
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Hide:1
+resourceOutput=Wooden Bow:1
