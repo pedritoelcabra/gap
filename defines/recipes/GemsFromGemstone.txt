@@ -1,4 +1,0 @@
-name=GemsFromGemstone
-resourceInput=Work:1
-resourceInput=Gemstone:1
-resourceOutput=Gems:1
