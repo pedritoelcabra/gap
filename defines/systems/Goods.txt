@@ -81,7 +81,7 @@ Elaborate Food          Simple Food + Salt + Meat/Fish        Castle Kitchen    
 
 ******Military 1
 Padded Armor            Fabric + Wood                         Armorer
-Wooden Shield           Wood                                  Armorer
+Wooden Shield           Wood                                  Carpenter
 Wooden Club             Wood                                  Carpenter
 Wooden Spear            Wood                                  Carpenter
 Wooden Bow              Wood + Hide                           Fletcher
