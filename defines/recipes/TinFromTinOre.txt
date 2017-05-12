@@ -1,4 +1,5 @@
 name=TinFromTinOre
 resourceInput=Work:1
 resourceInput=Tin Ore:1
+resourceInput=Coal:1
 resourceOutput=Tin:1
