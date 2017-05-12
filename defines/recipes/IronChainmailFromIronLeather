@@ -1,0 +1,5 @@
+name=IronChainmailFromIronLeather
+resourceInput=Work:1
+resourceInput=Iron:1
+resourceInput=Leather:1
+resourceOutput=Iron Chainmail:1
