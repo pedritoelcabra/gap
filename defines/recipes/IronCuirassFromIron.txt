@@ -1,0 +1,4 @@
+name=IronCuirassFromIron
+resourceInput=Work:1
+resourceInput=Iron:1
+resourceOutput=Iron Cuirass:1
