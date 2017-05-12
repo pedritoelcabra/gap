@@ -1,0 +1,16 @@
+name=Weaponsmith
+description=Makes weapons for your soldiers
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=wood:20
+workerCount=1
+workerPriority=80
+productionRecipe=BronzeGladiusFromBronze
+productionRecipe=BronzeSpearFromBronzeWood
+productionRecipe=IronSwordFromIron
+productionRecipe=IronSpearFromIronWood
+productionRecipe=SteelSwordFromSteel
+productionRecipe=SteelSpearFromSteelWood
