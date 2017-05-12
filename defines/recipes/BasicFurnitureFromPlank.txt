@@ -1,0 +1,4 @@
+name=BasicFurnitureFromPlank
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceOutput=Basic Furniture:1
