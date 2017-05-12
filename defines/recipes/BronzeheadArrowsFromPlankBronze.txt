@@ -1,0 +1,5 @@
+name=BronzeheadArrowsFromPlankBronze
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Bronze:1
+resourceOutput=Bronzehead Arrow:1
