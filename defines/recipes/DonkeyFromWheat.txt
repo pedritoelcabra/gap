@@ -1,0 +1,4 @@
+name=DonkeyFromWheat
+resourceInput=Work:1
+resourceInput=Wheat:1
+resourceOutput=Donkey:1
