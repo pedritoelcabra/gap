@@ -1,0 +1,3 @@
+name=GallnutFromWork
+resourceInput=Work:1
+resourceOutput=Gallnut:1
