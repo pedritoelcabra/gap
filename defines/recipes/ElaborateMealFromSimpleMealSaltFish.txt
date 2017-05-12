@@ -1,0 +1,6 @@
+name=ElaborateMealFromSimpleMealSaltFish
+resourceInput=Work:1
+resourceInput=Simple Meal:1
+resourceInput=Salt:1
+resourceInput=Fish:1
+resourceOutput=Elaborate Meal:1
