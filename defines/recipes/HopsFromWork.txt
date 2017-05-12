@@ -1,0 +1,3 @@
+name=HopsFromWork
+resourceInput=Work:1
+resourceOutput=Hops:1
