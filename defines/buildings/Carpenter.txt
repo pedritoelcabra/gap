@@ -1,0 +1,15 @@
+name=Carpenter
+description=Makes wooden household items
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3
+layoutLine=3:3:0:3:3:3:3
+buildCost=wood:20
+workerCount=1
+workerPriority=80
+productionRecipe=ReinforcedDoorFromPlankIron
+productionRecipe=BasicFurnitureFromPlank
+productionRecipe=NobleFurnitureFromPlankEbonySilver
+productionRecipe=WoodenClubFromPlank
+productionRecipe=WoodenSpearFromPlank
