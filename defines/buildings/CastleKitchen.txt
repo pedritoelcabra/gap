@@ -1,0 +1,17 @@
+name=Castle Kitchen
+description=Cooks meals
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=wood:20
+workerCount=1
+workerPriority=80
+productionRecipe=SimpleMealFromFlour
+productionRecipe=SimpleMealFromFruit
+productionRecipe=SimpleMealFromGrape
+productionRecipe=SimpleMealFromFish
+productionRecipe=SimpleMealFromMeat
+productionRecipe=ElaborateMealFromSimpleMealSaltFish
+productionRecipe=ElaborateMealFromSimpleMealSaltMeat
