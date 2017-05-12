@@ -1,0 +1,5 @@
+name=BeerFromWheatHops
+resourceInput=Work:1
+resourceInput=Wheat:1
+resourceInput=Hops:1
+resourceOutput=Beer:1
