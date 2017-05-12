@@ -1,0 +1,4 @@
+name=SimpleMealFromFruit
+resourceInput=Work:1
+resourceInput=Fruit:1
+resourceOutput=Simple Meal:1
