@@ -1,0 +1,5 @@
+name=SteelheadArrowsFromPlankSteel
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Steel:1
+resourceOutput=Steelhead Arrow:1
