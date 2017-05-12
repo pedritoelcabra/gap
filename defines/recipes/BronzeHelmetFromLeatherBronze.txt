@@ -1,0 +1,5 @@
+name=BronzeHelmetFromLeatherBronze
+resourceInput=Work:1
+resourceInput=Leather:1
+resourceInput=Bronze:1
+resourceOutput=Bronze Helmet:1
