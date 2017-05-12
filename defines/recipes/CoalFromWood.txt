@@ -1,0 +1,4 @@
+name=CoalFromWood
+resourceInput=Work:1
+resourceInput=Wood:1
+resourceOutput=Coal:1
