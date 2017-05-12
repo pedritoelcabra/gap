@@ -1,0 +1,4 @@
+name=LeatherArmorFromLeather
+resourceInput=Work:1
+resourceInput=Leather:1
+resourceOutput=Leather Armor:1
