@@ -1,0 +1,3 @@
+name=WoolFromWork
+resourceInput=Work:1
+resourceOutput=Wool:1
