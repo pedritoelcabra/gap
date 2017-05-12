@@ -1,0 +1,4 @@
+name=SteelShieldFromSteel
+resourceInput=Work:1
+resourceInput=Steel:1
+resourceOutput=Steel Shield:1
