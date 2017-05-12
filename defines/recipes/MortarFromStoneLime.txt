@@ -1,0 +1,5 @@
+name=MortarFromStoneLime
+resourceInput=Work:1
+resourceInput=Stone:1
+resourceInput=Lime:1
+resourceOutput=Mortar:1
