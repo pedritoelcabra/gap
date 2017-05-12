@@ -1,0 +1,6 @@
+name=NobleFurnitureFromPlankEbonySilver
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Ebony:1
+resourceInput=Silver:1
+resourceOutput=Noble Furniture:1
