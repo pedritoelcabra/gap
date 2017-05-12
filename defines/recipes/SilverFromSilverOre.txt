@@ -1,0 +1,5 @@
+name=SilverFromSilverOre
+resourceInput=Work:1
+resourceInput=Silver Ore:1
+resourceInput=Coal:1
+resourceOutput=Silver:1
