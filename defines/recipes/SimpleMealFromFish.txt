@@ -1,0 +1,4 @@
+name=SimpleMealFromFish
+resourceInput=Work:1
+resourceInput=Fish:1
+resourceOutput=Simple Meal:1
