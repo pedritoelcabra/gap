@@ -1,0 +1,12 @@
+name=Tinkerer
+description=Makes contraptions used for research
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Work:1
+workerCount=1
+workerPriority=90
+productionRecipe=BasicInstrumentFromWoodStone
+productionRecipe=AdvancedInstrumentFromEbonyBronze
