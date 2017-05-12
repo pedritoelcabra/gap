@@ -1,0 +1,5 @@
+name=ReinforcedDoorFromPlankIron
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Iron:1
+resourceOutput=Reinforced Door:1
