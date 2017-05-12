@@ -13,3 +13,4 @@ productionRecipe=BasicFurnitureFromPlank
 productionRecipe=NobleFurnitureFromPlankEbonySilver
 productionRecipe=WoodenClubFromPlank
 productionRecipe=WoodenSpearFromPlank
+productionRecipe=WoodenShieldFromPlank
