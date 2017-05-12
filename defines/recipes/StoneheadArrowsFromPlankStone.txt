@@ -1,0 +1,5 @@
+name=StoneheadArrowsFromPlankStone
+resourceInput=Work:1
+resourceInput=Plank:1
+resourceInput=Stone:1
+resourceOutput=Stonehead Arrow:1
