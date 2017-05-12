@@ -1,0 +1,6 @@
+name=ElegantGarmentsFromFabricLeatherGems
+resourceInput=Work:1
+resourceInput=Fabric:1
+resourceInput=Leather:1
+resourceInput=Gems:1
+resourceOutput=Elegant Garments:1
