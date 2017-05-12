@@ -9,7 +9,6 @@ buildCost=wood:20
 workerCount=1
 workerPriority=80
 productionRecipe=PaddedArmorFromFabricPlank
-productionRecipe=WoodenShieldFromPlank
 productionRecipe=LeatherArmorFromLeather
 productionRecipe=BronzeHelmetFromLeatherBronze
 productionRecipe=BronzeShieldFromBronze
