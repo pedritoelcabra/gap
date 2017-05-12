@@ -28,11 +28,11 @@ Fruit                                                         Orchard
 Herbs                                                         Herb Garden
 Cotton                                                        Cotton Field
 Wool                                                          Sheep Farm
-Meat                                                          Pig Farm
-Bones                                                         Pig Farm
-Hides                                                         Pig Farm
-Horse                                                         Horse Farm
-Donkey                                                        Donkey Farm
+Meat                    Wheat                                 Pig Farm
+Bones                   Wheat                                 Pig Farm
+Hides                   Wheat                                 Pig Farm
+Horse                   Wheat                                 Horse Farm
+Donkey                  Wheat                                 Donkey Farm
 Gallnuts                                                      Oak Tree
 
 ////////////////// CRAFTED
