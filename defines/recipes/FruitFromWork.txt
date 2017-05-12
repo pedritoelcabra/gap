@@ -1,0 +1,3 @@
+name=FruitFromWork
+resourceInput=Work:1
+resourceOutput=Fruit:1
