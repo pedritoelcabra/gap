@@ -9,15 +9,23 @@ CBuildingMenu::CBuildingMenu()
 {
 
     int tcount = 0;
-    int xoff = 50;
+    int xoff = 300;
     int yoff = 50;
+    int initialY = yoff;
+    int buttonHeight = 30;
+    int buttonWidth = 150;
 
-    CButton button = CButton(xoff, yoff + (tcount * 30), 1, -1, "Demolish" );
+    CButton button = CButton(xoff, yoff, 1, -1, "Demolish" );
+    yoff += buttonHeight;
     PopUpButtons.push_back(button);
 
     for(CBuildingType t : GAP.BuildingManager.GetBuildingTypes()){
-
-        CButton button = CButton(xoff, yoff + (tcount * 30) + 30, 1, tcount, t.GetName() );
+        if(yoff + buttonHeight > static_cast<int>(CScreen::screen_h)){
+            yoff = initialY;
+            xoff += buttonWidth;
+        }
+        CButton button = CButton(xoff, yoff, 1, tcount, *(t.GetName()) );
+        yoff += buttonHeight;
         PopUpButtons.push_back(button);
         tcount++;
     }

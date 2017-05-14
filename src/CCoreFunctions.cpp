@@ -50,8 +50,9 @@ bool CGame::OnInit(){
                                         Player->GetTileY() - chiefH ,
                                         1);
             if(auto s = w.lock()){
-                s->AddToInventory(CGood::wood, 5);
-                s->AddToInventory(CGood::stone, 5);
+                for(auto r : CGood::GetResources()){
+                    s->AddToInventory(r.first, 100);
+                }
             }
         }
         buildingCount++;

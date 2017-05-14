@@ -29,12 +29,15 @@ class CBuildingManager
         build_weak_ptr                      FindCollision(int x, int y);
         std::vector<build_weak_ptr>         GetUnfinishedBuildings( build_weak_ptr ptr );
         std::vector<build_weak_ptr>         GetWorkPositions( build_weak_ptr ptr );
+
+        std::vector<build_weak_ptr>*        GetTowns(){                             return &Towns; };
     protected:
 
     private:
         void                                LoadBuildingType(std::string fileName);
         std::vector<CBuildingType>          BuildingTypes;
         std::vector<build_shared_ptr>       Buildings;
+        std::vector<build_weak_ptr>         Towns;
         int                                 buildingCount = 0;
 };
 

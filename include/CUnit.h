@@ -51,7 +51,6 @@ class CUnit : public CGUIObject
         void                UpdateIdleAssignment();
         void                UpdateProductionAssignment();
         void                UpdateTransportAssignment();
-        void                GatherResource(int resource);
         void                Destroy();
         void                CarryItem(int resource);
         int                 GetCarriedItem(bool takeIt = false);
@@ -64,8 +63,8 @@ class CUnit : public CGUIObject
         int                 GetBusyTime(){              return busyTime; };
         int                 GetActionCount(){           return ActionQueue.size(); };
         std::weak_ptr<CUnit>GetPtr(){                   return myPtr;};
-        std::string         GetName() const{            return name;};
-        std::string         GetThought() const{         return thought;};
+        std::string*        GetName() {                 return &name;};
+        std::string*        GetThought() {              return &thought;};
         void                SetSpeed(int speed){        baseSpeed = speed; };
 
         std::string         GetAssignmentName() const;
@@ -135,6 +134,8 @@ class CUnit : public CGUIObject
         std::map<int, int>      Inventory;
         int                     carriedItem = 0;
         GPU_Rect                itemBox;
+
+        static  std::string            iconSpriteName;
 };
 
 #endif // CUNIT_H

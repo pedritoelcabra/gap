@@ -33,6 +33,7 @@ public:
     static constexpr float          grassLevel = 0.1f;
     static constexpr float          dryLandLevel = 0.6f;
     static const int                buildingUpdateFrequency = 60;
+    static const int                itemIconSize = 24;
 
 };
 

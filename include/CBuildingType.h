@@ -27,8 +27,8 @@ class CBuildingType
         std::vector<CRecipe>*               GetRecipes(){           return &Recipes;};
         int                                 GetW(){                 return w;};
         int                                 GetH(){                 return h;};
-        std::string                         GetName(){              return name;};
-        std::string                         GetDescription(){       return description;};
+        std::string*                        GetName(){              return &name;};
+        std::string*                        GetDescription(){       return &description;};
         GPU_Rect                            GetClip(){              return clip;};
         vec2i                               GetDoor(){              return door;};
         int                                 MaxPop(){               return popMax;};

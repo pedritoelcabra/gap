@@ -3,6 +3,7 @@
 
 extern CGame GAP;
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
+std::string CUnit::iconSpriteName = "icons";
 
 CUnit::CUnit(int x_, int y_, std::string myName){
     tileX = x_;
@@ -36,11 +37,11 @@ bool CUnit::Render(){
     }
     int frame = currentFrame + frameOffset;
 
-    GAP.TextureManager.DrawTextureGL(name, GAP.TextureManager.GetClip(frame), &box);
+    GAP.TextureManager.DrawTextureGL(&name, GAP.TextureManager.GetClip(frame), &box);
     if(carriedItem){
         itemBox.x = x;
         itemBox.y = y;
-        GAP.TextureManager.DrawTextureGL("icons", GAP.TextureManager.GetIconClip32(CGood::GetResourceIcon(carriedItem)), &itemBox);
+        GAP.TextureManager.DrawTextureGL(&iconSpriteName, GAP.TextureManager.GetIconClip32(CGood::GetResourceIcon(carriedItem)), &itemBox);
     }
     return 1;
 }
@@ -517,7 +518,13 @@ void CUnit::UpdateTransportAssignment(){
             maxCollision = 2.0f;
             if(auto destS = taskPtrS->GetDropOff().lock()){
                 if(destS->IsValidWorkLocation(tileX, tileY)){
+                    if(!destS->InventoryAvailable()){
+                        Idle(10);
+                        thought = "Waiting for my turn";
+                        return;
+                    }
                     if(destS->AddToInventory(GetCarriedItem(), 1) == 0){
+                        destS->UseInventory();
                         GetCarriedItem(true);
                         taskPtrS->MarkComplete();
                         taskPtr.reset();
@@ -546,7 +553,13 @@ void CUnit::UpdateTransportAssignment(){
         }
         if(auto destS = taskPtrS->GetPickUp().lock()){
             if(destS->IsValidWorkLocation(tileX, tileY)){
+                if(!destS->InventoryAvailable()){
+                    Idle(10);
+                    thought = "Waiting for my turn";
+                    return;
+                }
                 if(destS->TakeFromInventory(taskPtrS->GetResource(), 1) == 1){
+                    destS->UseInventory();
                     CarryItem(taskPtrS->GetResource());
                     thought = "Picked up goods";
                     return;
@@ -711,15 +724,6 @@ void CUnit::UpdateAssignment(){
 void CUnit::SetId(int id_, unit_weak_ptr myPtr_){
     id = id_;
     myPtr = myPtr_;
-}
-
-void CUnit::GatherResource(int resource){
-    switch(resource){
-    case CGood::wood:
-        CAction action = CAction(CAction::gatherResource, 240, 1);
-        AddAction(action);
-        break;
-    }
 }
 
 bool CUnit::IsIdle(){

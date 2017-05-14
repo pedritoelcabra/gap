@@ -19,7 +19,7 @@ class CChunkManager
         CChunkManager(){};
         virtual ~CChunkManager(){};
 
-        void                        UpdateChunks();
+        void                        UpdateChunks(bool forceUpdate = false);
         void                        RenderTiles();
         void                        RenderObjects();
         void                        RenderMinimap();
@@ -38,15 +38,13 @@ class CChunkManager
         matrix_type         Matrix;
         chunk_shared_ptr    GenericChunk;
         bool                ChunkExists(int x, int y);
-        void                GenerateChunk(int x, int y);
+        bool                GenerateChunk(int x, int y);
 
         const static int    tilesPerChunk = CScreen::tilesPerChunk;
         const static int    chunkWidth = tilesPerChunk * CScreen::tileWidth;
 
         void                            TilesInTileArea(std::vector<tile_weak_ptr>* tileVec, int x, int y, int w, int h);
         std::vector<tile_weak_ptr>        renderedTiles;
-        int                             lastRenderedX;
-        int                             lastRenderedY;
 
 
         utils::NoiseMapBuilderPlane             heightMapBuilder;
@@ -61,6 +59,12 @@ class CChunkManager
 
         int                                     xOff = 0;
         int                                     yOff = 0;
+        int                                     showWidth;
+        int                                     showHeight;
+        int                                     topY;
+        int                                     botY;
+        int                                     leftX;
+        int                                     rightX;
 };
 
 #endif // CCHUNKMANAGER_H

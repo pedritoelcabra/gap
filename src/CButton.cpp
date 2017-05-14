@@ -12,7 +12,7 @@ CButton::CButton(int x, int y, int clipnumber, unit_weak_ptr unit) : CGUIObject(
     clip = spriteClip(clipnumber);
     name = "menusprites";
     if(auto obj = unit.lock()){
-        caption.append(obj->GetName());
+        caption.append(*(obj->GetName()));
         unitPtr = unit;
     }
     box.x = x;
@@ -26,7 +26,7 @@ CButton::CButton(int x, int y, int clipnumber, build_weak_ptr building) : CGUIOb
     clip = spriteClip(clipnumber);
     name = "menusprites";
     if(auto obj = building.lock()){
-        caption.append(obj->GetName());
+        caption.append(*(obj->GetName()));
         buildingPtr = building;
     }
     box.x = x;
@@ -57,7 +57,7 @@ CButton::CButton(int x, int y, int clipnumber, int w, int h) : CGUIObject(x, y){
 }
 
 bool CButton::Render(){
-    GAP.TextureManager.DrawTextureGL(name, &clip, &box, true);
+    GAP.TextureManager.DrawTextureGL(&name, &clip, &box, true);
 
     if(caption.empty()){
         return 1;

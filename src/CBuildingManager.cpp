@@ -41,10 +41,10 @@ void CBuildingManager::LoadBuildingType(std::string fileName){
 	}
 
     std::string gfxPath = "gfx/buildings/";
-    gfxPath.append(buildingType.GetName());
+    gfxPath.append(*(buildingType.GetName()));
     gfxPath.append(".png");
 
-    GAP.TextureManager.LoadTextureGL(buildingType.GetName(), gfxPath);
+    GAP.TextureManager.LoadTextureGL(*(buildingType.GetName()), gfxPath);
 
 	BuildingTypes.push_back(buildingType);
 }
@@ -63,7 +63,9 @@ build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner, 
     building->SetId(buildingCount, ptr);
     building->ApplyMovementCosts();
 	Buildings.push_back(building);
-	UpdateConnections();
+	if(building->DistributionRange()){
+        Towns.push_back(build_weak_ptr(building));
+	}
 	return ptr;
 }
 
@@ -117,7 +119,7 @@ build_weak_ptr CBuildingManager::GetBuildingAt(int x, int y){
 std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings(build_weak_ptr ptr){
     std::vector<build_weak_ptr> result;
     if(auto s = ptr.lock()){
-        for(auto wc : s->GetConnections()){
+        for(auto wc : *(s->GetConnections())){
             if(auto sc = wc.lock()){
                 if(sc->UnderConstruction() && sc->HasBuildingResources() && sc->GetWorkers().size() < 1){
                     result.push_back(build_weak_ptr(wc));
@@ -131,7 +133,7 @@ std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings(build_weak_
 std::vector<build_weak_ptr> CBuildingManager::GetWorkPositions(build_weak_ptr ptr){
     std::vector<build_weak_ptr> result;
     if(auto s = ptr.lock()){
-        for(auto wc : s->GetConnections()){
+        for(auto wc : *(s->GetConnections())){
             if(auto sc = wc.lock()){
                 if(!sc->HasEnoughWorkers() && sc->HasWorkToDo()){
                     result.push_back(build_weak_ptr(wc));
@@ -147,9 +149,14 @@ build_weak_ptr CBuildingManager::GetBuilding(int id){
 }
 
 void CBuildingManager::Update(){
-    for(auto e : Buildings){
-        if(!e->UnderConstruction()){
+    if((GAP.GetTick() % CScreen::buildingUpdateFrequency) == 0){
+        for(auto e : Buildings){
             e->Update();
+        }
+        for(auto w : Towns){
+            if(auto s = w.lock()){
+                s->MatchTransportTasks();
+            }
         }
     }
 }
@@ -157,36 +164,7 @@ void CBuildingManager::Update(){
 void CBuildingManager::UpdateConnections(){
 
     for(auto e : Buildings){
-        e->ClearConnections();
-    }
-    for(auto e : Buildings){
-        if(e->DistributionRange() > 0){
-            for(auto f : Buildings){
-                if(f->DistributionRange() == 0 && !f->IsRoad()){
-                    if(e->GetTileFlightRoundDistance(f->GetTileX(), f->GetTileY()) <= e->DistributionRange()){
-                        e->AddConnection(build_weak_ptr(f));
-                    }
-                }
-            }
-            for(auto f : e->GetConnections()){
-                if(auto fs = f.lock()){
-                    fs->AddConnections(e->GetConnections());
-                    fs->AddConnection(build_weak_ptr(e));
-                }
-            }
-        }
-    }
-    for(auto e : Buildings){
-        if( e->PopRange() > 0){
-            for(auto f : Buildings){
-                if( !f->IsRoad() && f->PopRange() == 0 ){
-                    if(e->GetTileFlightRoundDistance(f->GetTileX(), f->GetTileY()) <= e->PopRange()){
-                        e->AddConnection(build_weak_ptr(f));
-                        f->AddConnection(build_weak_ptr(e));
-                    }
-                }
-            }
-        }
+        e->ConnectToNearestTown();
     }
 }
 
@@ -200,5 +178,7 @@ build_weak_ptr CBuildingManager::FindCollision(int x, int y){
     build_weak_ptr emptyPtr;
     return emptyPtr;
 }
+
+
 
 

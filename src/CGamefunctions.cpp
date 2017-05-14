@@ -14,7 +14,7 @@ void CGame::OnRenderGL(){
 
         ChunkManager.RenderTiles();
         BuildingManager.Render();
-        //ChunkManager.RenderObjects();
+        ChunkManager.RenderObjects();
         MenuManager.Render();
 
         if(Settings.at("ShowDebug")){
@@ -94,14 +94,12 @@ void CGame::OnProcessTick(){
 
     UpdatePlayerPosition();
 
-    mouseTileX = floor(( (mouseX/zoom) + MainViewport.x ) / CScreen::tileWidth);
-    mouseTileY = floor(( (mouseY/zoom) + MainViewport.y ) / CScreen::tileWidth);
+    mouseTileX = floor(( (mouseX*zoom) + MainViewport.x ) / CScreen::tileWidth);
+    mouseTileY = floor(( (mouseY*zoom) + MainViewport.y ) / CScreen::tileWidth);
 
 
     ChunkManager.UpdateChunks();
-    if((tick%CScreen::buildingUpdateFrequency) == 0){
-        BuildingManager.Update();
-    }
+    BuildingManager.Update();
     UnitManager.Update();
     TaskManager.Update();
     tick++;
@@ -120,7 +118,7 @@ int CGame::TranslateXWtoS(int x){
 }
 
 int CGame::TranslateXStoW(int x){
-    return (x / zoom ) + MainViewport.x;
+    return (x * zoom ) + MainViewport.x;
 }
 
 int CGame::TranslateYWtoS(int y){
@@ -128,7 +126,7 @@ int CGame::TranslateYWtoS(int y){
 }
 
 int CGame::TranslateYStoW(int y){
-    return (y / zoom ) + MainViewport.y;
+    return (y * zoom ) + MainViewport.y;
 }
 
 void CGame::SetViewPort(float x, float y){
@@ -137,15 +135,13 @@ void CGame::SetViewPort(float x, float y){
 }
 
 bool CGame::OnMouseWheel(bool Up, int x, int y){
-    if (Up){
-        if(zoom < 3){
+    if (!Up){
+        if(zoom < 8){
             zoom = zoom + 0.2;
         }
     }else{
-        if(zoom > 1){
+        if(zoom > 0.6){
             zoom = zoom - 0.2;
-        }else if(zoom > 0.2){
-            zoom = zoom - 0.1;
         }
     }
 
@@ -155,6 +151,7 @@ bool CGame::OnMouseWheel(bool Up, int x, int y){
 bool CGame::OnMouseMove(int x, int y){
     mouseX = x;
     mouseY = y;
+    MenuManager.HandleMouseMovement(x,y);
     return true;
 }
 
@@ -208,8 +205,8 @@ void CGame::OnKeyDown(SDL_Keycode key){
 
         case SDLK_m:
             mapView = !mapView;
-            mapX = Player->GetX() + ((Player->GetW() / ZoomLvl())/2);
-            mapY = Player->GetY() + ((Player->GetH() / ZoomLvl())/2);
+            mapX = Player->GetX() + ((Player->GetW() * ZoomLvl())/2);
+            mapY = Player->GetY() + ((Player->GetH() * ZoomLvl())/2);
         break;
 
         default:
@@ -281,18 +278,18 @@ void CGame::UpdatePlayerPosition(){
                 Player->AddAction(CAction(CAction::moveTile, Player->GetTileX() + txOff, Player->GetTileY() + tyOff));
             }
         }
-        viewX = Player->GetX() + ((Player->GetW() / ZoomLvl())/2);
-        viewY = Player->GetY() + ((Player->GetH() / ZoomLvl())/2);
+        viewX = Player->GetX() + ((Player->GetW() * ZoomLvl())/2);
+        viewY = Player->GetY() + ((Player->GetH() * ZoomLvl())/2);
     }else{
         if( txOff != 0 || tyOff != 0 ){
-            mapX += txOff*(50/ZoomLvl());
-            mapY += tyOff*(50/ZoomLvl());
+            mapX += txOff*(50*ZoomLvl());
+            mapY += tyOff*(50*ZoomLvl());
         }
         viewX = mapX;
         viewY = mapY;
     }
-    SetViewPort( viewX - (CScreen::screen_half_w / ZoomLvl()),
-        viewY - (CScreen::screen_half_h / ZoomLvl()) );
+    SetViewPort( viewX - (CScreen::screen_half_w * ZoomLvl()),
+        viewY - (CScreen::screen_half_h * ZoomLvl()) );
 }
 
 float CGame::ZoomLvl(){

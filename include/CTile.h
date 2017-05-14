@@ -12,6 +12,7 @@ class CTile;
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
 typedef std::unique_ptr<CTree> tree_uniq_ptr;
 typedef std::weak_ptr<CTile> tile_weak_ptr;
+typedef std::shared_ptr<CTile> tile_shared_ptr;
 
 class CTile : public CGUIObject
 {
@@ -34,10 +35,8 @@ class CTile : public CGUIObject
         int                         GetResource(){              return resource;};
         int                         GetVariety(){               return resourceVariety;};
         void                        SetMoveCost(float cost_){   moveCost = cost_;};
-        tile_weak_ptr               GetRightNeighbour() {       return rightNeighbour; };
-        void                        SetRightNeighbour(tile_weak_ptr rightNeighbour_){ rightNeighbour = rightNeighbour_; };
-        tile_weak_ptr               GetDownNeighbour() {       return downNeighbour; };
-        void                        SetDownNeighbour(tile_weak_ptr downNeighbour_){ downNeighbour = downNeighbour_; };
+        void                        SetRightNeighbour(tile_weak_ptr rightNeighbour_){ rightNeighbour = rightNeighbour_.lock(); };
+        void                        SetDownNeighbour(tile_weak_ptr downNeighbour_){ downNeighbour = downNeighbour_.lock(); };
 
         static std::string  spriteSheet;
     protected:
@@ -53,8 +52,8 @@ class CTile : public CGUIObject
         tree_uniq_ptr       resourcePtr;
         float               moveCost;
 
-        tile_weak_ptr       rightNeighbour;
-        tile_weak_ptr       downNeighbour;
+        tile_shared_ptr     rightNeighbour;
+        tile_shared_ptr     downNeighbour;
 
         static const int    tileWidth = CScreen::tileWidth;
 

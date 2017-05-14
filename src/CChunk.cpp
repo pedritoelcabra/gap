@@ -7,6 +7,15 @@
 extern CGame GAP;
 
 void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones){
+
+    SDL_Surface* targetSurf;
+    SDL_Surface* sourceSurf;
+    targetSurf = SDL_CreateRGBSurfaceWithFormat(0, tilesPerChunk * CScreen::tileWidth,
+                                          tilesPerChunk * CScreen::tileWidth,
+                                          32, SDL_PIXELFORMAT_RGBA32);
+    std::string tileSheetImage = CTile::spriteSheet;
+    sourceSurf = GPU_CopySurfaceFromImage(GAP.TextureManager.GetTexture(&tileSheetImage));
+
     cx = chunkX;
     cy = chunkY;
     offX = (chunkX * tilesPerChunk);
@@ -85,6 +94,42 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
             t->SetDownNeighbour(tile_weak_ptr(Tiles[0][k]));
         }
     }
+
+    SDL_Rect destSRect;
+    SDL_Rect srcSRect;
+    srcSRect.h = CScreen::tileWidth;
+    srcSRect.w = CScreen::tileWidth;
+    destSRect.h = CScreen::tileWidth;
+    destSRect.w = CScreen::tileWidth;
+    for(int k = 0; k < tilesPerChunk; k++){
+        for(int i = 0; i < tilesPerChunk; i++){
+            destSRect.x = CScreen::tileWidth * i;
+            destSRect.y = CScreen::tileWidth * k;
+            srcSRect.x = Tiles[k][i]->GetClip().x;
+            srcSRect.y = Tiles[k][i]->GetClip().y;
+            SDL_BlitSurface(sourceSurf,
+                    &srcSRect,
+                    targetSurf,
+                    &destSRect);
+        }
+    }
+
+    tilesTexture = SDLCALL GPU_CopyImageFromSurface	(targetSurf);
+
+    SDL_FreeSurface(sourceSurf);
+    SDL_FreeSurface(targetSurf);
+
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.w = tilesPerChunk * CScreen::tileWidth;
+    srcRect.h = tilesPerChunk * CScreen::tileWidth;
+    destRect.x = (tilesPerChunk * CScreen::tileWidth) * chunkX;
+    destRect.y = (tilesPerChunk * CScreen::tileWidth) * chunkY;
+    destRect.w = tilesPerChunk * CScreen::tileWidth;
+    destRect.h = tilesPerChunk * CScreen::tileWidth;
+    destRect.w++;
+    destRect.h++;
+
     isInited = true;
 }
 
@@ -117,3 +162,24 @@ void CChunk::RemoveUnit(int id){
         iter++;
     }
 }
+
+bool CChunk::RenderChunkTiles(){
+    if(!isInited){
+        return false;
+    }
+    GAP.TextureManager.DrawTextureGL(tilesTexture, &srcRect, &destRect);
+    return true;
+}
+
+bool CChunk::RenderChunkObjects(){
+    if(!isInited){
+        return false;
+    }
+    for(int k = 0; k < tilesPerChunk; k++){
+        for(int i = 0; i < tilesPerChunk; i++){
+            Tiles[k][i]->Render();
+        }
+    }
+    return true;
+}
+

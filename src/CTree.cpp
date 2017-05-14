@@ -52,6 +52,6 @@ void CTree::Set(int x_, int y_, int type_, int variety_){
 }
 
 bool CTree::Render(){
-    GAP.TextureManager.DrawTextureGL(textureName, &clip, &box);
+    GAP.TextureManager.DrawTextureGL(&textureName, &clip, &box);
     return 1;
 }

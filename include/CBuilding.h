@@ -29,6 +29,8 @@ class CBuilding : public CGUIObject
         void                SetId(int id_, build_weak_ptr ptr);
         void                Update();
         void                UpdateTransportTasks();
+        void                MatchTransportTasks();
+        void                UpdateNeededGoods();
         bool                Render();
         bool                RenderOnTooltip();
         int                 SetX(int x);
@@ -56,10 +58,8 @@ class CBuilding : public CGUIObject
         int                 TakeFromInventory(int resource, int amount);
         void                ApplyMovementCosts(bool destroy = false);
         int                 GetMaxStorage(int resource, bool excludingOrders = false);
-        int                 GetResourcePrio(int resource_);
-        build_weak_ptr      FindNearestStorage(int resource_);
-        int                 IncomingByResource(int res);
-        int                 OutgoingByResource(int res);
+        int                 IncomingByResource(int res, bool onlyPending = false);
+        int                 OutgoingByResource(int res, bool onlypending = false);
         task_weak_ptr       FindConnectedTask(unit_weak_ptr worker);
         bool                HasBuildingResources();
         vec2i               GetRandomPassableTile();
@@ -68,9 +68,15 @@ class CBuilding : public CGUIObject
         bool                DoProduce();
         int                 StartProduction();
         CRecipe*            AvailableRecipe();
+        void                ConnectToNearestTown(bool forceReconnect = false);
+        void                AddResourceOffer(build_weak_ptr sourcePtr, int res);
+        void                AddResourceRequest(build_weak_ptr sourcePtr, int res, int prio);
+        bool                InventoryAvailable();
+        void                UseInventory();
+
+        std::vector<build_weak_ptr>*    GetConnections();
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
-        std::vector<build_weak_ptr>     GetConnections(){                       return ConnectedBuildings;};
         std::vector<unit_weak_ptr>      GetInhabitants(){                       return Inhabitants;};
         std::vector<unit_weak_ptr>      GetWorkers(){                           return Workers;};
         std::vector<task_weak_ptr>      GetOutgoing(){                          return Outgoing;};
@@ -89,10 +95,11 @@ class CBuilding : public CGUIObject
         int                             DoorY(){                                return door.second; };
         int                             GetType(){                              return type;};
         int                             UnderConstruction(){                    return workToComplete;};
-        std::string                     GetName(){                              return typePtr->GetName();};
-        std::string                     GetDescription(){                       return typePtr->GetDescription();};
+        std::string*                    GetName(){                              return typePtr->GetName();};
+        std::string*                    GetDescription(){                       return typePtr->GetDescription();};
         bool                            IsRoad(){                               return typePtr->IsRoad();};
         int                             ConsumesResource(int res_ = 0){         return typePtr->ConsumesResource(res_);};
+        int                             ProducesResource(int res_ = 0){         return typePtr->ProducesResource(res_);};
 
     protected:
 
@@ -109,6 +116,8 @@ class CBuilding : public CGUIObject
         CRecipe*            currentProduction = nullptr;
         int                 currentProductionStage = 0;
         int                 currentProductionCooldown = 0;
+        int                 resourcePrio = 10;
+        int                 lastItemPickedUp = 0;
 
 
         std::vector<task_weak_ptr>      Outgoing;
@@ -119,6 +128,13 @@ class CBuilding : public CGUIObject
         std::vector<build_weak_ptr>     ConnectedBuildings;
         std::vector<vec2i>              PassableTiles;
         build_weak_ptr                  myPtr;
+        build_weak_ptr                  myTown;
+
+        std::map<int, int>                              NeededGoods;
+
+        std::map<int, std::vector<task_weak_ptr> >      RequestedGoods;
+        std::map<int, std::vector<task_weak_ptr> >      OfferedGoods;
+        std::vector<task_weak_ptr>                      AvailableTasks;
 
 };
 

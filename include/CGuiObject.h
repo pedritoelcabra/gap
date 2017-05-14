@@ -32,6 +32,7 @@ public:
         int                 GetW() const{                                       return box.w;};
         int                 GetH() const{                                       return box.h;};
         int                 GetId(){                                            return id;};
+        GPU_Rect            GetClip(){                                          return clip;};
         int                 GetTileFlightSquareDistance(int x, int y) const;
         int                 GetTileFlightRoundDistance(int x, int y) const;
         int                 GetTileDirection(int x, int y) const;
@@ -42,7 +43,6 @@ public:
         bool                FindCollision(int x, int y);
         bool                FindTileCollision(int x, int y);
 
-        virtual std::string GetName() const { std::terminate(); };
         virtual void        SetFacing(int direction) { std::terminate(); };
         virtual void        SetAnimation(std::string) { std::terminate(); };
         virtual bool        Render() { std::terminate(); };

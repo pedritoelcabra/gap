@@ -14,14 +14,12 @@ void CChunkManager::Init(){
 
     currentChunkX = 999999;
     currentChunkY = 999999;
-    lastRenderedX = 999999;
-    lastRenderedY = 999999;
     chunkPortion = 10000 * CScreen::tilesPerChunk;
     chunkPortion = chunkPortion / 1000000;
 
     GenericChunk = std::make_shared<CChunk>();
-    for(int k = -99; k < 99 ; k++){
-        for(int i = -99; i < 99 ; i++){
+    for(int k = -40; k < 40 ; k++){
+        for(int i = -40; i < 40 ; i++){
             Matrix[k][i] = GenericChunk;
         }
     }
@@ -58,20 +56,23 @@ void CChunkManager::Init(){
         }
     }
 
-    UpdateChunks();
+    UpdateChunks(true);
 
 }
 
-void CChunkManager::UpdateChunks(){
-    int oldChunkX = currentChunkX;
-    int oldChunkY = currentChunkY;
+void CChunkManager::UpdateChunks(bool forceUpdate){
+    if(!forceUpdate && GAP.GetTick() % 5){
+        return;
+    }
     currentChunkX = GetChunk(GAP.Player->GetTileX());
     currentChunkY = GetChunk(GAP.Player->GetTileY());
 
-    if(currentChunkX != oldChunkX || currentChunkY != oldChunkY){
-        for(int i = currentChunkY - 3; i <= currentChunkY + 3; i++ ){
-            for(int k = currentChunkX - 3; k <= currentChunkX + 3; k++ ){
-                GenerateChunk(k, i);
+    bool hasGenerated;
+    for(int i = currentChunkY - 2; i <= currentChunkY + 2; i++ ){
+        for(int k = currentChunkX - 2; k <= currentChunkX + 2; k++ ){
+            hasGenerated = GenerateChunk(k, i);
+            if(hasGenerated && !forceUpdate){
+                return;
             }
         }
     }
@@ -81,61 +82,31 @@ void CChunkManager::UpdateChunks(){
 
 void CChunkManager::RenderTiles(){
 
+    showWidth = (int)((CScreen::screen_w / CScreen::tileWidth) * GAP.ZoomLvl());
+    leftX = GAP.Player->GetTileX() - (showWidth/2);
+    rightX = GAP.Player->GetTileX() + (showWidth/2);
 
+    showHeight = (int)((CScreen::screen_h / CScreen::tileWidth) * GAP.ZoomLvl());
+    topY = GAP.Player->GetTileY() - (showHeight/2);
+    botY = GAP.Player->GetTileY() + (showHeight/2);
 
-    int showWidth = (int)((CScreen::screen_half_w/ CScreen::tileWidth) / GAP.ZoomLvl()) + 2;
-    int leftX = GAP.Player->GetTileX() - showWidth;
-    int showHeight = (int)((CScreen::screen_half_h/ CScreen::tileWidth) / GAP.ZoomLvl()) + 5;
-    int topY = GAP.Player->GetTileY() - showHeight ;
-
-    auto tilePtr = GetTile(leftX, topY);
-    if(auto t = tilePtr.lock()){
-        t->Render(showWidth*2, showHeight*2);
-    }
-
-    return;
-
-    if( abs(lastRenderedX - GAP.Player->GetTileX()) > 0 || abs(lastRenderedY - GAP.Player->GetTileY()) > 0 ){
-        int showWidth = (int)((CScreen::screen_half_w/ CScreen::tileWidth) / GAP.ZoomLvl()) + 3;
-        int showHeight = (int)((CScreen::screen_half_h/ CScreen::tileWidth) / GAP.ZoomLvl()) + 4;
-        renderedTiles.clear();
-        TilesInTileArea(&renderedTiles,
-                        GAP.Player->GetTileX() - showWidth,
-                        GAP.Player->GetTileY() - showHeight,
-                        (showWidth * 2),
-                        (showHeight * 2)
-                                 );
-    }
-
-//    for(int k = GAP.Player->GetTileY() - showHeight; k < (GAP.Player->GetTileY() - showHeight + (showHeight*2)); k++){
-//        for(int i = GAP.Player->GetTileX() - showWidth; i < (GAP.Player->GetTileX() - showWidth + (showWidth*2)); i++){
-//            if(auto s = GetTile(i,k).lock()){
-//                s->Render();
-//            }
-//        }
-//    }
-
-    for(auto e : renderedTiles)    {
-        if(auto s = e.lock()){
-            s->Render();
+    for(int i = GetChunk(topY); i <= GetChunk(botY + 3); i++){
+        for(int k = GetChunk(leftX); k <= GetChunk(rightX + 5); k++){
+            Matrix[k][i]->RenderChunkTiles();
         }
     }
+
 
     return;
 }
 
 void CChunkManager::RenderObjects(){
 
-    int showWidth = (int)((CScreen::screen_half_w/ CScreen::tileWidth) / GAP.ZoomLvl()) + 4;
-    int leftX = GAP.Player->GetTileX() - showWidth;
-    int showHeight = (int)((CScreen::screen_half_h/ CScreen::tileWidth) / GAP.ZoomLvl()) + 5;
-
-//    for(int k = GAP.Player->GetTileY() - showHeight; k < (GAP.Player->GetTileY() + showHeight); k++){
-//        Matrix[GetChunk(leftX)][GetChunk(k)]->RenderUnitsRow(leftX,k,showWidth*2);
-//        Matrix[GetChunk(leftX)][GetChunk(k)]->RenderResourceRow(leftX,k,showWidth*2);
-//    }
-
-    return;
+    for(int i = GetChunk(topY); i <= GetChunk(botY + 3); i++){
+        for(int k = GetChunk(leftX); k <= GetChunk(rightX + 5); k++){
+            Matrix[k][i]->RenderChunkObjects();
+        }
+    }
 }
 
 void CChunkManager::RenderMinimap(){
@@ -156,9 +127,9 @@ bool CChunkManager::ChunkExists(int x, int y){
     return false;
 }
 
-void CChunkManager::GenerateChunk(int x, int y){
+bool CChunkManager::GenerateChunk(int x, int y){
     if(Matrix[x][y]->IsInited()){
-        return;
+        return false;
     }
     float chunkY = chunkPortion * y;
     float chunkX = chunkPortion * (x + xOff);
@@ -184,6 +155,7 @@ void CChunkManager::GenerateChunk(int x, int y){
     chunk_shared_ptr newChunk = std::make_shared<CChunk>();
     newChunk->Init(x, y, &heightMap, &heightMapForest, &heightMapStones);
     Matrix[x][y] = newChunk;
+    return true;
 }
 
 void CChunkManager::TilesInTileArea(std::vector<tile_weak_ptr>* tileVec, int tileX, int tileY, int tileW, int tileH){

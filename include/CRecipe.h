@@ -17,7 +17,7 @@ class CRecipe
         void                                LoadLine(std::string key, std::string value);
         std::map< int, int >*               GetInput(){             return &Input;};
         std::map< int, int >*               GetOutput(){            return &Output;};
-        std::string                         GetName(){              return name;};
+        std::string*                        GetName(){              return &name;};
         int                                 ConsumesResource(int res_);
         int                                 ProducesResource(int res_);
     protected:

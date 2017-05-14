@@ -41,7 +41,7 @@ void CInfoMenu::Render(){
         RenderLine(tmp.str().c_str(), 16);
         tmp.str(std::string());
         RenderLine(s->GetAssignmentName(), 16);
-        RenderLine(s->GetThought(), 16);
+        RenderLine(*(s->GetThought()), 16);
         if(s->GetCarriedItem()){
             tmp << "Carrying 1 " << CGood::GetResourceName(s->GetCarriedItem());
             RenderLine(tmp.str().c_str(), 16);
@@ -69,8 +69,8 @@ void CInfoMenu::Render(){
     if(auto s = myBuilding.lock()){
         std::stringstream tmp;
         RenderLine("Building Overview:", 16);
-        RenderLine(s->GetName(), 16);
-        RenderLine(s->GetDescription(), 16);
+        RenderLine(*(s->GetName()), 16);
+        RenderLine(*(s->GetDescription()), 16);
         tmp << "DoorX: " << s->GetDoor().first << " DoorY: " << s->GetDoor().second;
         RenderLine(tmp.str().c_str(), 16);
         tmp.str(std::string());
@@ -90,7 +90,7 @@ void CInfoMenu::Render(){
             RenderLine(tmp.str().c_str(), 16);
             tmp.str(std::string());
         }
-        for(auto wb : s->GetConnections()){
+        for(auto wb : *(s->GetConnections())){
             if(auto sb = wb.lock()){
                 GAP.TextureManager.DrawConnectionLine(sb->GetDoor().first ,sb->GetDoor().second ,s->GetDoor().first,s->GetDoor().second, grey);
             }

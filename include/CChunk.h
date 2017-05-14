@@ -31,6 +31,8 @@ class CChunk
         void                            AddUnit(unit_weak_ptr ptr);
         void                            RemoveUnit(int id);
         bool                            IsInited(){ return isInited; };
+        bool                            RenderChunkTiles();
+        bool                            RenderChunkObjects();
     protected:
     private:
         tile_array                      Tiles;
@@ -41,6 +43,9 @@ class CChunk
         const static int                tilesPerChunk = CScreen::tilesPerChunk;
         std::vector<unit_weak_ptr>      Units;
         bool                            isInited = false;
+        GPU_Image*                      tilesTexture;
+        GPU_Rect                        srcRect;
+        GPU_Rect                        destRect;
 };
 
 #endif // CCHUNK_H

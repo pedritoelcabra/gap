@@ -105,6 +105,12 @@ bool CMenuManager::HandleLClick(int x, int y){
     return false;
 }
 
+bool CMenuManager::HandleMouseMovement(int x, int y){
+
+
+    return false;
+}
+
 void CMenuManager::Render(){
 
     if(mouseHasBuilding){

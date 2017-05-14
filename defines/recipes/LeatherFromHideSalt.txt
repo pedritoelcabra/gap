@@ -1,0 +1,5 @@
+name=LeatherFromHideSalt
+resourceInput=Work:1
+resourceInput=Hide:1
+resourceInput=Salt:1
+resourceOutput=Leather:1

@@ -10,8 +10,8 @@ void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, i
     y = ty * tileWidth;
     tileX = tx;
     tileY = ty;
-    box.h = tileWidth * 2;
-    box.w = tileWidth * 2;
+    box.h = tileWidth;
+    box.w = tileWidth;
     box.x = x;
     box.y = y;
     SetTerrain(type);
@@ -26,22 +26,14 @@ void CTile::Init(int type, int tx, int ty, int resource_, int resourceAmount_, i
 
 void CTile::SetTerrain(int type){
     terrain = type;
-    clip.w = 128;
-    clip.h = 128;
+    clip.w = tileWidth;
+    clip.h = tileWidth;
     switch(type){
-        case 1: clip.x = 0; clip.y = 0; break;
-        case 2: clip.x = 0; clip.y = 128; break;
-        case 3: clip.x = 128; clip.y = 0; break;
-        case 4: clip.x = 128; clip.y = 128; break;
-
-        case 92: clip.x = 0; clip.y = 256; break;
-        case 93: clip.x = 128; clip.y = 256; break;
-        case 94: clip.x = 0; clip.y = 384; break;
-        case 95: clip.x = 128; clip.y = 384; break;
-        case 96: clip.x = 0; clip.y = 512; break;
-        case 97: clip.x = 128; clip.y = 512; break;
-        case 98: clip.x = 0; clip.y = 640; break;
-        case 99: clip.x = 128; clip.y = 640; break;
+        case 92: clip.x = 256; clip.y = 0; break;
+        case 93: clip.x = 256; clip.y = 32; break;
+        case 94: clip.x = 256; clip.y = 64; break;
+        case 95: clip.x = 256; clip.y = 96; break;
+        case 96: clip.x = 256; clip.y = 128; break;
 
 
 
@@ -65,15 +57,17 @@ SDL_Color CTile::GetMinimapColor(){
 }
 
 bool CTile::Render(int row, int col){
-    GAP.TextureManager.DrawTextureGL(&spriteSheet, &clip, &box);
+    // GAP.TextureManager.DrawTextureGL(&spriteSheet, &clip, &box);
+    RenderResource();
+    RenderUnits();
     if(row){
-        if(auto t = rightNeighbour.lock()){
-            t->Render(row - 1);
+        if(rightNeighbour){
+            rightNeighbour->Render(row - 1);
         }
     }
     if(col){
-        if(auto t = downNeighbour.lock()){
-            t->Render(row, col - 1);
+        if(downNeighbour){
+            downNeighbour->Render(row, col - 1);
         }
     }
     return 1;

@@ -42,10 +42,6 @@ int CTextureManager::LoadTextureGL(std::string name, std::string path){
 
 }
 
-void CTextureManager::DrawTextureGL(std::string name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos){
-    DrawTextureGL(TexturesGL.at(name), src_rect, dest_rect, absolutePos);
-}
-
 void CTextureManager::DrawTextureGL(std::string* name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos){
     DrawTextureGL(TexturesGL.at(*name), src_rect, dest_rect, absolutePos);
 }
@@ -61,10 +57,10 @@ void CTextureManager::DrawTextureGL(GPU_Image* texture, GPU_Rect* src_rect, GPU_
     DrawRect.h = dest_rect->h;
     DrawRect.w = dest_rect->w;
     if(!absolutePos){
-        DrawRect.x = DrawRect.x * GAP.ZoomLvl();
-        DrawRect.y = DrawRect.y * GAP.ZoomLvl();
-        DrawRect.h = DrawRect.h * GAP.ZoomLvl();
-        DrawRect.w = DrawRect.w * GAP.ZoomLvl();
+        DrawRect.x = DrawRect.x / GAP.ZoomLvl();
+        DrawRect.y = DrawRect.y / GAP.ZoomLvl();
+        DrawRect.h = DrawRect.h / GAP.ZoomLvl();
+        DrawRect.w = DrawRect.w / GAP.ZoomLvl();
     }
     GPU_BlitRect(texture, src_rect, GAP.MainGLWindow, &DrawRect);
 }
@@ -77,14 +73,9 @@ bool CTextureManager::LoadFont(std::string path){
     return true;
 }
 
-GPU_Image* CTextureManager::GetTexture(std::string name){
+GPU_Image* CTextureManager::GetTexture(std::string* name){
 
-    return TexturesGL.at(name);
-}
-
-void CTextureManager::SetTexture(SDL_Texture* tex, std::string name){
-
-    Textures.at(name) = tex;
+    return TexturesGL.at(*name);
 }
 
 TTF_Font* CTextureManager::GetFont(int fontSize){
@@ -108,9 +99,9 @@ GPU_Rect* CTextureManager::GetIconClip32(int icon){
 void CTextureManager::DrawHighLightCircle(int tileX, int tileY, int tileRadius, SDL_Color  color){
     GPU_CircleFilled	(
         GAP.MainGLWindow,
-        ((tileX * CScreen::tileWidth) - GAP.MainViewport.x)* GAP.ZoomLvl(),
-        ((tileY * CScreen::tileWidth) - GAP.MainViewport.y)* GAP.ZoomLvl(),
-        ((tileRadius * CScreen::tileWidth))* GAP.ZoomLvl(),
+        ((tileX * CScreen::tileWidth) - GAP.MainViewport.x)/ GAP.ZoomLvl(),
+        ((tileY * CScreen::tileWidth) - GAP.MainViewport.y)/ GAP.ZoomLvl(),
+        ((tileRadius * CScreen::tileWidth))/ GAP.ZoomLvl(),
         color
         )	;
 }
@@ -118,10 +109,12 @@ void CTextureManager::DrawHighLightCircle(int tileX, int tileY, int tileRadius, 
 void CTextureManager::DrawConnectionLine(int t1X, int t1Y, int t2X, int t2Y, SDL_Color color){
     GPU_Line	(
         GAP.MainGLWindow,
-        ((t1X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)* GAP.ZoomLvl(),
-        ((t1Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)* GAP.ZoomLvl(),
-        ((t2X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)* GAP.ZoomLvl(),
-        ((t2Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)* GAP.ZoomLvl(),
+        ((t1X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)/ GAP.ZoomLvl(),
+        ((t1Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)/ GAP.ZoomLvl(),
+        ((t2X  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.x)/ GAP.ZoomLvl(),
+        ((t2Y  * CScreen::tileWidth) + CScreen::tileWidthH - GAP.MainViewport.y)/ GAP.ZoomLvl(),
         color
         );
 }
+
+

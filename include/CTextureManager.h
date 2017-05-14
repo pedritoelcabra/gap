@@ -11,10 +11,8 @@
 #include <SDL2/SDL_opengl.h>
 #include "SDL2/SDL_gpu.h"
 
-typedef std::map<std::string, SDL_Texture*>     TextureMap;
 typedef std::map<std::string, GPU_Image*>     TextureMapGL;
 typedef std::map<int, TTF_Font*>                FontMap;
-
 class CTextureManager
 {
     public:
@@ -22,15 +20,13 @@ class CTextureManager
         virtual ~CTextureManager(){};
 
         int                 LoadTextureGL(std::string name, std::string path);
-        void                DrawTextureGL(std::string name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos = false);
         void                DrawTextureGL(std::string* name, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos = false);
         void                DrawTextureGL(GPU_Image* texture, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos = false);
         void                DrawHighLightCircle(int tileX, int tileY, int radius, SDL_Color  color);
         void                DrawConnectionLine(int t1X, int t1Y, int t2X, int t2Y, SDL_Color color);
         bool                LoadFont(std::string path);
         void                Init();
-        GPU_Image*          GetTexture(std::string name);
-        void                SetTexture(SDL_Texture* tex, std::string name);
+        GPU_Image*          GetTexture(std::string* name);
         TTF_Font*           GetFont(int fontSize);
         GPU_Rect*           GetClip(int frame);
         GPU_Rect*           GetIconClip32(int frame);
@@ -44,11 +40,8 @@ class CTextureManager
         GPU_Rect            SpriteClips[spriteCount];
         GPU_Rect            IconClips32[iconCount32];
         GPU_Rect            DrawRect;
-        TextureMap          Textures;
         TextureMapGL        TexturesGL;
         FontMap             Fonts;
-        GLuint              texture[500];
-        int                 textureCount = 0;
 };
 
 #endif // TEXTUREMANAGER_H
