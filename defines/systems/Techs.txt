@@ -1,1 +1,53 @@
 
+Tech                    Requirements                Buildings                           Recipes
+
+@@@@@@@@@@@@@ LEVEL 0 @@@@@@@@@@@@@@@@
+
+Stoneworking            ---                         Stonecutter                         Stone
+Woodworking             ---                         Sawmill                             Planks
+Fishing                 ---                         Fishery                             Fish
+Food Preservation       ---                         Castle Kitchen                      Simple Food
+Animal Husbandry        ---                         Sheep Farm                          Sheep
+Agriculture             ---                         Wheat Farm                          Wheat
+
+Toolmaking              Woodworking, Stoneworking   Toolmaker                           Basic Instruments
+
+@@@@@@@@@@@@@ LEVEL 1 @@@@@@@@@@@@@@@@ Require Basic Instruments
+
+Carpentry               Toolmaking                  Carpenter                           Basic Furniture
+Basic Weapons           Carpentry                                                       WSpear, WShield, WClub
+Pottery                 Agriculture                 Potterer                            Earthenware
+Pig Domestication       Animal Husbandry            Pig Farm, Slaughterhouse            Pig, Bones, Meat, Hides     
+
+Weaving                 Sheep, Carpentry            Weaver                              FabricFWool, Rude Clothes
+Protective Wear         Weaving                     Armorer                             Padded Armor
+Archery                 Carpentry, Pig              Fletcher                            Wooden Bow, Stonehead Arrows
+Tanning                 Pig                         Tannery                             Leather
+
+Metals                  Toolmaking                  Furnace
+Copper                  Metals                      Copper Gatherer                     Copper Ores, Copper
+Tin                     Metals                      Tin Gatherer                        Tin Ores, Tin
+Silver                  Metals                      Silver Gatherer                     Silver Ores, Silver
+Gold                    Metals                      Gold Gatherer                       Gold Ores, Gold
+Bronze                  Copper, Tin                                                     Bronze
+
+Bronze Weapons          Bronze                      Weaponsmith                         Bronze Gladius, Spear
+Bronzehead Arrows       Bronze                                                          Bronzehead Arrows
+
+Medium Armor            Bronze, Leather                                                 Bronze & Leather Armor
+
+Advanced Carpentry      Toolmaking, Bronze                                              Ebony
+Advanced Toolmaking     Advanced Carpentry                                              Advanced Instruments
+
+@@@@@@@@@@@@@ LEVEL 2 @@@@@@@@@@@@@@@@ Require Advanced Instruments & Citizen
+
+Ironworking             Bronze                      Iron Gatherer, Bloomery             Iron Ore, Iron
+Charcoal Burning        Advanced Carpentry          Charcoal Burner                     CoalFWood
+
+
+
+
+@@@@@@@@@@@@@ LEVEL 3 @@@@@@@@@@@@@@@@ Require Books & Nobleman
+
+
+
