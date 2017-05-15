@@ -84,8 +84,8 @@ Padded Armor            Fabric + Plank                        Armorer
 Wooden Shield           Plank                                 Carpenter
 Wooden Club             Plank                                 Carpenter
 Wooden Spear            Plank                                 Carpenter
-Wooden Bow              Wood + Hide                           Fletcher
-Stonehead Arrows        Wood + Stone                          Fletcher
+Wooden Bow              Plank + Hide                          Fletcher
+Stonehead Arrows        Plank + Stone                         Fletcher
 
 ******Military 2
 Leather Armor           Leather                               Armorer
@@ -93,7 +93,7 @@ Leather Helmet          Leather                               Armorer
 Bronze Shield           Bronze                                Armorer
 Bronze Gladius          Bronze                                Weaponsmith
 Bronze Spear            Bronze + Plank                        Weaponsmith
-Bronzehead Arrows       Wood + Bronze                         Fletcher
+Bronzehead Arrows       Plank + Bronze                        Fletcher
 
 ******Military 3
 Iron Chainmail          Iron + Leather                        Armorer
@@ -103,7 +103,7 @@ Iron Shield             Iron                                  Armorer
 Iron Sword              Iron                                  Weaponsmith
 Iron Spear              Iron + Plank                          Weaponsmith
 Composite Bow           Ebony + Hide                          Fletcher
-Ironhead Arrows         Wood + Iron                           Fletcher
+Ironhead Arrows         Plank + Iron                          Fletcher
 
 ******Military 4
 Steel Chainmail         Steel + Leather                       Armorer
@@ -112,6 +112,6 @@ Steel Cuirass           Steel                                 Armorer
 Steel Shield            Steel                                 Armorer
 Steel Sword             Steel                                 Weaponsmith
 Steel Spear             Steel + Plank                         Weaponsmith
-Steelhead Arrows        Steel + Wood                          Fletcher
+Steelhead Arrows        Steel + Plank                         Fletcher
 
 
