@@ -60,8 +60,8 @@ Hides                   Pig                                   Butcher
 
 
 ******Research
-Basic Instruments       Plank + Stone                         Tinkerer                    Research 1
-Advanced Instruments    Bronze + Ebony                        Tinkerer                    Research 2
+Basic Instruments       Plank + Stone                         Toolmaker                   Research 1
+Advanced Instruments    Bronze + Ebony                        Toolmaker                   Research 2
 Beer                    Hops + Wheat                          Brewery                     Research 2
 Books                   Ink + Parchment                       Bookbinder                  Research 3
 Wine                    Glass + Grapes + Plank                Winery                      Research 3
