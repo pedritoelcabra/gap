@@ -13,7 +13,8 @@ class CGood
             rudeClothes, basicFurniture, earthenware, simpleFood, elegantClothes, nobleFurniture, ornatePorcelain, elaborateFood,
             paddedArmor, woodenShield, woodenClub, woodenSpear, woodenBow, stoneheadArrows, leatherArmor, leatherHelmet, bronzeShield,
             bronzeGladius, bronzeSpear, bronzeheadArrows, ironChainmail, ironHelmet, ironCuirass, ironShield, ironSword, ironSpear,
-            compositeBow, ironheadArrows, steelChainmail, steelShield, steelCuirass, steelHelmet, steelSword, steelSpear, steelheadArrows };
+            compositeBow, ironheadArrows, steelChainmail, steelShield, steelCuirass, steelHelmet, steelSword, steelSpear, steelheadArrows,
+            pig };
 
         static const std::map<int, std::string >    GetResources();
         static const std::string                    GetResourceName(int resource);
