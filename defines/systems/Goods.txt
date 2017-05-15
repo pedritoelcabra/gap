@@ -58,20 +58,20 @@ Glass                   Sand                                  Glass Kiln        
 Planks                  Wood                                  Sawmill                     Building Material 2
 
 ******Research
-Basic Instruments       Wood + Stone                          Tinkerer                    Research 1
+Basic Instruments       Plank + Stone                         Tinkerer                    Research 1
 Advanced Instruments    Bronze + Ebony                        Tinkerer                    Research 2
 Beer                    Hops + Wheat                          Brewery                     Research 2
 Books                   Ink + Parchment                       Bookbinder                  Research 3
-Wine                    Glass + Grapes + Wood                 Winery                      Research 3
+Wine                    Glass + Grapes + Plank                Winery                      Research 3
 
 ******Construction
 Bricks                  Clay                                  Kiln                        Building Material 2
 Mortar                  Stone + Lime                          Builder's Workshop          Building Material 3
-Reinforced Door         Iron + Wood                           Carpenter                   Building Material 3
+Reinforced Door         Iron + Plank                          Carpenter                   Building Material 3
 
 ******Consumable
 Rude Clothes            Wool                                  Weaver                      Consumable 1
-Basic Furniture         Wood                                  Carpenter                   Consumable 1
+Basic Furniture         Plank                                 Carpenter                   Consumable 1
 Earthenware             Clay                                  Potterer                    Consumable 1
 Simple Food             Any Food                              Castle Kitchen              Consumable 1
 Elegant Clothes         Fabric + Leather + Gems               Clothier                    Consumable 2
@@ -80,10 +80,10 @@ Ornate Porcelain        Clay + Lapis Lazuli + Gold            Potterer          
 Elaborate Food          Simple Food + Salt + Meat/Fish        Castle Kitchen              Consumable 2
 
 ******Military 1
-Padded Armor            Fabric + Wood                         Armorer
-Wooden Shield           Wood                                  Carpenter
-Wooden Club             Wood                                  Carpenter
-Wooden Spear            Wood                                  Carpenter
+Padded Armor            Fabric + Plank                        Armorer
+Wooden Shield           Plank                                 Carpenter
+Wooden Club             Plank                                 Carpenter
+Wooden Spear            Plank                                 Carpenter
 Wooden Bow              Wood + Hide                           Fletcher
 Stonehead Arrows        Wood + Stone                          Fletcher
 
@@ -92,7 +92,7 @@ Leather Armor           Leather                               Armorer
 Leather Helmet          Leather                               Armorer
 Bronze Shield           Bronze                                Armorer
 Bronze Gladius          Bronze                                Weaponsmith
-Bronze Spear            Bronze + Wood                         Weaponsmith
+Bronze Spear            Bronze + Plank                        Weaponsmith
 Bronzehead Arrows       Wood + Bronze                         Fletcher
 
 ******Military 3
@@ -101,7 +101,7 @@ Iron Helmet             Iron                                  Armorer
 Iron Cuirass            Iron                                  Armorer
 Iron Shield             Iron                                  Armorer
 Iron Sword              Iron                                  Weaponsmith
-Iron Spear              Iron + Wood                           Weaponsmith
+Iron Spear              Iron + Plank                          Weaponsmith
 Composite Bow           Ebony + Hide                          Fletcher
 Ironhead Arrows         Wood + Iron                           Fletcher
 
@@ -111,7 +111,7 @@ Steel Helmet            Steel                                 Armorer
 Steel Cuirass           Steel                                 Armorer
 Steel Shield            Steel                                 Armorer
 Steel Sword             Steel                                 Weaponsmith
-Steel Spear             Steel + Wood                          Weaponsmith
+Steel Spear             Steel + Plank                         Weaponsmith
 Steelhead Arrows        Steel + Wood                          Fletcher
 
 
