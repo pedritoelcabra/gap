@@ -226,17 +226,7 @@ void CBuilding::AddIncoming(task_weak_ptr ptr){
 
 void CBuilding::RemoveIncoming(int id){
     if(isBeingDestroyed){
-        return;
-    }
-    std::vector<task_weak_ptr>::iterator iter = Incoming.begin();
-    while (iter != Incoming.end())    {
-        if(auto s = (*iter).lock()){
-            if(s->GetId() == id){
-                Incoming.erase(iter);
-                return;
-            }
-        }
-        iter++;
+        DeleteById(&Incoming, id);
     }
 }
 
@@ -246,17 +236,7 @@ void CBuilding::AddOutgoing(task_weak_ptr ptr){
 
 void CBuilding::RemoveOutgoing(int id){
     if(isBeingDestroyed){
-        return;
-    }
-    std::vector<task_weak_ptr>::iterator iter = Outgoing.begin();
-    while (iter != Outgoing.end())    {
-        if(auto s = (*iter).lock()){
-            if(s->GetId() == id){
-                Outgoing.erase(iter);
-                return;
-            }
-        }
-        iter++;
+        DeleteById(&Outgoing, id);
     }
 }
 
@@ -266,20 +246,8 @@ void CBuilding::AddWorker(unit_weak_ptr ptr){
 
 void CBuilding::RemoveWorker(int id){
     if(isBeingDestroyed){
-        return;
+        DeleteById(&Workers, id);
     }
-    std::vector<unit_weak_ptr>::iterator iter = Workers.begin();
-    while (iter != Workers.end())
-    {
-        if(auto s = (*iter).lock()){
-            if(s->GetId() == id){
-                Workers.erase(iter);
-                return;
-            }
-        }
-        iter++;
-    }
-    CLog::Write("Trying to remove nonexistant unit from building workers?");
 }
 
 void CBuilding::AddConnection(build_weak_ptr ptr){
@@ -293,20 +261,8 @@ void CBuilding::AddConnections(std::vector<build_weak_ptr> connections){
 
 void CBuilding::RemoveConnection(int id_){
     if(isBeingDestroyed){
-        return;
+        DeleteById(&ConnectedBuildings, id);
     }
-    std::vector<build_weak_ptr>::iterator iter = ConnectedBuildings.begin();
-    while (iter != ConnectedBuildings.end())
-    {
-        if(auto s = (*iter).lock()){
-            if(s->GetId() == id_){
-                ConnectedBuildings.erase(iter);
-                return;
-            }
-        }
-        iter++;
-    }
-    CLog::Write("Trying to remove nonexistant building from building connections?");
 }
 
 void CBuilding::ClearConnections(){
@@ -314,21 +270,9 @@ void CBuilding::ClearConnections(){
 }
 
 void CBuilding::RemoveInhabitant(int id){
-    if(isBeingDestroyed){
-        return;
+    if(!isBeingDestroyed){
+        DeleteById(&Inhabitants, id);
     }
-    std::vector<unit_weak_ptr>::iterator iter = Inhabitants.begin();
-    while (iter != Inhabitants.end())
-    {
-        if(auto s = (*iter).lock()){
-            if(s->GetId() == id){
-                Inhabitants.erase(iter);
-                return;
-            }
-        }
-        iter++;
-    }
-    CLog::Write("Trying to remove nonexistant unit from building inhabitants?");
 }
 
 bool CBuilding::InRadius(int x, int y){
@@ -659,13 +603,9 @@ void CBuilding::ConnectToNearestTown(bool forceReconnect){
 }
 
 void CBuilding::AddResourceOffer(build_weak_ptr sourcePtr, int res){
-    if(!DistributionRange()){
-        return;
-    }
-    if(auto ss = sourcePtr.lock()){
+    if(!DistributionRange() && auto ss = sourcePtr.lock()){
         task_shared_ptr ts = std::make_shared<CTransportTask>(sourcePtr, build_weak_ptr(), res, 0);
-        task_weak_ptr tw;
-        tw = task_weak_ptr(ts);
+        task_weak_ptr tw = task_weak_ptr(ts);
         GAP.TaskManager.AddTask(ts);
         ss->AddOutgoing(tw);
         OfferedGoods.at(res).push_back(tw);
@@ -673,13 +613,9 @@ void CBuilding::AddResourceOffer(build_weak_ptr sourcePtr, int res){
 }
 
 void CBuilding::AddResourceRequest(build_weak_ptr destPtr, int res, int prio){
-    if(!DistributionRange()){
-        return;
-    }
-    if(auto ss = destPtr.lock()){
+    if(!DistributionRange() && auto ss = destPtr.lock()){
         task_shared_ptr ts = std::make_shared<CTransportTask>(build_weak_ptr(), destPtr, res, prio);
-        task_weak_ptr tw;
-        tw = task_weak_ptr(ts);
+        task_weak_ptr tw = task_weak_ptr(ts);
         GAP.TaskManager.AddTask(ts);
         ss->AddIncoming(tw);
         RequestedGoods.at(res).push_back(tw);
