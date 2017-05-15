@@ -1,4 +1,4 @@
-name=Tinkerer
+name=Toolmaker
 description=Makes contraptions used for research
 layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
