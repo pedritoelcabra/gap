@@ -89,6 +89,7 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::steelShield, "Steel Shield"},
    {CGood::steelSpear, "Steel Spear"},
    {CGood::steelSword, "Steel Sword"},
+   {CGood::pig, "Pig"},
    {CGood::compositeBow, "Composite Bow"}
 };
 
@@ -181,6 +182,7 @@ std::map<int, int > CGood::ResourceIcons = {
    {CGood::steelShield, 3105},
    {CGood::steelSpear, 3097},
    {CGood::steelSword, 3054},
+   {CGood::pig, 10},
    {CGood::compositeBow, 3089}
 };
 
