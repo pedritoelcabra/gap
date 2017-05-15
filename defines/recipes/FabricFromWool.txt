@@ -1,1 +1,4 @@
 name=FabricFromWool
+resourceInput=Work:1
+resourceInput=Wool:1
+resourceOutput=Fabric:1
