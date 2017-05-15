@@ -1,0 +1,5 @@
+name=IronSpearFromIronPlank
+resourceInput=Work:1
+resourceInput=Iron:1
+resourceOutput=Plank:1
+resourceOutput=Iron Spear:1
