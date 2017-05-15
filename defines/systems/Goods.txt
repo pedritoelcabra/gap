@@ -28,9 +28,7 @@ Fruit                                                         Orchard
 Herbs                                                         Herb Garden
 Cotton                                                        Cotton Field
 Wool                                                          Sheep Farm
-Meat                    Wheat                                 Pig Farm
-Bones                   Wheat                                 Pig Farm
-Hides                   Wheat                                 Pig Farm
+Pig                     Wheat                                 Pig Farm
 Horse                   Wheat                                 Horse Farm
 Donkey                  Wheat                                 Donkey Farm
 Gallnuts                                                      Oak Tree
@@ -56,6 +54,10 @@ Fabric                  Cotton                                Weaver
 Gems                    Gemstones                             Gemcutter
 Glass                   Sand                                  Glass Kiln                  Building Material 2
 Planks                  Wood                                  Sawmill                     Building Material 2
+Meat                    Pig                                   Butcher
+Bones                   Pig                                   Butcher
+Hides                   Pig                                   Butcher
+
 
 ******Research
 Basic Instruments       Plank + Stone                         Tinkerer                    Research 1
