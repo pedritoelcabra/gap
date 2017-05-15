@@ -1,1 +1,4 @@
 name=BrickFromClay
+resourceInput=Work:1
+resourceInput=Clay:1
+resourceOutput=Brick:1
