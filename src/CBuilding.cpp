@@ -225,7 +225,7 @@ void CBuilding::AddIncoming(task_weak_ptr ptr){
 }
 
 void CBuilding::RemoveIncoming(int id){
-    if(isBeingDestroyed){
+    if(!isBeingDestroyed){
         DeleteById(&Incoming, id);
     }
 }
@@ -235,7 +235,7 @@ void CBuilding::AddOutgoing(task_weak_ptr ptr){
 }
 
 void CBuilding::RemoveOutgoing(int id){
-    if(isBeingDestroyed){
+    if(!isBeingDestroyed){
         DeleteById(&Outgoing, id);
     }
 }
@@ -245,7 +245,7 @@ void CBuilding::AddWorker(unit_weak_ptr ptr){
 }
 
 void CBuilding::RemoveWorker(int id){
-    if(isBeingDestroyed){
+    if(!isBeingDestroyed){
         DeleteById(&Workers, id);
     }
 }
@@ -260,7 +260,7 @@ void CBuilding::AddConnections(std::vector<build_weak_ptr> connections){
 }
 
 void CBuilding::RemoveConnection(int id_){
-    if(isBeingDestroyed){
+    if(!isBeingDestroyed){
         DeleteById(&ConnectedBuildings, id);
     }
 }
