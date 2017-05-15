@@ -1,0 +1,6 @@
+name=MeatBonesHidesFromPig
+resourceInput=Work:1
+resourceInput=Pig:1
+resourceOutput=Meat:1
+resourceOutput=Bones:1
+resourceOutput=Hides:1
