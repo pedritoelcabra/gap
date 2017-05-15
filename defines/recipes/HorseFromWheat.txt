@@ -1,1 +1,4 @@
 name=HorseFromWheat
+resourceInput=Work:1
+resourceInput=Wheat:1
+resourceOutput=Horse:1
