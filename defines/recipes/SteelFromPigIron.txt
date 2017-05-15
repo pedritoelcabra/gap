@@ -1,1 +1,5 @@
 name=SteelFromPigIron
+resourceInput=Work:1
+resourceInput=Coal:1
+resourceInput=Pig Iron:1
+resourceOutput=Steel:1
