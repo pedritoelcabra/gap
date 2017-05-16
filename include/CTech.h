@@ -18,12 +18,14 @@ class CTech
 
     private:
         std::string                             name;
-        std::map< int  >                        Requirements;
+        std::map< int, int >                    Input;
+        std::vector< int >                      Requirements;
+        std::vector< std::string >              RequirementsNames;
         bool                                    isAvailable = false;
         bool                                    isResearched = false;
-        int                                     totalCost = 1;
+        int                                     techCost = 1;
         int                                     currentProgress = 0;
-        int                                     requiredSkill = 0;
+        int                                     minSkill = 0;
 
         void                                    LoadCosts(std::map< int, int > & container, std::string value);
 };
