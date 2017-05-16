@@ -1,0 +1,4 @@
+name=Silver
+techCost=100
+resourceInput=Work:1
+techRequirement=Metals
