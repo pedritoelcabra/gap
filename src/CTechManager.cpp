@@ -23,7 +23,7 @@ bool CTechManager::Init(){
 }
 
 void CTechManager::LoadTech(std::string fileName){
-  CLog::Write(fileName);
+  	CLog::Write(fileName);
 
 	CTech tech = CTech ();
 	std::ifstream is_file(fileName);
@@ -39,10 +39,9 @@ void CTechManager::LoadTech(std::string fileName){
             recipe.LoadLine(key, value);
         }
 	}
-
-	Techs[*(tech.GetName())] = tech;
+	Techs[techCounter] = tech;
+	TechsByName[*(tech.GetName())] = techCounter;
+	techCounter++;
 }
 
-CTech CTechManager::GetTechByName(std::string name){
-	return Techs.at(name);
-}
+bool CTechManager::AddProgress()
