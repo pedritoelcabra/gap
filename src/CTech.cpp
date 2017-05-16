@@ -1,6 +1,6 @@
 #include "CTech.h"
 
-void CRecipe::LoadLine(std::string key, std::string value){
+void CTech::LoadLine(std::string key, std::string value){
 
 	if(!key.compare("name")){
 		name = value;
@@ -29,7 +29,7 @@ void CRecipe::LoadLine(std::string key, std::string value){
 	}
 }
 
-void CRecipe::LoadCosts(std::map< int, int > & container, std::string value){
+void CTech::LoadCosts(std::map< int, int > & container, std::string value){
 
 	std::istringstream is_value(value);
 	std::string type;
