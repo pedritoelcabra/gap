@@ -11,8 +11,8 @@
 class CRecipe
 {
     public:
-        CRecipe();
-        virtual ~CRecipe();
+        CRecipe(){};
+        virtual ~CRecipe(){};
 
         void                                LoadLine(std::string key, std::string value);
         std::map< int, int >*               GetInput(){             return &Input;};
