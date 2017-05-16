@@ -1,11 +1,5 @@
 #include "CRecipe.h"
 
-CRecipe::CRecipe(){
-}
-
-CRecipe::~CRecipe(){
-}
-
 void CRecipe::LoadLine(std::string key, std::string value){
 
 	if(!key.compare("name")){
