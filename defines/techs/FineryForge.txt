@@ -1,0 +1,10 @@
+name=Finery Forge
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+resourceInput=Advanced Instrument:1
+resourceInput=Books:1
+resourceInput=Beer:1
+resourceInput=Wine:1
+minSkill=2
+techRequirement=Blast Furnace
