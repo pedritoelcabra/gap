@@ -1,0 +1,5 @@
+name=Toolmaking
+techCost=100
+resourceInput=Work:1
+techRequirement=Woodworking
+techRequirement=Stoneworking
