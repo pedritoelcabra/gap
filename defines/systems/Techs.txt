@@ -9,6 +9,7 @@ Fishing                 ---                         Fishery                     
 Food Preservation       ---                         Castle Kitchen                      Simple Food
 Animal Husbandry        ---                         Sheep Farm                          Sheep
 Agriculture             ---                         Wheat Farm                          Wheat
+Bartering               ---                         Gem Gatherer                        Gemstones
 
 Toolmaking              Woodworking, Stoneworking   Toolmaker                           Basic Instruments
 
@@ -20,7 +21,7 @@ Pottery                 Agriculture                 Potterer, Clay Gatherer     
 Pig Domestication       Animal Husbandry            Pig Farm, Slaughterhouse            Pig, Bones, Meat, Hides
 
 Weaving                 Sheep, Carpentry            Weaver                              FabricFWool, Rude Clothes
-Protective Wear         Weaving                     Armorer                             Padded Armor
+L Armor                 Weaving                     Armorer                             Padded Armor
 Archery                 Carpentry, Pig              Fletcher                            Wooden Bow, Stonehead Arrows
 Tanning                 Pig                         Tannery                             Leather
 
@@ -34,39 +35,62 @@ Bronze                  Copper, Tin                                             
 Bronze Weapons          Bronze, Basic Weapons       Weaponsmith                         Bronze Gladius, Spear
 Bronzehead Arrows       Bronze, Archery                                                 Bronzehead Arrows
 
-Medium Armor            Bronze, Leather, Protective Wear                                Bronze Shield, Leather Armor, Helmet
+Medium Armor            Bronze, Leather, L Armor                                        Bronze Shield, Leather Armor, Helmet
 
 Advanced Carpentry      Toolmaking, Bronze                                              Ebony
-Advanced Toolmaking     Advanced Carpentry                                              Advanced Instruments
+Advanced Toolmaking     Adv. Carpentry                                                  Advanced Instruments
+Brickmaking             Adv. Toolmaking, Pottery
 
-Advanced Agriculture    Agriculture, Bronze
-Alcohol                 Advanced Agriculture
-Brewing                 Advanced Carpentry
+Advanced Agriculture    Agriculture, Bronze         Vineyard, Hops F, Cotton F          Hops, Cotton, Grape 
+Brewing                 Adv. Carpentry, A Agric.    Brewery                             Beer
 
 @@@@@@@@@@@@@ LEVEL 2 @@@@@@@@@@@@@@@@ Require Advanced Instruments, Beer & Citizen
 
 Ironworking             Bronze                      Iron Gatherer, Bloomery             Iron Ore, Iron
+
+Iron Weapons            Ironworking, B Weapons                                          Iron Weapons
+Iron Armor              Ironworking, Medium Armor                                       Iron Armor
+Ironhead Arrows         Ironworking, B Arrows                                           Ironhead Arrows
+
 Charcoal Burning        Advanced Carpentry          Charcoal Burner                     CoalFWood
+Glassmaking             Advanced Toolmaking         Glass Kiln                          Glass
 
-Pack Animals
+Currency                Bronze                      
+Pack Animals            Pig, A Agric.               Donkey Farm                         Donkey
+Trade                   Pack Animals, Currency      
 
-Jewelcutting
-Noble Clothes
+Gemcutting              Adv. Toolmaking             Gemcutter                           Gems
+Elegant Clothes         Weaving, Adv. Toolmaking                                        Elegant Clothes
 
-Dyes
-Ornate Porcelain
+Dyes                    Adv. Toolmaking             Lapis Gatherer
+Ornate Porcelain        Pottery, Adv. Toolmaking                                        Ornate Porcelain
 
-Gastronomy
+Gastronomy              Food Preserv., A Agric.                                         Elaborate Food
 
-Noble Furniture
+Noble Furniture         Advanced Carpentry                                              Noble Furniture
 
-Inkmaking
-Parchment
-Bookbinding
+Writing                 Currency                    Bookbinder
+Inkmaking,              Writing                                                         Ink
+Parchment               Writing                                                         Parchment 
+Bookbinding             Inkmaking, Parchment                                            Books
 
+Wine                    Brewing                     Winery                              Wine
 
 @@@@@@@@@@@@@ LEVEL 3 @@@@@@@@@@@@@@@@ Require Books, Wine & Nobleman
 
-Horseriding
+Concrete                Brickmaking, Iron           Builder's Workshop                  Mortar
+Reinforced Doors        Adv. Carpentry, Iron        Carpenter                           Reinforced Door
+Advanced Architecture   Concrete, Reinf. Doors      
 
+Advanced Metallurgy     Iron, Charcoal Burning      
+Blast Furnace           Advanced Metallurgy         Blast Furnace                       Pig Iron
+Finery Forge            Blast Furnace               Finery Forge                        IronFromPigIron
+Steelmaking             Blast Furnace               Steel Furnace                       Steel
+
+Steel Weapons           Steelmaking                 
+Steel Armor             Steelmaking
+Steelhead Arrows        Steelmaking
+
+Horseriding             Pack Animals                
+Chivalry                Horseriding, Steelmaking
 
