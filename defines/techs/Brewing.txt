@@ -1,0 +1,6 @@
+name=Brewing
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+techRequirement=Advanced Carpentry
+techRequirement=Advanced Agriculture
