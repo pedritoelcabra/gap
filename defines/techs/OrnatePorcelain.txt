@@ -1,0 +1,9 @@
+name=Ornate Porcelain
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+resourceInput=Advanced Instrument:1
+resourceInput=Beer:1
+minSkill=1
+techRequirement=Advanced Toolmaking
+techRequirement=Pottery
