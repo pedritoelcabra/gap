@@ -8,3 +8,4 @@ resourceInput=Beer:1
 resourceInput=Wine:1
 minSkill=2
 techRequirement=Steelmaking
+techRequirement=Iron Weapons
