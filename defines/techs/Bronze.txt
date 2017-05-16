@@ -1,0 +1,5 @@
+name=Bronze
+techCost=100
+resourceInput=Work:1
+techRequirement=Copper
+techRequirement=Tin
