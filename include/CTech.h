@@ -14,6 +14,9 @@ class CTech
         virtual ~CTech(){};
 
         void                                    LoadLine(std::string key, std::string value);
+        bool                                    IsAvailable(){      return isAvailable; };
+        bool                                    IsResearched(){     return isResearched; };
+        bool                                    AddProgress();
     protected:
 
     private:
