@@ -534,7 +534,7 @@ void CUnit::UpdateTransportAssignment(){
                     }
                     thought = "Cant drop off goods!";
                     maxCollision = 3.0f;
-                    taskPtr.reset();
+                    CancelTransportTask();
                     return;
                 }
                 vec2i randomTile = destS->GetRandomPassableTile();
@@ -546,7 +546,7 @@ void CUnit::UpdateTransportAssignment(){
                 Idle(60);
                 return;
             }
-            taskPtr.reset();
+            CancelTransportTask();
             thought =  "My task has no destination";
             maxCollision = 3.0f;
             return;
@@ -565,7 +565,7 @@ void CUnit::UpdateTransportAssignment(){
                     return;
                 }
                 thought = "Cant pick up goods!";
-                taskPtr.reset();
+                CancelTransportTask();
                 maxCollision = 3.0f;
                 return;
             }
@@ -578,8 +578,7 @@ void CUnit::UpdateTransportAssignment(){
             Idle(60);
             return;
         }
-        taskPtrS->MarkComplete();
-        taskPtr.reset();
+        CancelTransportTask();
         maxCollision = 3.0f;
         thought =  "My task has no destination";
         return;
@@ -718,6 +717,13 @@ void CUnit::UpdateAssignment(){
         UpdateProductionAssignment(); break;
     case CAction::transportAssignment:
         UpdateTransportAssignment(); break;
+    }
+}
+
+void CUnit::CancelTransportTask(){
+    if(auto taskPtrS = taskPtr.lock()){
+        taskPtrS->DropPorter();
+        taskPtr.reset();
     }
 }
 

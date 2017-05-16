@@ -54,6 +54,7 @@ class CUnit : public CGUIObject
         void                Destroy();
         void                CarryItem(int resource);
         int                 GetCarriedItem(bool takeIt = false);
+        void                CancelTransportTask();
 
         float               GetMinCollision(){          return minCollision;};
         float               GetMaxCollision(){          return maxCollision;};

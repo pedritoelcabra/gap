@@ -51,7 +51,9 @@ bool CGame::OnInit(){
                                         1);
             if(auto s = w.lock()){
                 for(auto r : CGood::GetResources()){
-                    s->AddToInventory(r.first, 100);
+                    if(r.first == 1){
+                        s->AddToInventory(r.first, 100);
+                    }
                 }
             }
         }

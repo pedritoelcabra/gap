@@ -138,31 +138,36 @@ void CBuilding::MatchTransportTasks(){
         return;
     }
     for(auto goodsVec : OfferedGoods){
+        DeleteUnusedWeak(&goodsVec.second);
+        DeleteUnusedWeak(&RequestedGoods.at(goodsVec.first));
         for(auto ow : goodsVec.second){
             if(auto os = ow.lock()){
-                int bestPrio = 0;
-                task_weak_ptr bestDest;
-                for(auto dw :  RequestedGoods.at(goodsVec.first) ){
-                    if(auto ds = dw.lock()){
-                        if(!ds->GetCompleted() && ds->GetPrio() > bestPrio){
-                            bestPrio = ds->GetPrio();
-                            bestDest = dw;
+                if(!os->GetCompleted()){
+                    int bestPrio = 0;
+                    task_weak_ptr bestDest;
+                    auto vecReq = RequestedGoods.at(goodsVec.first);
+                    for(auto dw :  RequestedGoods.at(goodsVec.first) ){
+                        if(auto ds = dw.lock()){
+                            if(!ds->GetCompleted() && ds->GetPrio() > bestPrio){
+                                bestPrio = ds->GetPrio();
+                                bestDest = dw;
+                            }
                         }
                     }
-                }
-                if(auto bs = bestDest.lock()){
-                    task_shared_ptr ts = std::make_shared<CTransportTask>(os->GetPickUp(), bs->GetDropOff(), goodsVec.first, bestPrio);
-                    task_weak_ptr tw = task_weak_ptr(ts);
-                    if(auto destS = bs->GetDropOff().lock()){
-                        destS->AddIncoming(tw);
-                        if(auto oriS = os->GetPickUp().lock()){
-                            oriS->AddOutgoing(tw);
+                    if(auto bs = bestDest.lock()){
+                        task_shared_ptr ts = std::make_shared<CTransportTask>(os->GetPickUp(), bs->GetDropOff(), goodsVec.first, bestPrio);
+                        task_weak_ptr tw = task_weak_ptr(ts);
+                        if(auto destS = bs->GetDropOff().lock()){
+                            if(auto oriS = os->GetPickUp().lock()){
+                                destS->AddIncoming(tw);
+                                oriS->AddOutgoing(tw);
 
-                            AvailableTasks.push_back(tw);
-                            GAP.TaskManager.AddTask(ts);
+                                AvailableTasks.push_back(tw);
+                                GAP.TaskManager.AddTask(ts);
 
-                            bs->MarkComplete();
-                            os->MarkComplete();
+                                bs->MarkComplete();
+                                os->MarkComplete();
+                            }
                         }
                     }
                 }
@@ -172,10 +177,15 @@ void CBuilding::MatchTransportTasks(){
 }
 
 void CBuilding::UpdateTransportTasks(){
+    DeleteUnusedWeak(&Incoming);
+    DeleteUnusedWeak(&Outgoing);
     if(auto ts = myTown.lock()){
         for (auto const& item : Inventory){
+            if(item.first == CGood::work){
+                continue;
+            }
             if(NeededGoods.count(item.first)){
-                if(item.second <= NeededGoods.at(item.first)){
+                if(item.second < NeededGoods.at(item.first)){
                     if(!IncomingByResource(item.first, true)){
                         if(item.second + IncomingByResource(item.first) < NeededGoods.at(item.first)){
                             ts->AddResourceRequest(myPtr, item.first, resourcePrio);
@@ -332,7 +342,7 @@ CRecipe* CBuilding::AvailableRecipe(){
             }
         }
         for(auto const &c : *(recipe.GetOutput()) ){
-            if( GetMaxStorage(c.first) < c.second){
+            if( c.second > GetMaxStorage(c.first) ){
                 canProduce = false;
             }
         }
@@ -364,20 +374,24 @@ bool CBuilding::DoProduce(){
         return false;
     }
 
-    currentProductionStage++;
-    clip.x = currentProductionStage * GetW();
+    if(typePtr->ProductionStages()){
+        currentProductionStage++;
+        clip.x = currentProductionStage * GetW();
+
+        if(currentProductionStage < typePtr->ProductionStages()){
+            return true;
+        }
+
+        currentProductionStage -= typePtr->ProductionSetback();
+
+        clip.x = currentProductionStage * GetW();
+    }
     currentProductionCooldown = typePtr->ProductionCooldown();
 
-    if(currentProductionStage < typePtr->ProductionStages()){
-        return true;
-    }
 
-    currentProductionStage -= typePtr->ProductionSetback();
-    clip.x = currentProductionStage * GetW();
     for(auto const &c : *(currentProduction->GetOutput()) ){
         AddToInventory(c.first, c.second);
     }
-    // UpdateTransportTasks();
     return true;
 }
 
@@ -386,6 +400,16 @@ void CBuilding::Destroy(){
     for(auto e : Inhabitants)    {
         if(auto s = e.lock()){
             s->Destroy();
+        }
+    }
+    for(auto e : Incoming)    {
+        if(auto s = e.lock()){
+            s->MarkComplete();
+        }
+    }
+    for(auto e : Outgoing)    {
+        if(auto s = e.lock()){
+            s->MarkComplete();
         }
     }
     if(auto s = myTown.lock()){
@@ -550,12 +574,16 @@ int CBuilding::OutgoingByResource(int res, bool onlyPending){
 
 task_weak_ptr CBuilding::FindConnectedTask(unit_weak_ptr worker){
     if(DistributionRange()){
-        if(!AvailableTasks.size()){
-            return task_weak_ptr();
+        if(AvailableTasks.size()){
+            for(auto task : AvailableTasks){
+                if(auto ts = task.lock()){
+                    if(!ts->GetAssigned()){
+                        return task;
+                    }
+                }
+            }
         }
-        task_weak_ptr task = AvailableTasks.back();
-        AvailableTasks.pop_back();
-        return task;
+        return task_weak_ptr();
     }
     if(auto s = myTown.lock()){
         return s->FindConnectedTask(worker);
@@ -603,22 +631,26 @@ void CBuilding::ConnectToNearestTown(bool forceReconnect){
 }
 
 void CBuilding::AddResourceOffer(build_weak_ptr sourcePtr, int res){
-    if(!DistributionRange() && auto ss = sourcePtr.lock()){
-        task_shared_ptr ts = std::make_shared<CTransportTask>(sourcePtr, build_weak_ptr(), res, 0);
-        task_weak_ptr tw = task_weak_ptr(ts);
-        GAP.TaskManager.AddTask(ts);
-        ss->AddOutgoing(tw);
-        OfferedGoods.at(res).push_back(tw);
+    if( DistributionRange() ){
+        if(auto ss = sourcePtr.lock()){
+            task_shared_ptr ts = std::make_shared<CTransportTask>(sourcePtr, build_weak_ptr(), res, 0);
+            task_weak_ptr tw = task_weak_ptr(ts);
+            GAP.TaskManager.AddTask(ts);
+            ss->AddOutgoing(tw);
+            OfferedGoods.at(res).push_back(tw);
+        }
     }
 }
 
 void CBuilding::AddResourceRequest(build_weak_ptr destPtr, int res, int prio){
-    if(!DistributionRange() && auto ss = destPtr.lock()){
-        task_shared_ptr ts = std::make_shared<CTransportTask>(build_weak_ptr(), destPtr, res, prio);
-        task_weak_ptr tw = task_weak_ptr(ts);
-        GAP.TaskManager.AddTask(ts);
-        ss->AddIncoming(tw);
-        RequestedGoods.at(res).push_back(tw);
+    if( DistributionRange() ){
+        if(auto ss = destPtr.lock()){
+            task_shared_ptr ts = std::make_shared<CTransportTask>(build_weak_ptr(), destPtr, res, prio);
+            task_weak_ptr tw = task_weak_ptr(ts);
+            GAP.TaskManager.AddTask(ts);
+            ss->AddIncoming(tw);
+            RequestedGoods.at(res).push_back(tw);
+        }
     }
 }
 

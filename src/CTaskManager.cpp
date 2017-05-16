@@ -23,7 +23,27 @@ void CTaskManager::DestroyTask(int id){
 
 void CTaskManager::Update(){
     std::vector<task_shared_ptr>::iterator iter = Tasks.begin();
+//    int counter = 0;
     while (iter != Tasks.end()){
+//        task_shared_ptr task = task_shared_ptr(*iter);
+//        unit_weak_ptr porter = task->GetPorter();
+//        if(auto ps = porter.lock()){
+//            std::string str = *(ps->GetName());
+//            int res = ps->GetResource();
+//            counter++;
+//        }
+//        build_weak_ptr pickup = task->GetPickUp();
+//        if(auto ps = pickup.lock()){
+//            std::string str = *(ps->GetName());
+//            int res = ps->GetResource();
+//            counter++;
+//        }
+//        build_weak_ptr dropoff = task->GetDropOff();
+//        if(auto ps = dropoff.lock()){
+//            std::string str = *(ps->GetName());
+//            int res = ps->GetResource();
+//            counter++;
+//        }
         if((*iter)->GetCompleted()){
             if(auto s = (*iter)->GetPickUp().lock()){
                 s->RemoveOutgoing((*iter)->GetId());
