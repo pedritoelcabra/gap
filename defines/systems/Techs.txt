@@ -38,7 +38,7 @@ Bronzehead Arrows       Bronze, Archery                                         
 Medium Armor            Bronze, Leather, L Armor                                        Bronze Shield, Leather Armor, Helmet
 
 Advanced Carpentry      Toolmaking, Bronze                                              Ebony
-Advanced Toolmaking     Adv. Carpentry                                                  Advanced Instruments
+Advanced Toolmaking     Toolmaking, Bronze                                              Advanced Instruments
 Brickmaking             Adv. Toolmaking, Pottery
 
 Advanced Agriculture    Agriculture, Bronze         Vineyard, Hops F, Cotton F          Hops, Cotton, Grape 
