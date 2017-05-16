@@ -1,0 +1,6 @@
+name=Archery
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+techRequirement=Carpentry
+techRequirement=Pig Domestication
