@@ -1,0 +1,3 @@
+name=Fishing
+techCost=100
+resourceInput=Work:1
