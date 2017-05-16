@@ -87,9 +87,9 @@ Blast Furnace           Advanced Metallurgy         Blast Furnace               
 Finery Forge            Blast Furnace               Finery Forge                        IronFromPigIron
 Steelmaking             Blast Furnace               Steel Furnace                       Steel
 
-Steel Weapons           Steelmaking                 
-Steel Armor             Steelmaking
-Steelhead Arrows        Steelmaking
+Steel Weapons           Steelmaking, Iron Weapons
+Steel Armor             Steelmaking, Iron Armor
+Steelhead Arrows        Steelmaking, Ironhead Arrows
 
 Horseriding             Pack Animals                
 Chivalry                Horseriding, Steelmaking
