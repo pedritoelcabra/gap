@@ -1,0 +1,5 @@
+name=Bronzehead Arrows
+techCost=100
+resourceInput=Work:1
+techRequirement=Bronze
+techRequirement=Archery
