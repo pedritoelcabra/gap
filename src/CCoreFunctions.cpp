@@ -23,6 +23,7 @@ bool CGame::OnInit(){
     Player->SetSpeed(8);
 
     ChunkManager.Init();
+    TechManager.Init();
     RecipeManager.Init();
     BuildingManager.Init();
 
