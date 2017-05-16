@@ -1,0 +1,6 @@
+name=Advanced Toolmaking
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+techRequirement=Toolmaking
+techRequirement=Bronze
