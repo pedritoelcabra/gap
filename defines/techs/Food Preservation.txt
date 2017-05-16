@@ -1,0 +1,3 @@
+name=Food Preservation
+techCost=100
+resourceInput=Work:1
