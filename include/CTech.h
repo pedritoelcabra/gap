@@ -10,8 +10,8 @@
 class CTech
 {
     public:
-        CTech();
-        virtual ~CTech();
+        CTech(){};
+        virtual ~CTech(){};
 
         void                                    LoadLine(std::string key, std::string value);
     protected:
