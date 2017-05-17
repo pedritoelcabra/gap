@@ -11,14 +11,14 @@ void CTech::LoadLine(std::string key, std::string value){
 		return;
 	}
 	if(!key.compare("minSkill")){
-		minSkill = value;
+		minSkill = std::stoi(value);
 		return;
 	}
 	if(!key.compare("techCost")){
-		techCost = value;
+		techCost = std::stoi(value);
 		return;
 	}
-  
+
 	if(!key.compare("resourceInput")){
 		LoadCosts(Input, value);
 		return;
@@ -44,4 +44,12 @@ void CTech::LoadCosts(std::map< int, int > & container, std::string value){
 		}
 	}
 
+}
+
+bool CTech::AddProgress(){
+    currentProgress++;
+    if(currentProgress >= techCost){
+        isResearched = true;
+    }
+    return isResearched;
 }

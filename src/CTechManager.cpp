@@ -36,7 +36,7 @@ void CTechManager::LoadTech(std::string fileName){
             std::string value = "";
             std::getline(is_line, key, '=');
             std::getline(is_line, value);
-            recipe.LoadLine(key, value);
+            tech.LoadLine(key, value);
         }
 	}
 	Techs[techCounter] = tech;
@@ -44,4 +44,6 @@ void CTechManager::LoadTech(std::string fileName){
 	techCounter++;
 }
 
-bool CTechManager::AddProgress()
+bool CTechManager::AddProgress(int tech){
+    return Techs[tech].AddProgress();
+}

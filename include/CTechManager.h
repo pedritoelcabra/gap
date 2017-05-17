@@ -12,7 +12,7 @@ class CTechManager
         virtual ~CTechManager(){};
 
         bool                                Init();
-        Tech*                               GetTechByName(const std::string * name){    return Techs.at(TechsByName.at(*name)); };
+        CTech*                              GetTechByName(const std::string * name){    return &Techs.at(TechsByName.at(*name)); };
         bool                                IsAvailable(int tech){                      return Techs.at(tech).IsResearched(); };
         bool                                IsResearched(int tech){                     return Techs.at(tech).IsAvailable(); };
         bool                                AddProgress(int tech);

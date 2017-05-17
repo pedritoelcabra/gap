@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include "CGood.h"
 
 class CTech
 {
@@ -17,10 +18,13 @@ class CTech
         bool                                    IsAvailable(){      return isAvailable; };
         bool                                    IsResearched(){     return isResearched; };
         bool                                    AddProgress();
+        std::string*                            GetName(){              return &name;};
+
     protected:
 
     private:
         std::string                             name;
+        std::string                             description;
         std::map< int, int >                    Input;
         std::vector< int >                      Requirements;
         std::vector< std::string >              RequirementsNames;
