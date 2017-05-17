@@ -15,3 +15,4 @@ productionRecipe=SimpleMealFromFish
 productionRecipe=SimpleMealFromMeat
 productionRecipe=ElaborateMealFromSimpleMealSaltFish
 productionRecipe=ElaborateMealFromSimpleMealSaltMeat
+techRequirement=Food Preservation
