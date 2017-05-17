@@ -483,7 +483,7 @@ void CUnit::UpdateIdleAssignment(){
                 return;
             }
         }
-        taskPtr = s->FindConnectedTask(myPtr);
+        taskPtr = s->FindConnectedTask(tileX, tileY);
         if(auto taskPtrS = taskPtr.lock()){
             if(GAP.Pathfinder.GetCost(tileX, tileY) <= 2.0f){
                 maxCollision = 2.0f;
@@ -537,8 +537,8 @@ void CUnit::UpdateTransportAssignment(){
                     CancelTransportTask();
                     return;
                 }
-                vec2i randomTile = destS->GetRandomPassableTile();
-                if(MoveTo(randomTile.first, randomTile.second)){
+                vec2i door = destS->GetDoor();
+                if(MoveTo(door.first, door.second)){
                     thought = "Going to drop off goods";
                     return;
                 }
@@ -697,7 +697,6 @@ void CUnit::UpdateProductionAssignment(){
     thought = "Going to production site";
     vec2i randomTile = workBuildingPtrS->GetRandomPassableTile();
     MoveTo(randomTile.first, randomTile.second);
-    return;
     return;
 }
 

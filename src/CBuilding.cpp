@@ -116,6 +116,46 @@ bool CBuilding::HasBuildingResources(){
     return true;
 }
 
+void CBuilding::Destroy(){
+    isBeingDestroyed = true;
+    for(auto e : Inhabitants)    {
+        if(auto s = e.lock()){
+            s->Destroy();
+        }
+    }
+    for(auto e : Incoming)    {
+        if(auto s = e.lock()){
+            s->MarkComplete();
+        }
+    }
+    for(auto e : Outgoing)    {
+        if(auto s = e.lock()){
+            s->MarkComplete();
+        }
+    }
+    if(auto s = myTown.lock()){
+        s->RemoveConnection(id);
+    }
+    ApplyMovementCosts(true);
+}
+
+bool CBuilding::AddWork(int amount){
+    workToComplete -= amount;
+    if(workToComplete <= 0){
+        workToComplete = 0;
+        ApplyMovementCosts();
+        for(auto p : CGood::GetResources() ){
+            Inventory[p.first] = 0;
+        }
+        Workers.clear();
+        UpdateNeededGoods();
+        return true;
+    }
+    return false;
+}
+
+///////
+
 void CBuilding::Update(){
     if(!workToComplete){
         if(currentProductionCooldown > 0){
@@ -155,10 +195,15 @@ void CBuilding::MatchTransportTasks(){
                         }
                     }
                     if(auto bs = bestDest.lock()){
-                        task_shared_ptr ts = std::make_shared<CTransportTask>(os->GetPickUp(), bs->GetDropOff(), goodsVec.first, bestPrio);
-                        task_weak_ptr tw = task_weak_ptr(ts);
                         if(auto destS = bs->GetDropOff().lock()){
                             if(auto oriS = os->GetPickUp().lock()){
+                                task_shared_ptr ts = std::make_shared<CTransportTask>(
+                                                          os->GetPickUp(),
+                                                          bs->GetDropOff(),
+                                                          goodsVec.first,
+                                                          bestPrio);
+                                task_weak_ptr tw = task_weak_ptr(ts);
+
                                 destS->AddIncoming(tw);
                                 oriS->AddOutgoing(tw);
 
@@ -168,6 +213,25 @@ void CBuilding::MatchTransportTasks(){
                                 bs->MarkComplete();
                                 os->MarkComplete();
                             }
+                        }
+                    }else if(!os->OfferedByTown()){
+                        // if something is being sent from a building other than the town and has no place to go
+                        // take it into the town
+                        if(auto oriS = os->GetPickUp().lock()){
+                            task_shared_ptr ts = std::make_shared<CTransportTask>(
+                                                      os->GetPickUp(),
+                                                      myPtr,
+                                                      goodsVec.first,
+                                                      bestPrio);
+                            task_weak_ptr tw = task_weak_ptr(ts);
+
+                            AddIncoming(tw);
+                            oriS->AddOutgoing(tw);
+
+                            AvailableTasks.push_back(tw);
+                            GAP.TaskManager.AddTask(ts);
+
+                            os->MarkComplete();
                         }
                     }
                 }
@@ -230,6 +294,8 @@ void CBuilding::GenerateInhabitant(){
     Inhabitants.push_back(iw);
 }
 
+////////////////
+
 void CBuilding::AddIncoming(task_weak_ptr ptr){
     Incoming.push_back(ptr);
 }
@@ -285,14 +351,7 @@ void CBuilding::RemoveInhabitant(int id){
     }
 }
 
-bool CBuilding::InRadius(int x, int y){
-    if(typePtr->PopRange() > 0){
-        if(GetTileFlightRoundDistance(x, y) <= typePtr->PopRange()){
-            return true;
-        }
-    }
-    return false;
-}
+////////////////
 
 unit_weak_ptr CBuilding::GetIdleInhabitant(){
     for(auto e : Inhabitants)    {
@@ -395,44 +454,6 @@ bool CBuilding::DoProduce(){
     return true;
 }
 
-void CBuilding::Destroy(){
-    isBeingDestroyed = true;
-    for(auto e : Inhabitants)    {
-        if(auto s = e.lock()){
-            s->Destroy();
-        }
-    }
-    for(auto e : Incoming)    {
-        if(auto s = e.lock()){
-            s->MarkComplete();
-        }
-    }
-    for(auto e : Outgoing)    {
-        if(auto s = e.lock()){
-            s->MarkComplete();
-        }
-    }
-    if(auto s = myTown.lock()){
-        s->RemoveConnection(id);
-    }
-    ApplyMovementCosts(true);
-}
-
-bool CBuilding::AddWork(int amount){
-    workToComplete -= amount;
-    if(workToComplete <= 0){
-        workToComplete = 0;
-        ApplyMovementCosts();
-        for(auto p : CGood::GetResources() ){
-            Inventory[p.first] = 0;
-        }
-        Workers.clear();
-        UpdateNeededGoods();
-        return true;
-    }
-    return false;
-}
-
 int CBuilding::AddToInventory(int resource, int amount){
     if(amount <= GetMaxStorage(resource, true)){
         Inventory.at(resource) += amount;
@@ -500,10 +521,10 @@ bool CBuilding::IsValidWorkLocation(int x, int y){
     if(y < tileY){
         return false;
     }
-    if(x > tileX + GetTileWidth()){
+    if(x >= tileX + GetTileWidth()){
         return false;
     }
-    if(y > tileY + GetTileHeight()){
+    if(y >= tileY + GetTileHeight()){
         return false;
     }
     return true;
@@ -540,13 +561,15 @@ int CBuilding::IncomingByResource(int res, bool onlyPending){
     int amount = 0;
     for(auto w : Incoming)    {
         if(auto s = w.lock()){
-            if(onlyPending){
-                if(auto ds = s->GetPickUp().lock()){
+            if(res == s->GetResource()){
+                if(onlyPending){
+                    if(auto ds = s->GetPickUp().lock()){
+                    }else{
+                        amount++;
+                    }
                 }else{
                     amount++;
                 }
-            }else{
-                amount++;
             }
         }
     }
@@ -572,23 +595,30 @@ int CBuilding::OutgoingByResource(int res, bool onlyPending){
     return amount;
 }
 
-task_weak_ptr CBuilding::FindConnectedTask(unit_weak_ptr worker){
+task_weak_ptr CBuilding::FindConnectedTask(int x, int y){
+    task_weak_ptr task;
+    bool firstTask = true;
     if(DistributionRange()){
         if(AvailableTasks.size()){
-            for(auto task : AvailableTasks){
-                if(auto ts = task.lock()){
+            for(auto tw : AvailableTasks){
+                if(auto ts = tw.lock()){
                     if(!ts->GetAssigned()){
-                        return task;
+                        if(firstTask){
+                            task = tw;
+                        }
+                        if(ts->GetDoor().first == x && ts->GetDoor().second == y){
+                            return tw;
+                        }
                     }
                 }
             }
         }
-        return task_weak_ptr();
+        return task;
     }
     if(auto s = myTown.lock()){
-        return s->FindConnectedTask(worker);
+        return s->FindConnectedTask(x, y);
     }
-    return task_weak_ptr();
+    return task;
 }
 
 std::vector<build_weak_ptr>* CBuilding::GetConnections(){
@@ -634,6 +664,10 @@ void CBuilding::AddResourceOffer(build_weak_ptr sourcePtr, int res){
     if( DistributionRange() ){
         if(auto ss = sourcePtr.lock()){
             task_shared_ptr ts = std::make_shared<CTransportTask>(sourcePtr, build_weak_ptr(), res, 0);
+            if(ss->GetType() == type){
+                // the town itself is sending out this offer
+                ts->SetOfferedByTown();
+            }
             task_weak_ptr tw = task_weak_ptr(ts);
             GAP.TaskManager.AddTask(ts);
             ss->AddOutgoing(tw);

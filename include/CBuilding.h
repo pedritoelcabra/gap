@@ -41,7 +41,6 @@ class CBuilding : public CGUIObject
         void                RemoveWorker(int id);
         void                RemoveInhabitant(int id);
         unit_weak_ptr       GetIdleInhabitant();
-        bool                InRadius(int x, int y);
         bool                HasEnoughWorkers();
         bool                HasWorkToDo();
         void                Destroy();
@@ -60,7 +59,7 @@ class CBuilding : public CGUIObject
         int                 GetMaxStorage(int resource, bool excludingOrders = false);
         int                 IncomingByResource(int res, bool onlyPending = false);
         int                 OutgoingByResource(int res, bool onlypending = false);
-        task_weak_ptr       FindConnectedTask(unit_weak_ptr worker);
+        task_weak_ptr       FindConnectedTask(int x, int y);
         bool                HasBuildingResources();
         vec2i               GetRandomPassableTile();
         bool                IsValidWorkLocation(int x, int y);

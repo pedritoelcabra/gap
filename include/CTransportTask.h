@@ -2,7 +2,7 @@
 #ifndef CTRANSPORTTASK_H
 #define CTRANSPORTTASK_H
 
-#include <CBuilding.h>
+#include "CBuilding.h"
 #include <CUnit.h>
 
 class CUnit;
@@ -15,13 +15,7 @@ class CTransportTask
 {
 
     public:
-
-        CTransportTask(build_weak_ptr pickUp_, build_weak_ptr dropOff_, int resource_, int prio_ ){
-            pickUp = pickUp_;
-            dropOff = dropOff_;
-            resource = resource_;
-            prio = prio_;
-        };
+        CTransportTask(build_weak_ptr pickUp_, build_weak_ptr dropOff_, int resource_, int prio_ );
         virtual ~CTransportTask(){};
 
         void                AssignPorter(unit_weak_ptr porter_){ porter = porter_; assigned = true; };
@@ -37,14 +31,19 @@ class CTransportTask
         bool                GetCompleted(){ return completed;};
         bool                GetAssigned(){ return assigned;};
         void                MarkComplete(){ completed = true; };
+        void                SetOfferedByTown(){ offeredByTown = true; };
+        bool                OfferedByTown(){ return offeredByTown; };
+        vec2i               GetDoor(){ return door; };
 
     private:
 
+        bool                offeredByTown = false;
         bool                completed = false;
         bool                assigned = false;
         int                 id;
         int                 resource;
         int                 prio;
+        vec2i               door;
         build_weak_ptr      pickUp;
         build_weak_ptr      dropOff;
         unit_weak_ptr       porter;
