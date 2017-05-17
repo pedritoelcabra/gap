@@ -14,3 +14,4 @@ productionRecipe=NobleFurnitureFromPlankEbonySilver
 productionRecipe=WoodenClubFromPlank
 productionRecipe=WoodenSpearFromPlank
 productionRecipe=WoodenShieldFromPlank
+techRequirement=Carpentry
