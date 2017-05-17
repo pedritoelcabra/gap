@@ -9,3 +9,4 @@ buildCost=wood:20
 workerCount=1
 workerPriority=80
 productionRecipe=MortarFromStoneLime
+techRequirement=Concrete

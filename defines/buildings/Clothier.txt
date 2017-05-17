@@ -10,3 +10,4 @@ workerCount=1
 workerPriority=80
 productionRecipe=RudeClothesFromWool
 productionRecipe=ElegantGarmentsFromFabricLeatherGems
+techRequirement=Weaving

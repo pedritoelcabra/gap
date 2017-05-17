@@ -20,3 +20,4 @@ productionRecipe=SteelChainmailFromSteelLeather
 productionRecipe=SteelHelmetFromSteel
 productionRecipe=SteelCuirassFromSteel
 productionRecipe=SteelShieldFromSteel
+techRequirement=Light Armor
