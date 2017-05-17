@@ -18,14 +18,15 @@ Toolmaking              Woodworking, Stoneworking   Toolmaker                   
 Carpentry               Toolmaking                  Carpenter                           Basic Furniture
 Basic Weapons           Carpentry                                                       WSpear, WShield, WClub
 Pottery                 Agriculture                 Potterer, Clay Gatherer             Earthenware, Kiln
-Pig Domestication       Animal Husbandry            Pig Farm, Slaughterhouse            Pig, Bones, Meat, Hides
+Pig Domestication       Animal Husbandry            Pig Farm, Butcher                   Pig, Bones, Meat, Hides
 
-Weaving                 Sheep, Carpentry            Weaver                              FabricFWool, Rude Clothes
+Weaving                 Sheep, Carpentry            Weaver, Clothier                    FabricFWool, Rude Clothes
 L Armor                 Weaving                     Armorer                             Padded Armor
 Archery                 Carpentry, Pig              Fletcher                            Wooden Bow, Stonehead Arrows
 Tanning                 Pig                         Tannery                             Leather
 
 Metals                  Toolmaking                  Furnace
+Coal                    Metals                      Coal Gatherer                       Coal
 Copper                  Metals                      Copper Gatherer                     Copper Ores, Copper
 Tin                     Metals                      Tin Gatherer                        Tin Ores, Tin
 Silver                  Metals                      Silver Gatherer                     Silver Ores, Silver
@@ -52,7 +53,7 @@ Iron Weapons            Ironworking, B Weapons                                  
 Iron Armor              Ironworking, Medium Armor                                       Iron Armor
 Ironhead Arrows         Ironworking, B Arrows                                           Ironhead Arrows
 
-Charcoal Burning        Advanced Carpentry          Charcoal Burner                     CoalFWood
+Charcoal Burning        Advanced Carpentry, Coal    Charcoal Burner                     CoalFWood
 Glassmaking             Advanced Toolmaking         Glass Kiln                          Glass
 
 Currency                Bronze                      
