@@ -9,3 +9,4 @@ buildCost=Work:1
 workerCount=1
 workerPriority=90
 productionRecipe=BrickFromClay
+techRequirement=Brickmaking
