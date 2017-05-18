@@ -10,3 +10,4 @@ workerCount=1
 workerPriority=80
 productionRecipe=EarthenwareFromClay
 productionRecipe=OrnatePorcelainFromClayLapislazuliGold
+techRequirement=Pottery
