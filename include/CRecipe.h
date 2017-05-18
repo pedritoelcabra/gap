@@ -20,9 +20,17 @@ class CRecipe
         std::string*                        GetName(){              return &name;};
         int                                 ConsumesResource(int res_);
         int                                 ProducesResource(int res_);
+
+        void                                SetProductionPrio(int prio ){   productionPrio = prio; };
+        int                                 GetProductionPrio(){            return productionPrio; };
+        int                                 NextProductionProgress(){       productionProgress += productionPrio;
+                                                                            return productionProgress; };
+        void                                FinishProduction(){             productionProgress = 0; };
     protected:
 
     private:
+        int                                     productionPrio = 10;
+        int                                     productionProgress = 0;
         std::string                             name;
         std::map< int, int >                    Input;
         std::map< int, int >                    Output;

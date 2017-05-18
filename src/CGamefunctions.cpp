@@ -233,6 +233,18 @@ bool CGame::OnLButtonDown(int x, int y){
     return true;
 }
 
+bool CGame::OnLButtonUp(int x, int y){
+
+
+    if(MenuManager.HandleLClickUp(x,y)){
+        return true;
+    }
+
+    // Player->MoveTo(mouseTileX, mouseTileY);
+
+    return true;
+}
+
 bool CGame::OnRButtonDown(int x, int y){
     if(MenuManager.HandleRClick(x,y)){
         return true;

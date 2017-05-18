@@ -29,6 +29,10 @@ void CBuilding::SetId(int id_, build_weak_ptr ptr){
     id = id_;
     myPtr = ptr;
     std::vector<task_weak_ptr> taskVec;
+
+    for(auto & recipe : *(typePtr->GetRecipes()) ){
+        Recipes.push_back(recipe);
+    }
     for(auto p : CGood::GetResources() ){
         Inventory[p.first] = 0;
         if(DistributionRange()){
@@ -185,7 +189,6 @@ void CBuilding::MatchTransportTasks(){
                 if(!os->GetCompleted()){
                     int bestPrio = 0;
                     task_weak_ptr bestDest;
-                    auto vecReq = RequestedGoods.at(goodsVec.first);
                     for(auto dw :  RequestedGoods.at(goodsVec.first) ){
                         if(auto ds = dw.lock()){
                             if(!ds->GetCompleted() && ds->GetPrio() > bestPrio){
@@ -238,6 +241,50 @@ void CBuilding::MatchTransportTasks(){
             }
         }
     }
+}
+
+task_weak_ptr CBuilding::FindPlaceToDropOff(int resource){
+    if(!DistributionRange()){
+        if(auto s = myTown.lock()){
+            return s->FindPlaceToDropOff(resource);
+        }
+    }
+    int bestPrio = 0;
+    task_weak_ptr bestDest;
+    task_weak_ptr tw;
+    for(auto dw :  RequestedGoods.at(resource) ){
+        if(auto ds = dw.lock()){
+            if(!ds->GetCompleted() && ds->GetPrio() > bestPrio){
+                bestPrio = ds->GetPrio();
+                bestDest = dw;
+            }
+        }
+    }
+    if(auto bs = bestDest.lock()){
+        if(auto destS = bs->GetDropOff().lock()){
+            task_shared_ptr ts = std::make_shared<CTransportTask>(
+                                      build_weak_ptr(),
+                                      bs->GetDropOff(),
+                                      resource,
+                                      bestPrio);
+            tw = task_weak_ptr(ts);
+
+            destS->AddIncoming(tw);
+            GAP.TaskManager.AddTask(ts);
+            return tw;
+        }
+    }else{
+        task_shared_ptr ts = std::make_shared<CTransportTask>(
+                                  build_weak_ptr(),
+                                  myPtr,
+                                  resource,
+                                  bestPrio);
+        tw = task_weak_ptr(ts);
+
+        AddIncoming(tw);
+        GAP.TaskManager.AddTask(ts);
+    }
+    return tw;
 }
 
 void CBuilding::UpdateTransportTasks(){
@@ -370,6 +417,9 @@ bool CBuilding::HasEnoughWorkers(){
 }
 
 bool CBuilding::HasWorkToDo(){
+    if(workToComplete){
+        return false;
+    }
     if(ResourceArea() > 0 && GAP.ChunkManager.GetResources(GetResource(), ResourceArea(), DoorX(), DoorY()).size() > 0){
         return true;
     }
@@ -393,7 +443,9 @@ CRecipe* CBuilding::AvailableRecipe(){
     if(!ConsumesResource(0)){
         return nullptr;
     }
-    for(auto & recipe : *(typePtr->GetRecipes()) ){
+    int bestRecipePrio = 0;
+    CRecipe* bestRecipe = nullptr;
+    for(auto & recipe : Recipes ){
         bool canProduce = true;
         for(auto const & c : *(recipe.GetInput()) ){
             if( c.first != CGood::work && Inventory.at(c.first) < c.second){
@@ -406,10 +458,14 @@ CRecipe* CBuilding::AvailableRecipe(){
             }
         }
         if(canProduce){
-            return &recipe;
+            int currentPrio = recipe.NextProductionProgress();
+            if(currentPrio > bestRecipePrio){
+                bestRecipePrio = currentPrio;
+                bestRecipe = &recipe;
+            }
         }
     }
-    return nullptr;
+    return bestRecipe;
 }
 
 int CBuilding::StartProduction(){
@@ -451,6 +507,7 @@ bool CBuilding::DoProduce(){
     for(auto const &c : *(currentProduction->GetOutput()) ){
         AddToInventory(c.first, c.second);
     }
+    currentProduction->FinishProduction();
     return true;
 }
 
@@ -487,10 +544,7 @@ void CBuilding::ApplyMovementCosts(bool destroy){
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
             if(destroy){
-                tile_shared_ptr tile = GAP.ChunkManager.GetTile( tileX + k, tileY + i).lock();
-                if(tile){
-                    GAP.Pathfinder.SetCost(tileX + k, tileY + i, tile->GetMoveCost() );
-                }
+                GAP.Pathfinder.SetCost(tileX + k, tileY + i, CScreen::flatMoveCost );
                 continue;
             }
             if(typePtr->IsRoad() && workToComplete > 0){

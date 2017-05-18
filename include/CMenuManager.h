@@ -24,6 +24,7 @@ class CMenuManager
 
         bool                        HandleRClick(int x, int y);
         bool                        HandleLClick(int x, int y);
+        bool                        HandleLClickUp(int x, int y);
         bool                        HandleMouseMovement(int x, int y);
         void                        BuildMenus();
         void                        ShowBuildingMenu();

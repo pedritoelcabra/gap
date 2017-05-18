@@ -33,7 +33,7 @@ class CEvent {
 
         virtual bool OnLButtonDown(int mX, int mY);
 
-        virtual void OnLButtonUp(int mX, int mY);
+        virtual bool OnLButtonUp(int mX, int mY);
 
         virtual bool OnRButtonDown(int mX, int mY);
 

@@ -17,6 +17,8 @@ class CInfoMenu : public CMenu
         void                    Render();
         void                    RenderLine(std::string text, int fontSize);
         void                    Clicked(CButton button);
+        bool                    HandleLClickUp(int x, int y);
+        bool                    HandleMouseMovement(int x, int y);
 
     protected:
 
@@ -28,6 +30,7 @@ class CInfoMenu : public CMenu
         int                     h;
         int                     w;
         int                     yOff;
+        CRecipe*                selectedRecipe = nullptr;
 };
 
 #endif // CINFOMENU_H

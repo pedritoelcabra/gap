@@ -23,12 +23,14 @@ public:
     CButton (int x, int y, int clip, build_weak_ptr building);
     CButton (int x, int y, int clip, int id, std::string caption);
     CButton(int x, int y, int clipnumber, int w, int h);
+    CButton(int x, int y, int clipnumber, int w, int h, CRecipe& recipe);
 
 
     bool                Render();
-    unit_weak_ptr       GetUnit();
-    build_weak_ptr      GetBuilding();
-    int                 GetAction();
+    unit_weak_ptr       GetUnit(){                                      return unitPtr;};
+    build_weak_ptr      GetBuilding(){                                  return buildingPtr;};
+    int                 GetAction(){                                    return action;};
+    CRecipe*            GetRecipe(){                                    return recipe;};
     void                SetPosition(int x, int y, int w, int h);
 
 
@@ -47,6 +49,7 @@ private:
     static GPU_Rect     spriteClip(int clipnumber);
     std::string         caption;
     void                CenterCaption();
+    CRecipe*            recipe = nullptr;
 };
 
 #endif // _CBUTTON_H

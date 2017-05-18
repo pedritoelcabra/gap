@@ -30,6 +30,7 @@ class CBuilding : public CGUIObject
         void                Update();
         void                UpdateTransportTasks();
         void                MatchTransportTasks();
+        task_weak_ptr       FindPlaceToDropOff(int resource);
         void                UpdateNeededGoods();
         bool                Render();
         bool                RenderOnTooltip();
@@ -77,6 +78,7 @@ class CBuilding : public CGUIObject
 
         std::map<int, int>              GetInventory(){                         return Inventory;};
         std::vector<unit_weak_ptr>      GetInhabitants(){                       return Inhabitants;};
+        std::vector<CRecipe>*           GetRecipes(){                           return &Recipes;};
         std::vector<unit_weak_ptr>      GetWorkers(){                           return Workers;};
         std::vector<task_weak_ptr>      GetOutgoing(){                          return Outgoing;};
         int                             GetResource(){                          return typePtr->GetResource();};
@@ -128,6 +130,7 @@ class CBuilding : public CGUIObject
         std::vector<vec2i>              PassableTiles;
         build_weak_ptr                  myPtr;
         build_weak_ptr                  myTown;
+        std::vector<CRecipe>            Recipes;
 
         std::map<int, int>                              NeededGoods;
 

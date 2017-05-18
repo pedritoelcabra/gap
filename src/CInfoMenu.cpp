@@ -31,6 +31,7 @@ void CInfoMenu::Render(){
     SDL_Color grey = {100, 100, 100, 255};
     SDL_Color red = {255, 100, 100, 255};
     SDL_Color green = {100, 255, 100, 255};
+    SDL_Color black = {0, 0, 0, 255};
     GPU_RectangleFilled(GAP.MainGLWindow,x,y,x + w,y + h,grey);
     yOff = 10;
 
@@ -113,6 +114,25 @@ void CInfoMenu::Render(){
                 GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, red);
             }
         }
+        RenderLine("Workers:", 16);
+        for(auto wu : s->GetWorkers()){
+            if(auto su = wu.lock()){
+                CButton button = CButton(x + 10, yOff, 1, wu );
+                yOff += button.GetH();
+                PopUpButtons.push_back(button);
+                GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, red);
+            }
+        }
+        RenderLine("Production:", 16);
+        for(auto & recipe : *(s->GetRecipes())){
+            tmp << *(recipe.GetName());
+            RenderLine(tmp.str().c_str(), 10);
+            tmp.str(std::string());
+            GPU_Line(GAP.MainGLWindow, x + 10, yOff + 10, x + 210, yOff + 10, black);
+            CButton button = CButton(x + 10 + (recipe.GetProductionPrio()*20), yOff, 1, 20, 20, recipe );
+            yOff += button.GetH();
+            PopUpButtons.push_back(button);
+        }
     }
 
     CMenu::Render();
@@ -151,4 +171,36 @@ void CInfoMenu::Clicked(CButton button){
         return;
     }
 
+    CRecipe* recipe = button.GetRecipe();
+    if(recipe != nullptr){
+        selectedRecipe = recipe;
+    }
 }
+
+bool CInfoMenu::HandleLClickUp(int x, int y){
+    selectedRecipe = nullptr;
+    return true;
+}
+
+bool CInfoMenu::HandleMouseMovement(int x_, int y_){
+    if(selectedRecipe != nullptr){
+        int currentPrio = selectedRecipe->GetProductionPrio();
+        int newVal = (x_ - (x + 10)) / 20;
+        if(newVal < 0){
+            newVal = 0;
+        }
+        if(newVal > 10){
+            newVal = 10;
+        }
+        if(newVal != currentPrio){
+            selectedRecipe->SetProductionPrio(newVal);
+        }
+
+    }
+    return true;
+}
+
+
+
+
+

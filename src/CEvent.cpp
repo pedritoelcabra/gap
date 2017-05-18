@@ -154,7 +154,7 @@ bool CEvent::OnLButtonDown(int mX, int mY) {
     return true;
 }
 
-void CEvent::OnLButtonUp(int mX, int mY) {
+bool CEvent::OnLButtonUp(int mX, int mY) {
     //Pure virtual, do nothing
 }
 

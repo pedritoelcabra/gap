@@ -76,6 +76,7 @@ class CUnit : public CGUIObject
         void                SetGatherAssignment(build_weak_ptr ptr);
         void                SetBuildAssignment(build_weak_ptr ptr);
         void                SetProductionAssignment(build_weak_ptr ptr);
+        bool                SetTransportAssignment(task_weak_ptr ptr);
         void                SetHome(build_weak_ptr ptr);
         void                SetFacing(int direction);
         void                SetMoving(bool);

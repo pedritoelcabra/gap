@@ -56,6 +56,20 @@ CButton::CButton(int x, int y, int clipnumber, int w, int h) : CGUIObject(x, y){
     this->caption = "";
 }
 
+CButton::CButton(int x, int y, int clipnumber, int w, int h, CRecipe& recipe_) : CGUIObject(x, y){
+    box.h = h;
+    box.w = w;
+    box.x = x;
+    box.y = y;
+    fontSize = 10;
+    clip = spriteClip(clipnumber);
+    name = "menusprites";
+    std::stringstream tmp;
+    tmp << recipe_.GetProductionPrio();
+    this->caption = tmp.str();
+    recipe = &recipe_;
+}
+
 bool CButton::Render(){
     GAP.TextureManager.DrawTextureGL(&name, &clip, &box, true);
 
@@ -116,14 +130,3 @@ void CButton::CenterCaption(){
     return;
 }
 
-unit_weak_ptr CButton::GetUnit(){
-    return unitPtr;
-}
-
-build_weak_ptr CButton::GetBuilding(){
-    return buildingPtr;
-}
-
-int CButton::GetAction(){
-    return action;
-}

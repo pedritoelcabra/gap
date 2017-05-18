@@ -1,5 +1,5 @@
 name=BronzeSpearFromBronzePlank
 resourceInput=Work:1
 resourceInput=Bronze:1
-resourceOutput=Plank:1
+resourceInput=Plank:1
 resourceOutput=Bronze Spear:1

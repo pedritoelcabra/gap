@@ -452,8 +452,28 @@ void CUnit::SetFollowAssignment(unit_weak_ptr targetPtr_){
     UpdateAssignment();
 }
 
+bool CUnit::SetTransportAssignment(task_weak_ptr ptr){
+    if(auto taskPtrS = taskPtr.lock()){
+        if(GAP.Pathfinder.GetCost(tileX, tileY) <= 2.0f){
+            maxCollision = 2.0f;
+        }
+        ClearActions();
+        taskPtrS->AssignPorter(myPtr);
+        thought =  "Found a transport task";
+        assignment = CAction::transportAssignment;
+        return true;
+    }
+    return false;
+}
+
 void CUnit::UpdateIdleAssignment(){
     if(auto s = homeBuildingPtr.lock()){
+        if(GetCarriedItem()){
+            taskPtr = s->FindPlaceToDropOff(GetCarriedItem());
+            if(SetTransportAssignment(taskPtr)){
+                return;
+            }
+        }
         std::vector<build_weak_ptr> nearestSites = GAP.BuildingManager.GetUnfinishedBuildings(homeBuildingPtr);
         if(nearestSites.size() > 0){
             targetBuildingPtr = nearestSites.back();
@@ -484,14 +504,7 @@ void CUnit::UpdateIdleAssignment(){
             }
         }
         taskPtr = s->FindConnectedTask(tileX, tileY);
-        if(auto taskPtrS = taskPtr.lock()){
-            if(GAP.Pathfinder.GetCost(tileX, tileY) <= 2.0f){
-                maxCollision = 2.0f;
-            }
-            ClearActions();
-            taskPtrS->AssignPorter(myPtr);
-            thought =  "Found a transport task";
-            assignment = CAction::transportAssignment;
+        if(SetTransportAssignment(taskPtr)){
             return;
         }
         if( GetTileFlightRoundDistance(s->DoorX(), s->DoorY()) < 5 ){

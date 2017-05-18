@@ -1,1 +1,4 @@
 name=SteelSwordFromSteel
+resourceInput=Work:1
+resourceInput=Steel:1
+resourceOutput=Steel Sword:1

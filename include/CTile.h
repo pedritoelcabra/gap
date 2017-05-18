@@ -50,7 +50,7 @@ class CTile : public CGUIObject
         int                 resourceAmount;
         int                 resourceVariety;
         tree_uniq_ptr       resourcePtr;
-        float               moveCost;
+        float               moveCost = CScreen::flatMoveCost;
 
         tile_shared_ptr     rightNeighbour;
         tile_shared_ptr     downNeighbour;

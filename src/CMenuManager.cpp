@@ -105,9 +105,18 @@ bool CMenuManager::HandleLClick(int x, int y){
     return false;
 }
 
+bool CMenuManager::HandleLClickUp(int x, int y){
+    for(CMenu& e : InfoMenus)    {
+       e.HandleLClickUp(x, y);
+    }
+    return true;
+}
+
 bool CMenuManager::HandleMouseMovement(int x, int y){
 
-
+    for(CMenu& e : InfoMenus)    {
+       e.HandleMouseMovement(x, y);
+    }
     return false;
 }
 

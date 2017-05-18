@@ -72,6 +72,7 @@ public:
     bool                OnMouseWheel(bool Up, int x, int y);
     bool                OnMouseMove(int x, int y);
     bool                OnLButtonDown(int x, int y);
+    bool                OnLButtonUp(int x, int y);
     bool                OnRButtonDown(int x, int y);
     void                LoadMainMenu();
     int                 TileToPixel(int tile);
