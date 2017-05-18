@@ -18,3 +18,4 @@ productionStages=4
 productionSetback=4
 productionCooldown=2
 randomWorkPosition
+techRequirement=Horseriding
