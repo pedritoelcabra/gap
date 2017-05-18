@@ -14,3 +14,4 @@ productionRecipe=IronSwordFromIron
 productionRecipe=IronSpearFromIronPlank
 productionRecipe=SteelSwordFromSteel
 productionRecipe=SteelSpearFromSteelPlank
+techRequirement=Weaponsmith
