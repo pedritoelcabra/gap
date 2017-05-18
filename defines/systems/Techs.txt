@@ -4,7 +4,7 @@ Tech                    Requirements                Buildings                   
 @@@@@@@@@@@@@ LEVEL 0 @@@@@@@@@@@@@@@@
 
 Stoneworking            ---                         Stonecutter                         Stone
-Woodworking             ---                         Sawmill                             Planks
+Woodworking             ---                         Woodcutter                          Wood
 Fishing                 ---                         Fishery                             Fish
 Food Preservation       ---                         Castle Kitchen                      Simple Food
 Animal Husbandry        ---                         Sheep Farm                          Sheep
@@ -39,11 +39,11 @@ Bronzehead Arrows       Bronze, Archery                                         
 
 Medium Armor            Bronze, Leather, L Armor                                        Bronze Shield, Leather Armor, Helmet
 
-Advanced Carpentry      Toolmaking, Bronze                                              Ebony
+Advanced Carpentry      Toolmaking, Bronze          Sawmill                             Planks, Ebony
 Advanced Toolmaking     Toolmaking, Bronze                                              Advanced Instruments
 Brickmaking             Adv. Toolmaking, Pottery    Kiln                                Bricks
 
-Advanced Agriculture    Agriculture, Bronze         Vineyard, Hops F, Cotton F          Hops, Cotton, Grape 
+Advanced Agriculture    Agriculture, Bronze         Hops F, Cotton F                    Hops, Cotton
 Brewing                 Adv. Carpentry, A Agric.    Brewery                             Beer
 
 @@@@@@@@@@@@@ LEVEL 2 @@@@@@@@@@@@@@@@ Require Advanced Instruments, Beer & Citizen
@@ -67,22 +67,22 @@ Elegant Clothes         Weaving, Adv. Toolmaking                                
 Dyes                    Adv. Toolmaking             Lapis Gatherer
 Ornate Porcelain        Pottery, Adv. Toolmaking                                        Ornate Porcelain
 
-Gastronomy              Food Preserv., A Agric.                                         Elaborate Food
+Gastronomy              Food Preserv., A Agric.     Saltworks                           Salt, Elaborate Food
 
 Noble Furniture         Advanced Carpentry                                              Noble Furniture
 
 Writing                 Currency                    Bookbinder
-Inkmaking,              Writing                                                         Ink
+Inkmaking               Writing                     Oakwood                             Ink, Gallnuts
 Parchment               Writing                                                         Parchment 
 Bookbinding             Inkmaking, Parchment                                            Books
 
-Wine                    Brewing                     Winery                              Wine
+Wine                    Brewing                     Winery, Vineyard                    Wine, Grape 
 
 @@@@@@@@@@@@@ LEVEL 3 @@@@@@@@@@@@@@@@ Require Books, Wine & Nobleman
 
 Concrete                Brickmaking, Iron           Builder's Workshop                  Mortar
 Reinforced Doors        Adv. Carpentry, Iron        Carpenter                           Reinforced Door
-Advanced Architecture   Concrete, Reinf. Doors      
+Advanced Architecture   Concrete, Reinf. Doors      Marble Quarry                       Marble
 
 Advanced Metallurgy     Iron, Charcoal Burning      
 Blast Furnace           Advanced Metallurgy         Blast Furnace                       Pig Iron
