@@ -11,3 +11,4 @@ resourceGatherer=Salt
 resourceRadius=20
 workerCount=1
 workerPriority=100
+techRequirement=Gastronomy
