@@ -10,4 +10,4 @@ buildCost=Work:1
 workerCount=1
 workerPriority=90
 productionRecipe=PlankFromWood
-techRequirement=Woodworking
+techRequirement=Advanced Carpentry
