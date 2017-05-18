@@ -19,11 +19,12 @@ Carpentry               Toolmaking                  Carpenter                   
 Basic Weapons           Carpentry                                                       WSpear, WShield, WClub
 Pottery                 Agriculture                 Potterer, Clay Gatherer             Earthenware, Kiln
 Pig Domestication       Animal Husbandry            Pig Farm, Butcher                   Pig, Bones, Meat, Hides
+Limestone               Stoneworking                Limestone Quarry                    Limestone
 
 Weaving                 Sheep, Carpentry            Weaver, Clothier                    FabricFWool, Rude Clothes
 L Armor                 Weaving                     Armorer                             Padded Armor
 Archery                 Carpentry, Pig              Fletcher                            Wooden Bow, Stonehead Arrows
-Tanning                 Pig                         Tannery                             Leather
+Tanning                 Pig, Limestone              Tannery                             Leather
 
 Metals                  Toolmaking                  Furnace
 Coal                    Metals                      Coal Gatherer                       Coal
@@ -40,7 +41,7 @@ Medium Armor            Bronze, Leather, L Armor                                
 
 Advanced Carpentry      Toolmaking, Bronze                                              Ebony
 Advanced Toolmaking     Toolmaking, Bronze                                              Advanced Instruments
-Brickmaking             Adv. Toolmaking, Pottery
+Brickmaking             Adv. Toolmaking, Pottery    Kiln                                Bricks
 
 Advanced Agriculture    Agriculture, Bronze         Vineyard, Hops F, Cotton F          Hops, Cotton, Grape 
 Brewing                 Adv. Carpentry, A Agric.    Brewery                             Beer
@@ -92,6 +93,6 @@ Steel Weapons           Steelmaking, Iron Weapons
 Steel Armor             Steelmaking, Iron Armor
 Steelhead Arrows        Steelmaking, Ironhead Arrows
 
-Horseriding             Pack Animals                
+Horseriding             Pack Animals                Horse F                             Horse
 Chivalry                Horseriding, Steelmaking
 
