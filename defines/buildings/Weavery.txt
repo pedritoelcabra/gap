@@ -10,3 +10,4 @@ workerCount=1
 workerPriority=90
 productionRecipe=FabricFromWool
 productionRecipe=FabricFromCotton
+techRequirement=Weaving
