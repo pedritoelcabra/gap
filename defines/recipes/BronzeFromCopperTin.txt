@@ -4,3 +4,4 @@ resourceInput=Copper:1
 resourceInput=Tin:1
 resourceInput=Coal:1
 resourceOutput=Bronze:1
+techRequirement=Bronze
