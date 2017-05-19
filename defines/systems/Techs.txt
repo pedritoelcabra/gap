@@ -48,8 +48,9 @@ Brewing                 Adv. Carpentry, A Agric.    Brewery                     
 
 @@@@@@@@@@@@@ LEVEL 2 @@@@@@@@@@@@@@@@ Require Advanced Instruments, Beer & Citizen
 
-Ironworking             Bronze                      Iron Gatherer, Bloomery             Iron Ore, Iron
+Composite Bows          Archery, Advanced Carpentry                                     Composite Bow
 
+Ironworking             Bronze                      Iron Gatherer, Bloomery             Iron Ore, Iron
 Iron Weapons            Ironworking, B Weapons                                          Iron Weapons
 Iron Armor              Ironworking, Medium Armor                                       Iron Armor
 Ironhead Arrows         Ironworking, B Arrows                                           Ironhead Arrows
@@ -62,7 +63,7 @@ Pack Animals            Pig, A Agric.               Donkey Farm                 
 Trade                   Pack Animals, Currency      
 
 Gemcutting              Adv. Toolmaking             Gemcutter                           Gems
-Elegant Clothes         Weaving, Adv. Toolmaking                                        Elegant Clothes
+Elegant Garments        Weaving, Adv. Toolmaking                                        Elegant Garments
 
 Dyes                    Adv. Toolmaking             Lapis Gatherer
 Ornate Porcelain        Pottery, Adv. Toolmaking                                        Ornate Porcelain
