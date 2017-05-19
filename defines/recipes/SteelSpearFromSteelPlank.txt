@@ -3,3 +3,4 @@ resourceInput=Work:1
 resourceInput=Steel:1
 resourceInput=Plank:1
 resourceOutput=Steel Spear:1
+techRequirement=Steel Weapons
