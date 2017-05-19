@@ -2,3 +2,4 @@ name=WoodenSpearFromPlank
 resourceInput=Work:1
 resourceInput=Plank:1
 resourceOutput=Wooden Spear:1
+techRequirement=Basic Weapons
