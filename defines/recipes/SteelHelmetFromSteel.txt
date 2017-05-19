@@ -2,3 +2,4 @@ name=SteelHelmetFromSteel
 resourceInput=Work:1
 resourceInput=Steel:1
 resourceOutput=Steel Helmet:1
+techRequirement=Steel Armor
