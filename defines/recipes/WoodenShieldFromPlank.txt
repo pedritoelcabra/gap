@@ -2,3 +2,4 @@ name=WoodenShieldFromPlank
 resourceInput=Work:1
 resourceInput=Plank:1
 resourceOutput=Wooden Shield:1
+techRequirement=Basic Weapons
