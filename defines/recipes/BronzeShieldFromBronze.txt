@@ -2,3 +2,4 @@ name=BronzeShieldFromBronze
 resourceInput=Work:1
 resourceInput=Bronze:1
 resourceOutput=Bronze Shield:1
+techRequirement=Medium Armor
