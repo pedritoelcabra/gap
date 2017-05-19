@@ -4,4 +4,4 @@ resourceInput=Fabric:1
 resourceInput=Leather:1
 resourceInput=Gems:1
 resourceOutput=Elegant Garments:1
-techRequirement=Elegant Clothes
+techRequirement=Elegant Garments
