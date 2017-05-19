@@ -2,3 +2,4 @@ name=IronSwordFromIron
 resourceInput=Work:1
 resourceInput=Iron:1
 resourceOutput=Iron Sword:1
+techRequirement=Iron Weapons
