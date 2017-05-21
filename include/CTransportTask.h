@@ -18,6 +18,8 @@ class CTransportTask
         CTransportTask(build_weak_ptr pickUp_, build_weak_ptr dropOff_, int resource_, int prio_ );
         virtual ~CTransportTask(){};
 
+        bool                CheckPath();
+
         void                AssignPorter(unit_weak_ptr porter_){ porter = porter_; assigned = true; };
         void                AssignOrigin(build_weak_ptr pickUp_){ pickUp = pickUp_; };
         build_weak_ptr      GetPickUp() { return pickUp ;};

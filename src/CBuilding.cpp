@@ -17,7 +17,7 @@ CBuilding::CBuilding(int type_, int x_, int y_, int owner_){
     box.h = typePtr->GetH();
     workToComplete = typePtr->GetCost(CGood::work);
     clip = typePtr->GetClip();
-    if(workToComplete){
+    if(workToComplete && owner >= 0){
         clip.y = clip.h;
     }
     door = typePtr->GetDoor();
@@ -46,7 +46,7 @@ void CBuilding::SetId(int id_, build_weak_ptr ptr){
 }
 
 bool CBuilding::Render(){
-    if(workToComplete){
+    if(workToComplete && owner >= 0){
         clip.y = clip.h;
         GAP.TextureManager.DrawTextureGL(typePtr->GetName(), &clip, &box);
         int parts = clip.h / typePtr->BuildCost(CGood::work);
@@ -76,6 +76,11 @@ bool CBuilding::RenderOnTooltip(){
 
     GPU_SetRGBA(tex, 255, 255, 255, 255);
 
+    return 1;
+}
+
+bool CBuilding::RenderInPosition(GPU_Rect* destBox){
+    GAP.TextureManager.DrawTextureGL(typePtr->GetName(), &clip, destBox, true);
     return 1;
 }
 
@@ -143,9 +148,9 @@ void CBuilding::Destroy(){
     ApplyMovementCosts(true);
 }
 
-bool CBuilding::AddWork(int amount){
+bool CBuilding::AddWork(int amount, bool setUp){
     workToComplete -= amount;
-    if(workToComplete <= 0){
+    if(workToComplete){
         workToComplete = 0;
         ApplyMovementCosts();
         for(auto p : CGood::GetResources() ){
@@ -191,10 +196,14 @@ void CBuilding::MatchTransportTasks(){
                     task_weak_ptr bestDest;
                     for(auto dw :  RequestedGoods.at(goodsVec.first) ){
                         if(auto ds = dw.lock()){
-                            if(!ds->GetCompleted() && ds->GetPrio() > bestPrio){
-                                bestPrio = ds->GetPrio();
-                                bestDest = dw;
+                            if(ds->GetCompleted()){
+                                continue;
                             }
+                            if(ds->GetPrio() <= bestPrio){
+                                continue;
+                            }
+                            bestPrio = ds->GetPrio();
+                            bestDest = dw;
                         }
                     }
                     if(auto bs = bestDest.lock()){
@@ -205,16 +214,18 @@ void CBuilding::MatchTransportTasks(){
                                                           bs->GetDropOff(),
                                                           goodsVec.first,
                                                           bestPrio);
-                                task_weak_ptr tw = task_weak_ptr(ts);
+                                if(ts->CheckPath()){
+                                    task_weak_ptr tw = task_weak_ptr(ts);
 
-                                destS->AddIncoming(tw);
-                                oriS->AddOutgoing(tw);
+                                    destS->AddIncoming(tw);
+                                    oriS->AddOutgoing(tw);
 
-                                AvailableTasks.push_back(tw);
-                                GAP.TaskManager.AddTask(ts);
+                                    AvailableTasks.push_back(tw);
+                                    GAP.TaskManager.AddTask(ts);
 
-                                bs->MarkComplete();
-                                os->MarkComplete();
+                                    bs->MarkComplete();
+                                    os->MarkComplete();
+                                }
                             }
                         }
                     }else if(!os->OfferedByTown()){
@@ -226,15 +237,17 @@ void CBuilding::MatchTransportTasks(){
                                                       myPtr,
                                                       goodsVec.first,
                                                       bestPrio);
-                            task_weak_ptr tw = task_weak_ptr(ts);
+                            if(ts->CheckPath()){
+                                task_weak_ptr tw = task_weak_ptr(ts);
 
-                            AddIncoming(tw);
-                            oriS->AddOutgoing(tw);
+                                AddIncoming(tw);
+                                oriS->AddOutgoing(tw);
 
-                            AvailableTasks.push_back(tw);
-                            GAP.TaskManager.AddTask(ts);
+                                AvailableTasks.push_back(tw);
+                                GAP.TaskManager.AddTask(ts);
 
-                            os->MarkComplete();
+                                os->MarkComplete();
+                            }
                         }
                     }
                 }
@@ -456,6 +469,21 @@ CRecipe* CBuilding::AvailableRecipe(){
             if( c.second > GetMaxStorage(c.first) ){
                 canProduce = false;
             }
+            if(c.first == CGood::basicResearch){
+                if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 1){
+                    canProduce = false;
+                }
+            }
+            if(c.first == CGood::intermediateResearch){
+                if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 2){
+                    canProduce = false;
+                }
+            }
+            if(c.first == CGood::advancedResearch){
+                if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 3){
+                    canProduce = false;
+                }
+            }
         }
         if(canProduce){
             int currentPrio = recipe.NextProductionProgress();
@@ -489,6 +517,7 @@ bool CBuilding::DoProduce(){
         return false;
     }
 
+    currentProductionCooldown = typePtr->ProductionCooldown();
     if(typePtr->ProductionStages()){
         currentProductionStage++;
         clip.x = currentProductionStage * GetW();
@@ -501,7 +530,6 @@ bool CBuilding::DoProduce(){
 
         clip.x = currentProductionStage * GetW();
     }
-    currentProductionCooldown = typePtr->ProductionCooldown();
 
 
     for(auto const &c : *(currentProduction->GetOutput()) ){
@@ -512,6 +540,10 @@ bool CBuilding::DoProduce(){
 }
 
 int CBuilding::AddToInventory(int resource, int amount){
+    if(resource == CGood::basicResearch || resource == CGood::intermediateResearch || resource == CGood::advancedResearch){
+        GAP.TechManager.AddProgress(resource);
+        return amount;
+    }
     if(amount <= GetMaxStorage(resource, true)){
         Inventory.at(resource) += amount;
         return 0;

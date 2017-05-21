@@ -6,6 +6,7 @@
 #include "CBuildingMenu.h"
 #include "CIngameMenu.h"
 #include "CInfoMenu.h"
+#include "CTechMenu.h"
 #include "CGuiObject.h"
 #include "CBuilding.h"
 #include "CPathfinder.h"
@@ -25,10 +26,13 @@ class CMenuManager
         bool                        HandleRClick(int x, int y);
         bool                        HandleLClick(int x, int y);
         bool                        HandleLClickUp(int x, int y);
+        bool                        OnMouseWheel(bool Up, int x, int y);
         bool                        HandleMouseMovement(int x, int y);
         void                        BuildMenus();
         void                        ShowBuildingMenu();
+        void                        ShowTechMenu();
         void                        HideBuildingMenus();
+        void                        HideTechMenus();
         void                        HideContextMenus();
         void                        Render();
         void                        MousePointerBuilding(int type);
@@ -43,9 +47,11 @@ class CMenuManager
         std::vector<CIngameMenu>                    IngameMenus;
         std::vector<CBuildingMenu>                  BuildingMenus;
         std::vector<CInfoMenu>                      InfoMenus;
+        std::vector<CTechMenu>                      TechMenus;
 
-        bool                                        contextOpen;
-        bool                                        buildingOpen;
+        bool                                        contextOpen = false;
+        bool                                        buildingOpen = false;
+        bool                                        techOpen = false;
 
         build_shared_ptr                            mouseBuilding;
         bool                                        mouseHasBuilding = false;

@@ -48,6 +48,7 @@ class CBuildingType
         int                                 ProductionCooldown(){   return productionCooldown;};
         int                                 ProductionSetback(){    return productionSetback;};
         bool                                RandomWorkPosition(){   return randomWorkPosition;};
+        bool                                RequirementsMet();
 
 
         int                                 BuildCost(int res_);
@@ -59,7 +60,7 @@ class CBuildingType
         std::string                             name;
         std::string                             description;
         std::string                             upgrade;
-        std::vector<std::string>                Requirements;
+        std::vector<int>                        Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
         std::vector<CRecipe>                    Recipes;

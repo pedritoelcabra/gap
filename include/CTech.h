@@ -18,6 +18,13 @@ class CTech
         bool                                    IsAvailable(){      return isAvailable; };
         bool                                    IsResearched(){     return isResearched; };
         bool                                    AddProgress();
+        void                                    Init();
+        void                                    SetId(int id_){      id = id_; };
+        int                                     GetId(){             return id; };
+        int                                     GetProgress(){             return currentProgress; };
+        int                                     GetCost(){             return techCost; };
+        int                                     GetLvL(){             return minSkill; };
+        void                                    UpdateStatus();
         std::string*                            GetName(){              return &name;};
 
     protected:
@@ -32,7 +39,8 @@ class CTech
         bool                                    isResearched = false;
         int                                     techCost = 1;
         int                                     currentProgress = 0;
-        int                                     minSkill = 0;
+        int                                     minSkill = 1;
+        int                                     id;
 
         void                                    LoadCosts(std::map< int, int > & container, std::string value);
 };

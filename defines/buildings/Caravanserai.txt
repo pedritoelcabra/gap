@@ -9,3 +9,4 @@ layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:0:3:3
+techRequirement=Disabled

@@ -100,8 +100,8 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		LoadCosts(BuildCosts, value);
 		return;
 	}
-	if(!key.compare("buildRequirement")){
-		Requirements.push_back(value);
+	if(!key.compare("techRequirement")){
+		Requirements.push_back(GAP.TechManager.GetTechByName(&value)->GetId());
 		return;
 	}
 	if(!key.compare("layoutLine")){
@@ -186,11 +186,19 @@ int CBuildingType::GetCost(int type){
     return 0;
 }
 
-
 int CBuildingType::BuildCost(int res_){
     if(BuildCosts.count(res_)){
 	return BuildCosts.at(res_);
     }
     return 0;
 };
+
+bool CBuildingType::RequirementsMet(){
+    for(auto t : Requirements){
+        if(!GAP.TechManager.IsResearched(t)){
+            return false;
+        }
+    }
+    return true;
+}
 

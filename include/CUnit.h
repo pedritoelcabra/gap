@@ -29,7 +29,9 @@ class CUnit : public CGUIObject
         CUnit(int x, int y, std::string name) ;
         virtual ~CUnit(){};
 
+        bool                PreRender();
         bool                Render();
+        bool                RenderInPosition(GPU_Rect* destBox);
         void                SetAnimation(std::string);
         void                Update();
 
@@ -137,7 +139,6 @@ class CUnit : public CGUIObject
         int                     carriedItem = 0;
         GPU_Rect                itemBox;
 
-        static  std::string            iconSpriteName;
 };
 
 #endif // CUNIT_H

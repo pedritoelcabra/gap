@@ -9,6 +9,8 @@ class CIngameMenu : public CMenu
     public:
         CIngameMenu();
         virtual ~CIngameMenu();
+
+        void                    Render();
         void                    Clicked(CButton button);
 
     protected:

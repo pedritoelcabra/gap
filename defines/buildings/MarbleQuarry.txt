@@ -1,11 +1,10 @@
 slug=marblequarry
 name=Marble Quarry
 description=Works surface quarries for marble blocks
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:0:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:0:3
 buildCost=Work:10
 resourceGatherer=Marble
 resourceRadius=20

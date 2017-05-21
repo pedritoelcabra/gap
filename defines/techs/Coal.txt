@@ -1,0 +1,5 @@
+name=Coal
+techCost=100
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+techRequirement=Metals

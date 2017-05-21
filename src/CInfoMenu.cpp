@@ -11,6 +11,10 @@ CInfoMenu::CInfoMenu(unit_weak_ptr ptr){
     x = CScreen::screen_w - w;
     y = 0;
     h = CScreen::screen_h;
+    imageBox.x = x + 30;
+    imageBox.y = y + 30;
+    imageBox.w = w - 60;
+    imageBox.h = w - 60;
 }
 
 CInfoMenu::CInfoMenu(build_weak_ptr ptr){
@@ -20,6 +24,10 @@ CInfoMenu::CInfoMenu(build_weak_ptr ptr){
     x = CScreen::screen_w - w;
     y = 0;
     h = CScreen::screen_h;
+    imageBox.x = x + 10;
+    imageBox.y = y + 10;
+    imageBox.w = w - 20;
+    imageBox.h = w - 20;
 }
 
 CInfoMenu::~CInfoMenu(){
@@ -33,7 +41,7 @@ void CInfoMenu::Render(){
     SDL_Color green = {100, 255, 100, 255};
     SDL_Color black = {0, 0, 0, 255};
     GPU_RectangleFilled(GAP.MainGLWindow,x,y,x + w,y + h,grey);
-    yOff = 10;
+    yOff = imageBox.h + imageBox.y + 10 + yScroll;
 
     if(auto s = myUnit.lock()){
         std::stringstream tmp;
@@ -65,9 +73,14 @@ void CInfoMenu::Render(){
             PopUpButtons.push_back(button);
             GAP.TextureManager.DrawConnectionLine(s->GetTileX(),s->GetTileY(),homeb->GetDoor().first,homeb->GetDoor().second, red);
         }
+        CMenu::Render();
+        s->RenderInPosition(&imageBox);
     }
 
     if(auto s = myBuilding.lock()){
+        GPU_Rect itemRect;
+        itemRect.w = 20;
+        itemRect.h = 20;
         std::stringstream tmp;
         RenderLine("Building Overview:", 16);
         RenderLine(*(s->GetName()), 16);
@@ -76,16 +89,24 @@ void CInfoMenu::Render(){
         RenderLine(tmp.str().c_str(), 16);
         tmp.str(std::string());
         RenderLine("Inventory:", 16);
-        for(auto const& x : s->GetInventory() ){
-            if(x.second > 0 || ( s->UnderConstruction() && s->GetMaxStorage(x.first, true) ) ){
-                tmp << CGood::GetResourceName(x.first) << ": " << x.second;
-                if(s->UnderConstruction() && s->GetMaxStorage(x.first, true)){
-                    tmp << " ("<< s->GetMaxStorage(x.first, true) << " needed)";
+        int counter = 0;
+        itemRect.x = x;
+        itemRect.y = yOff;
+        for(auto const& item : s->GetInventory() ){
+            if(item.second > 0 || ( s->UnderConstruction() && s->GetMaxStorage(item.first, true) ) ){
+                counter++;
+                CGood::Render(&itemRect, item.first, item.second, true);
+                if(counter > 2){
+                    itemRect.x = x;
+                    yOff += itemRect.h;
+                    itemRect.y = yOff;
+                    counter = 0;
+                }else{
+                    itemRect.x += itemRect.w * 4;
                 }
-                RenderLine(tmp.str().c_str(), 16);
-                tmp.str(std::string());
             }
         }
+        yOff += itemRect.h;
         if(s->UnderConstruction()){
             tmp << "Work needed: " << s->UnderConstruction();
             RenderLine(tmp.str().c_str(), 16);
@@ -133,9 +154,11 @@ void CInfoMenu::Render(){
             yOff += button.GetH();
             PopUpButtons.push_back(button);
         }
+        CMenu::Render();
+        s->RenderInPosition(&imageBox);
     }
 
-    CMenu::Render();
+
 }
 
 void CInfoMenu::RenderLine(std::string text, int fontSize){
@@ -177,7 +200,7 @@ void CInfoMenu::Clicked(CButton button){
     }
 }
 
-bool CInfoMenu::HandleLClickUp(int x, int y){
+bool CInfoMenu::HandleLClickUp(int x_, int y_){
     selectedRecipe = nullptr;
     return true;
 }
@@ -196,6 +219,21 @@ bool CInfoMenu::HandleMouseMovement(int x_, int y_){
             selectedRecipe->SetProductionPrio(newVal);
         }
 
+    }
+    return true;
+}
+
+bool CInfoMenu::OnMouseWheel(bool Up, int x_, int y_){
+    if(x_ < x){
+        return false;
+    }
+    if(!Up){
+        yScroll -= 30;
+    }else{
+        yScroll += 30;
+        if(yScroll > 0){
+            yScroll = 0;
+        }
     }
     return true;
 }

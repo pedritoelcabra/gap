@@ -135,6 +135,9 @@ void CGame::SetViewPort(float x, float y){
 }
 
 bool CGame::OnMouseWheel(bool Up, int x, int y){
+    if(MenuManager.OnMouseWheel(Up, mouseX, mouseY)){
+        return true;
+    }
     if (!Up){
         if(zoom < 8){
             zoom = zoom + 0.2;

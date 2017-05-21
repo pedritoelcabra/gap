@@ -35,6 +35,10 @@ public:
     static const int                buildingUpdateFrequency = 60;
     static const int                itemIconSize = 24;
 
+
+    static SDL_Color                colorBlack(){return {255, 255, 255, 255};};
+    static SDL_Color                colorGreen(){return {100, 100, 255, 255};};
+
 };
 
 typedef std::pair<int, int>    vec2i;

@@ -19,3 +19,4 @@ populationCost=1
 maxStorage=999
 workerCount=3
 workerPriority=80
+techRequirement=Disabled

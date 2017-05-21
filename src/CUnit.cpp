@@ -3,7 +3,6 @@
 
 extern CGame GAP;
 typedef std::weak_ptr<CUnit> unit_weak_ptr;
-std::string CUnit::iconSpriteName = "icons";
 
 CUnit::CUnit(int x_, int y_, std::string myName){
     tileX = x_;
@@ -24,7 +23,7 @@ CUnit::CUnit(int x_, int y_, std::string myName){
     this->ResetFrames();
 }
 
-bool CUnit::Render(){
+bool CUnit::PreRender(){
 
     box.x = x + xoff;
     box.y = y + yoff;
@@ -35,14 +34,24 @@ bool CUnit::Render(){
             currentFrame = 0;
         }
     }
-    int frame = currentFrame + frameOffset;
+    return 1;
+}
 
-    GAP.TextureManager.DrawTextureGL(&name, GAP.TextureManager.GetClip(frame), &box);
+bool CUnit::Render(){
+
+    PreRender();
+
+    GAP.TextureManager.DrawTextureGL(&name, GAP.TextureManager.GetClip(currentFrame + frameOffset), &box);
     if(carriedItem){
         itemBox.x = x;
         itemBox.y = y;
-        GAP.TextureManager.DrawTextureGL(&iconSpriteName, GAP.TextureManager.GetIconClip32(CGood::GetResourceIcon(carriedItem)), &itemBox);
+        CGood::Render(&itemBox, carriedItem);
     }
+    return 1;
+}
+
+bool CUnit::RenderInPosition(GPU_Rect* destBox){
+    GAP.TextureManager.DrawTextureGL(&name, GAP.TextureManager.GetClip(currentFrame + frameOffset), destBox, true);
     return 1;
 }
 

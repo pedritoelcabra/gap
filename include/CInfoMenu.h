@@ -19,6 +19,7 @@ class CInfoMenu : public CMenu
         void                    Clicked(CButton button);
         bool                    HandleLClickUp(int x, int y);
         bool                    HandleMouseMovement(int x, int y);
+        bool                    OnMouseWheel(bool Up, int x, int y);
 
     protected:
 
@@ -30,7 +31,9 @@ class CInfoMenu : public CMenu
         int                     h;
         int                     w;
         int                     yOff;
+        int                     yScroll = 0;
         CRecipe*                selectedRecipe = nullptr;
+        GPU_Rect                imageBox;
 };
 
 #endif // CINFOMENU_H

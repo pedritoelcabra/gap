@@ -1,9 +1,8 @@
-name=Iron Armor
-techCost=100
+name=AdvancedResearch
 resourceInput=Work:1
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
-minSkill=1
-techRequirement=Medium Armor
-techRequirement=Ironworking
+resourceInput=Wine:1
+resourceInput=Books:1
+resourceOutput=Advanced Research:1

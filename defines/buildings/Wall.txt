@@ -6,3 +6,4 @@ buildCost=wood:10
 buildCost=work:10
 upgrade=reinforced_wall
 draggable
+techRequirement=Disabled

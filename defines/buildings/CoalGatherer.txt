@@ -1,11 +1,10 @@
 slug=coalgatherer
 name=Coal Gatherer
 description=Collects surface coal
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:0:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:0:3
 buildCost=Work:1
 resourceGatherer=Coal
 resourceRadius=20

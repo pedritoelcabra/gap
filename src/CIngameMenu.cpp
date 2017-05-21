@@ -1,5 +1,6 @@
 #include "CIngameMenu.h"
 #include "CGame.h"
+#include "CScreen.h"
 
 
 extern CGame GAP;
@@ -14,11 +15,28 @@ CIngameMenu::CIngameMenu()
     CButton button2 = CButton(offset, 0, 1, 2, "Buildings" );
     PopUpButtons.push_back(button2);
 
+    offset += button2.GetW();
+    CButton button3 = CButton(offset, 0, 1, 3, *GAP.TechManager.CurrentTechName() );
+    PopUpButtons.push_back(button3);
+
 }
 
 CIngameMenu::~CIngameMenu()
 {
     //dtor
+}
+
+void CIngameMenu::Render()
+{
+    CMenu::Render();
+    int lineX, lineY, lineMaxW, lineCurrentW;
+    lineX = 303;
+    lineY = 25;
+    lineMaxW = 149;
+    lineCurrentW = (lineMaxW * GAP.TechManager.CurrentTech()->GetProgress())
+                    / GAP.TechManager.CurrentTech()->GetCost();
+    GPU_Line(GAP.MainGLWindow, lineX, lineY, lineX + lineMaxW, lineY, {0,0,0,255} );
+    GPU_Line(GAP.MainGLWindow, lineX, lineY, lineX + lineCurrentW, lineY, {100,100,255,255} );
 }
 
 void CIngameMenu::Clicked(CButton button){
@@ -30,6 +48,9 @@ void CIngameMenu::Clicked(CButton button){
             break;
         case 2:
             GAP.MenuManager.ShowBuildingMenu();
+            break;
+        case 3:
+            GAP.MenuManager.ShowTechMenu();
             break;
     }
 }

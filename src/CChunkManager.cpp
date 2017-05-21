@@ -26,7 +26,7 @@ void CChunkManager::Init(){
 
     heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
 
-    myModule.SetFrequency (1.0);
+    myModule.SetFrequency (0.5);
     myModule.SetSeed(GAP.GetSeed());
 
     myModuleForest.SetFrequency (5.0);

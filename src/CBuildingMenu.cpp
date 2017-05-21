@@ -5,10 +5,9 @@ extern CGame GAP;
 
 
 
-CBuildingMenu::CBuildingMenu()
-{
+CBuildingMenu::CBuildingMenu(){
 
-    int tcount = 0;
+    int tcount = -1;
     int xoff = 300;
     int yoff = 50;
     int initialY = yoff;
@@ -20,6 +19,10 @@ CBuildingMenu::CBuildingMenu()
     PopUpButtons.push_back(button);
 
     for(CBuildingType t : GAP.BuildingManager.GetBuildingTypes()){
+        tcount++;
+        if(!t.RequirementsMet()){
+            continue;
+        }
         if(yoff + buttonHeight > static_cast<int>(CScreen::screen_h)){
             yoff = initialY;
             xoff += buttonWidth;
@@ -27,13 +30,11 @@ CBuildingMenu::CBuildingMenu()
         CButton button = CButton(xoff, yoff, 1, tcount, *(t.GetName()) );
         yoff += buttonHeight;
         PopUpButtons.push_back(button);
-        tcount++;
     }
 
 }
 
-CBuildingMenu::~CBuildingMenu()
-{
+CBuildingMenu::~CBuildingMenu(){
     //dtor
 }
 

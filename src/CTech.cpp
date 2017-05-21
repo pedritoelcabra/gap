@@ -1,4 +1,7 @@
 #include "CTech.h"
+#include "CGame.h"
+
+extern CGame GAP;
 
 void CTech::LoadLine(std::string key, std::string value){
 
@@ -53,3 +56,25 @@ bool CTech::AddProgress(){
     }
     return isResearched;
 }
+
+void CTech::Init(){
+    for(auto n : RequirementsNames){
+        Requirements.push_back(GAP.TechManager.GetTechByName(&n)->GetId());
+    }
+}
+
+void CTech::UpdateStatus(){
+    if(isResearched){
+        return;
+    }
+    if(isAvailable){
+        return;
+    }
+    for(auto i : Requirements){
+        if(!GAP.TechManager.GetTechById(i)->IsResearched()){
+            return;
+        }
+    }
+    isAvailable = true;
+}
+

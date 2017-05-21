@@ -16,6 +16,6 @@ workerPriority=90
 productionRecipe=WheatFromWork
 productionStages=4
 productionSetback=4
-productionCooldown=2
+productionCooldown=10
 randomWorkPosition
 techRequirement=Agriculture

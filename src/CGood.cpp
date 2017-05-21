@@ -1,4 +1,8 @@
 #include "CGood.h"
+#include "CGame.h"
+
+extern CGame GAP;
+std::string CGood::iconSpriteName = "icons";
 
 std::map<int, std::string > CGood::ResourceNames = {
    {CGood::wood, "Wood"},
@@ -90,7 +94,10 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::steelSpear, "Steel Spear"},
    {CGood::steelSword, "Steel Sword"},
    {CGood::pig, "Pig"},
-   {CGood::compositeBow, "Composite Bow"}
+   {CGood::compositeBow, "Composite Bow"},
+   {CGood::basicResearch, "Basic Research"},
+   {CGood::intermediateResearch, "Intermediate Research"},
+   {CGood::advancedResearch, "Advanced Research"}
 };
 
 std::map<int, int > CGood::ResourceIcons = {
@@ -182,7 +189,7 @@ std::map<int, int > CGood::ResourceIcons = {
    {CGood::steelShield, 3105},
    {CGood::steelSpear, 3097},
    {CGood::steelSword, 3054},
-   {CGood::pig, 10},
+   {CGood::pig, 2689},
    {CGood::compositeBow, 3089}
 };
 
@@ -206,4 +213,30 @@ const int CGood::GetResourceByName(std::string resourceName){
 const int CGood::GetResourceIcon(int resource){
     return ResourceIcons.at(resource);
 }
+
+bool CGood::Render(GPU_Rect* box, int resource, int amount, bool absolutePos){
+    GAP.TextureManager.DrawTextureGL(&iconSpriteName, GAP.TextureManager.GetIconClip32(GetResourceIcon(resource)), box, absolutePos);
+    if(amount){
+        SDL_Color black = {0, 0, 0};
+        SDL_Surface* textSurface = TTF_RenderText_Solid( GAP.TextureManager.GetFont(16), std::to_string(amount).c_str(), black );
+        GPU_Image* texture = GPU_CopyImageFromSurface( textSurface );
+        GPU_Rect Message_rect; //create a rect
+        Message_rect.x = box->x + box->w;  //controls the rect's x coordinate
+        Message_rect.y = box->y; // controls the rect's y coordinte
+        Message_rect.w = box->w; // controls the width of the rect
+        if(amount >= 10){
+            Message_rect.w += box->w;
+        }
+        if(amount >= 100){
+            Message_rect.w += box->w;
+        }
+        Message_rect.h = box->h; // controls the height of the rect
+
+        GAP.TextureManager.DrawTextureGL(texture, 0, &Message_rect, true);
+        GPU_FreeImage(texture);
+        SDL_FreeSurface( textSurface );
+    }
+    return true;
+}
+
 

@@ -1,11 +1,10 @@
 slug=silvergatherer
 name=Silver Gatherer
 description=Collects surface silver ore
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:0:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:0:3
 buildCost=Work:1
 resourceGatherer=Silver Ore
 resourceRadius=20

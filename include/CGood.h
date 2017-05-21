@@ -2,8 +2,9 @@
 #define CGOOD_H
 
 #include <map>
+#include "CGuiObject.h"
 
-class CGood
+class CGood : public CGUIObject
 {
     public:
         enum EResources { nothing, wood, stone, work, plank, wheat, ironOre, copperOre, tinOre, coal, goldOre, silverOre,
@@ -14,18 +15,20 @@ class CGood
             paddedArmor, woodenShield, woodenClub, woodenSpear, woodenBow, stoneheadArrows, leatherArmor, leatherHelmet, bronzeShield,
             bronzeGladius, bronzeSpear, bronzeheadArrows, ironChainmail, ironHelmet, ironCuirass, ironShield, ironSword, ironSpear,
             compositeBow, ironheadArrows, steelChainmail, steelShield, steelCuirass, steelHelmet, steelSword, steelSpear, steelheadArrows,
-            pig };
+            pig, basicResearch, intermediateResearch, advancedResearch };
 
         static const std::map<int, std::string >    GetResources();
         static const std::string                    GetResourceName(int resource);
         static const int                            GetResourceByName(std::string resourceName);
         static const int                            GetResourceIcon(int resource);
+        static bool                                 Render(GPU_Rect* box, int resource, int amount = 0, bool absolutePos = false);
 
     protected:
 
     private:
         static std::map<int, std::string >          ResourceNames;
         static std::map<int, int >                  ResourceIcons;
+        static  std::string                         iconSpriteName;
 };
 
-#endif // CGOOD_H
+#endif // CGOOD_H  zzzzzzzzz

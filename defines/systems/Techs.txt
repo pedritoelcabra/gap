@@ -37,7 +37,7 @@ Bronze                  Copper, Tin                                             
 Bronze Weapons          Bronze, Basic Weapons       Weaponsmith                         Bronze Gladius, Spear
 Bronzehead Arrows       Bronze, Archery                                                 Bronzehead Arrows
 
-Medium Armor            Bronze, Leather, L Armor                                        Bronze Shield, Leather Armor, Helmet
+Medium Armor            Bronze, Tanning, L Armor                                        Bronze Shield, Leather Armor, Helmet
 
 Advanced Carpentry      Toolmaking, Bronze          Sawmill                             Planks, Ebony
 Advanced Toolmaking     Toolmaking, Bronze                                              Advanced Instruments
@@ -58,9 +58,9 @@ Ironhead Arrows         Ironworking, B Arrows                                   
 Charcoal Burning        Advanced Carpentry, Coal    Charcoal Burner                     CoalFWood
 Glassmaking             Advanced Toolmaking         Glass Kiln                          Glass
 
-Currency                Bronze                      
+Currency                Bronze
 Pack Animals            Pig, A Agric.               Donkey Farm                         Donkey
-Trade                   Pack Animals, Currency      
+Trade                   Pack Animals, Currency
 
 Gemcutting              Adv. Toolmaking             Gemcutter                           Gems
 Elegant Garments        Weaving, Adv. Toolmaking                                        Elegant Garments
@@ -74,10 +74,10 @@ Noble Furniture         Advanced Carpentry                                      
 
 Writing                 Currency                    Bookbinder
 Inkmaking               Writing                     Oakwood                             Ink, Gallnuts
-Parchment               Writing                                                         Parchment 
+Parchment               Writing                                                         Parchment
 Bookbinding             Inkmaking, Parchment                                            Books
 
-Wine                    Brewing                     Winery, Vineyard                    Wine, Grape 
+Wine                    Brewing                     Winery, Vineyard                    Wine, Grape
 
 @@@@@@@@@@@@@ LEVEL 3 @@@@@@@@@@@@@@@@ Require Books, Wine & Nobleman
 
@@ -85,7 +85,7 @@ Concrete                Brickmaking, Iron           Builder's Workshop          
 Reinforced Doors        Adv. Carpentry, Iron        Carpenter                           Reinforced Door
 Advanced Architecture   Concrete, Reinf. Doors      Marble Quarry                       Marble
 
-Advanced Metallurgy     Iron, Charcoal Burning      
+Advanced Metallurgy     Iron, Charcoal Burning
 Blast Furnace           Advanced Metallurgy         Blast Furnace                       Pig Iron
 Finery Forge            Blast Furnace               Finery Forge                        IronFromPigIron
 Steelmaking             Blast Furnace               Steel Furnace                       Steel

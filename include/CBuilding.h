@@ -34,6 +34,7 @@ class CBuilding : public CGUIObject
         void                UpdateNeededGoods();
         bool                Render();
         bool                RenderOnTooltip();
+        bool                RenderInPosition(GPU_Rect* destBox);
         int                 SetX(int x);
         int                 SetY(int y);
         bool                IsInBlockedLocation();
@@ -45,7 +46,7 @@ class CBuilding : public CGUIObject
         bool                HasEnoughWorkers();
         bool                HasWorkToDo();
         void                Destroy();
-        bool                AddWork(int amount);
+        bool                AddWork(int amount, bool setUp = true);
         void                AddIncoming(task_weak_ptr ptr);
         void                RemoveIncoming(int id);
         void                AddOutgoing(task_weak_ptr ptr);

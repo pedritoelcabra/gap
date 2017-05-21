@@ -19,6 +19,13 @@ bool CTechManager::Init(){
         fileName.append(entry->d_name);
         LoadTech(fileName);
     }
+    for(auto & t : Techs){
+        t.second.Init();
+    }
+    for(auto & t : Techs){
+        t.second.UpdateStatus();
+    }
+    noTechName = "Research";
     return true;
 }
 
@@ -39,11 +46,41 @@ void CTechManager::LoadTech(std::string fileName){
             tech.LoadLine(key, value);
         }
 	}
+	tech.SetId(techCounter);
 	Techs[techCounter] = tech;
 	TechsByName[*(tech.GetName())] = techCounter;
 	techCounter++;
 }
 
-bool CTechManager::AddProgress(int tech){
-    return Techs[tech].AddProgress();
+bool CTechManager::AddProgress(int lvl){
+    if(!isResearching){
+        return false;
+    }
+    if(lvl < 0){
+
+    }
+    if(Techs[currentTech].AddProgress()){
+        for(auto & t : Techs){
+            t.second.UpdateStatus();
+        }
+        isResearching = false;
+        GAP.MenuManager.BuildMenus();
+        return true;
+    }
+    return false;
 }
+
+void CTechManager::StartResearch(int tech){
+    isResearching = true;
+    currentTech = tech;
+    GAP.MenuManager.BuildMenus();
+}
+
+std::string* CTechManager::CurrentTechName(){
+    if(isResearching){
+        return Techs.at(currentTech).GetName();
+    }
+    return &noTechName;
+}
+
+

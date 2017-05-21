@@ -1,11 +1,10 @@
 slug=coppergatherer
 name=Copper Gatherer
 description=Collects surface copper ore
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:0:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:0:3
 buildCost=Work:1
 resourceGatherer=Copper Ore
 resourceRadius=20

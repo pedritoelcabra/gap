@@ -76,13 +76,19 @@ bool CMenuManager::HandleLClick(int x, int y){
     }
     HideContextMenus();
 
-    for(CBuildingMenu& e : BuildingMenus)    {
+    for(auto & e : BuildingMenus)    {
         if(e.HandleLClick( x,  y)){
             return true;
         }
     }
 
-    for(CInfoMenu& e : InfoMenus)    {
+    for(auto & e : TechMenus)    {
+        if(e.HandleLClick( x,  y)){
+            return true;
+        }
+    }
+
+    for(auto & e : InfoMenus)    {
         if(e.HandleLClick( x,  y)){
             return true;
         }
@@ -116,6 +122,15 @@ bool CMenuManager::HandleMouseMovement(int x, int y){
 
     for(CMenu& e : InfoMenus)    {
        e.HandleMouseMovement(x, y);
+    }
+    return false;
+}
+
+bool CMenuManager::OnMouseWheel(bool Up, int x, int y){
+    for(CMenu& e : InfoMenus)    {
+       if(e.OnMouseWheel(Up, x, y)){
+            return true;
+       }
     }
     return false;
 }
@@ -168,6 +183,9 @@ void CMenuManager::Render(){
     for(CMenu& e : BuildingMenus)    {
        e.Render();
     }
+    for(CMenu& e : TechMenus)    {
+       e.Render();
+    }
     for(CMenu& e : ContextMenus)    {
        e.Render();
     }
@@ -206,6 +224,7 @@ void CMenuManager::SetHighLightCirce(build_weak_ptr ptr){
 }
 
 void CMenuManager::BuildMenus(){
+    IngameMenus.clear();
     CIngameMenu ingameMenu = CIngameMenu();
     IngameMenus.push_back(ingameMenu);
 }
@@ -216,14 +235,31 @@ void CMenuManager::ShowBuildingMenu(){
         HideBuildingMenus();
         return;
     }
+    HideTechMenus();
     CBuildingMenu buildingMenu = CBuildingMenu();
     BuildingMenus.push_back(buildingMenu);
     buildingOpen = true;
 }
 
+void CMenuManager::ShowTechMenu(){
+    if(techOpen){
+        HideTechMenus();
+        return;
+    }
+    HideBuildingMenus();
+    CTechMenu techMenu = CTechMenu();
+    TechMenus.push_back(techMenu);
+    techOpen = true;
+}
+
 void CMenuManager::HideBuildingMenus(){
     BuildingMenus.clear();
     buildingOpen = false;
+}
+
+void CMenuManager::HideTechMenus(){
+    TechMenus.clear();
+    techOpen = false;
 }
 
 void CMenuManager::HideContextMenus(){
@@ -241,6 +277,7 @@ void CMenuManager::MousePointerBuilding(int type){
         return;
     }
     mouseHasBuilding = true;
+    ShowInfoBuilding(build_weak_ptr(mouseBuilding));
 }
 
 void CMenuManager::MousePointerDemolition(){

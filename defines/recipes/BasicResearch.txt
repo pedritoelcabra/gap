@@ -1,0 +1,4 @@
+name=BasicResearch
+resourceInput=Work:1
+resourceInput=Basic Instrument:1
+resourceOutput=Basic Research:1

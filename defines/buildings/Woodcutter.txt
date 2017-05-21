@@ -1,11 +1,10 @@
 slug=woodcutter
 name=Woodcutter
 description=Cuts down trees for wood
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:3:3:3
-layoutLine=3:3:0:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:3:3
+layoutLine=3:3:0:3
 buildCost=Work:1
 resourceGatherer=Wood
 resourceRadius=20
