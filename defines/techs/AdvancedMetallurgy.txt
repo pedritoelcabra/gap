@@ -1,6 +1,6 @@
 name=Advanced Metallurgy
 techCost=40
-resourceInput=Work:30
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Books:1
