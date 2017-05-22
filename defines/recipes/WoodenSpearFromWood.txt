@@ -1,5 +1,5 @@
-name=WoodenSpearFromPlank
+name=WoodenSpearFromWood
 resourceInput=Work:1
-resourceInput=Plank:1
+resourceInput=Wood:1
 resourceOutput=Wooden Spear:1
 techRequirement=Basic Weapons
