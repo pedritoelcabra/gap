@@ -1,5 +1,5 @@
 name=Advanced Architecture
-techCost=100
+techCost=10
 resourceInput=Work:1
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
