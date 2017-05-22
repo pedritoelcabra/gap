@@ -1,5 +1,6 @@
 name=Pig Domestication
-techCost=100
+techCost=20
 resourceInput=Work:1
 resourceInput=Basic Instrument:1
 techRequirement=Animal Husbandry
+minSkill=1
