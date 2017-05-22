@@ -4,3 +4,4 @@ resourceInput=Work:1
 resourceInput=Basic Instrument:1
 techRequirement=Agriculture
 techRequirement=Bronze
+minSkill=1
