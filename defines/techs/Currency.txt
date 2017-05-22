@@ -1,8 +1,8 @@
 name=Currency
-techCost=100
-resourceInput=Work:1
+techCost=30
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
-minSkill=1
+minSkill=2
 techRequirement=Bronze
