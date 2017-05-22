@@ -1,5 +1,5 @@
 name=Toolmaking
-techCost=100
-resourceInput=Work:1
+techCost=10
+resourceInput=Work:10
 techRequirement=Woodworking
 techRequirement=Stoneworking
