@@ -1,6 +1,6 @@
 name=Advanced Carpentry
-techCost=10
-resourceInput=Work:1
+techCost=20
+resourceInput=Work:30
 resourceInput=Basic Instrument:1
 techRequirement=Toolmaking
 techRequirement=Bronze
