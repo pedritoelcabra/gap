@@ -1,10 +1,10 @@
-name=AdvancedResearch
+name=NoblemenResearch
 resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
 resourceInput=Wine:1
 resourceInput=Books:1
-resourceOutput=Advanced Research:1
+resourceOutput=Noblemen Research:1
 techRequirement=Wine
 techRequirement=Bookbinding
