@@ -56,8 +56,17 @@ bool CTechManager::AddProgress(int lvl){
     if(!isResearching){
         return false;
     }
-    if(lvl < 0){
-
+    if(lvl == CGood::bruteResearch && CurrentTechLvL() != 0){
+        return false;
+    }
+    if(lvl == CGood::peasantResearch && CurrentTechLvL() != 1){
+        return false;
+    }
+    if(lvl == CGood::citizenResearch && CurrentTechLvL() != 2){
+        return false;
+    }
+    if(lvl == CGood::noblemenResearch && CurrentTechLvL() != 3){
+        return false;
     }
     if(Techs[currentTech].AddProgress()){
         for(auto & t : Techs){
@@ -65,6 +74,7 @@ bool CTechManager::AddProgress(int lvl){
         }
         isResearching = false;
         GAP.MenuManager.BuildMenus();
+        GAP.RecipeManager.UpdateAvailabilities();
         return true;
     }
     return false;

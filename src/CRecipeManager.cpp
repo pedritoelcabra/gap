@@ -39,10 +39,16 @@ void CRecipeManager::LoadRecipe(std::string fileName){
             recipe.LoadLine(key, value);
         }
 	}
-
+    recipe.Init();
 	Recipes[*(recipe.GetName())] = recipe;
 }
 
 CRecipe CRecipeManager::GetRecipeByName(std::string name){
 	return Recipes.at(name);
+}
+
+void CRecipeManager::UpdateAvailabilities(){
+    for(auto & recipe : Recipes){
+        recipe.second.UpdateAvailability();
+    }
 }

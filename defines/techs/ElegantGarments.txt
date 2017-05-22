@@ -1,4 +1,4 @@
-name=Elegant Clothes
+name=Elegant Garments
 techCost=30
 resourceInput=Work:10
 resourceInput=Basic Instrument:1

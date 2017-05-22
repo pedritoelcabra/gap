@@ -1,4 +1,4 @@
 
 name=BruteResearch
-resourceInput=Work:10
+resourceInput=Work:5
 resourceOutput=Brute Research:1

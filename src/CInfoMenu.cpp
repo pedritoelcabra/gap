@@ -146,6 +146,9 @@ void CInfoMenu::Render(){
         }
         RenderLine("Production:", 16);
         for(auto & recipe : *(s->GetRecipes())){
+            if(!recipe.IsAvailable()){
+                continue;
+            }
             tmp << *(recipe.GetName());
             RenderLine(tmp.str().c_str(), 10);
             tmp.str(std::string());

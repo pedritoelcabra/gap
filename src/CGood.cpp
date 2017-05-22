@@ -95,9 +95,10 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::steelSword, "Steel Sword"},
    {CGood::pig, "Pig"},
    {CGood::compositeBow, "Composite Bow"},
-   {CGood::basicResearch, "Basic Research"},
-   {CGood::intermediateResearch, "Intermediate Research"},
-   {CGood::advancedResearch, "Advanced Research"}
+   {CGood::bruteResearch, "Brute Research"},
+   {CGood::peasantResearch, "Peasant Research"},
+   {CGood::citizenResearch, "Citizen Research"},
+   {CGood::citizenResearch, "Noblemen Research"}
 };
 
 std::map<int, int > CGood::ResourceIcons = {

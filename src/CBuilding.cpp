@@ -31,7 +31,9 @@ void CBuilding::SetId(int id_, build_weak_ptr ptr){
     std::vector<task_weak_ptr> taskVec;
 
     for(auto & recipe : *(typePtr->GetRecipes()) ){
-        Recipes.push_back(recipe);
+        CRecipe recipeCopy = recipe;
+        recipeCopy.SetParent(&recipe);
+        Recipes.push_back(recipeCopy);
     }
     for(auto p : CGood::GetResources() ){
         Inventory[p.first] = 0;
@@ -459,38 +461,50 @@ CRecipe* CBuilding::AvailableRecipe(){
     int bestRecipePrio = 0;
     CRecipe* bestRecipe = nullptr;
     for(auto & recipe : Recipes ){
+        if(!recipe.IsAvailable()){
+            continue;
+        }
         bool canProduce = true;
         for(auto const & c : *(recipe.GetInput()) ){
             if( c.first != CGood::work && Inventory.at(c.first) < c.second){
                 canProduce = false;
             }
         }
+        if(!canProduce){
+            continue;
+        }
         for(auto const &c : *(recipe.GetOutput()) ){
             if( c.second > GetMaxStorage(c.first) ){
                 canProduce = false;
             }
-            if(c.first == CGood::basicResearch){
+            if(c.first == CGood::bruteResearch){
+                if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 0){
+                    canProduce = false;
+                }
+            }
+            if(c.first == CGood::peasantResearch){
                 if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 1){
                     canProduce = false;
                 }
             }
-            if(c.first == CGood::intermediateResearch){
+            if(c.first == CGood::citizenResearch){
                 if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 2){
                     canProduce = false;
                 }
             }
-            if(c.first == CGood::advancedResearch){
+            if(c.first == CGood::noblemenResearch){
                 if(!GAP.TechManager.IsResearching() || GAP.TechManager.CurrentTechLvL() != 3){
                     canProduce = false;
                 }
             }
         }
-        if(canProduce){
-            int currentPrio = recipe.NextProductionProgress();
-            if(currentPrio > bestRecipePrio){
-                bestRecipePrio = currentPrio;
-                bestRecipe = &recipe;
-            }
+        if(!canProduce){
+            continue;
+        }
+        int currentPrio = recipe.NextProductionProgress();
+        if(currentPrio > bestRecipePrio){
+            bestRecipePrio = currentPrio;
+            bestRecipe = &recipe;
         }
     }
     return bestRecipe;
@@ -540,7 +554,10 @@ bool CBuilding::DoProduce(){
 }
 
 int CBuilding::AddToInventory(int resource, int amount){
-    if(resource == CGood::basicResearch || resource == CGood::intermediateResearch || resource == CGood::advancedResearch){
+    if(resource == CGood::bruteResearch ||
+       resource == CGood::peasantResearch ||
+       resource == CGood::citizenResearch ||
+       resource == CGood::noblemenResearch){
         GAP.TechManager.AddProgress(resource);
         return amount;
     }
@@ -719,6 +736,7 @@ std::vector<build_weak_ptr>* CBuilding::GetConnections(){
 void CBuilding::ConnectToNearestTown(bool forceReconnect){
     if(DistributionRange() > 0){
         myTown = myPtr;
+        ConnectedBuildings.push_back(build_weak_ptr(myPtr));
         return;
     }
     if(IsRoad()){

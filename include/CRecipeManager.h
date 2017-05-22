@@ -13,6 +13,7 @@ class CRecipeManager
 
         bool                                Init();
         CRecipe                             GetRecipeByName(std::string name);
+        void                                UpdateAvailabilities();
     protected:
 
     private:

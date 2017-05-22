@@ -1,4 +1,7 @@
 #include "CRecipe.h"
+#include "CGame.h"
+
+extern CGame GAP;
 
 void CRecipe::LoadLine(std::string key, std::string value){
 
@@ -12,6 +15,10 @@ void CRecipe::LoadLine(std::string key, std::string value){
 	}
 	if(!key.compare("resourceOutput")){
 		LoadCosts(Output, value);
+		return;
+	}
+	if(!key.compare("techRequirement")){
+    RequirementsNames.push_back(value);
 		return;
 	}
 }
@@ -52,3 +59,35 @@ void CRecipe::LoadCosts(std::map< int, int > & container, std::string value){
 	}
 
 }
+
+bool CRecipe::IsAvailable(){
+    if(parentRecipe != nullptr){
+        return parentRecipe->IsAvailable();
+    }
+    return isAvailable;
+}
+
+bool CRecipe::UpdateAvailability(){
+    isAvailable = false;
+    for(auto t : Requirements){
+        if(!GAP.TechManager.IsResearched(t)){
+            return false;
+        }
+    }
+    isAvailable = true;
+    return true;
+}
+
+void CRecipe::Init(){
+    for(auto n : RequirementsNames){
+        Requirements.push_back(GAP.TechManager.GetTechByName(&n)->GetId());
+    }
+    UpdateAvailability();
+}
+
+void CRecipe::SetParent(CRecipe* parent_){
+    parentRecipe = parent_;
+    Requirements.clear();
+    RequirementsNames.clear();
+}
+

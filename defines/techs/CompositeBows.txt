@@ -1,0 +1,9 @@
+name=Composite Bows
+techCost=30
+resourceInput=Work:10
+resourceInput=Basic Instrument:1
+resourceInput=Advanced Instrument:1
+resourceInput=Beer:1
+techRequirement=Archery
+techRequirement=Advanced Carpentry
+minSkill=2

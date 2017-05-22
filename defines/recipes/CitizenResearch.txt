@@ -4,5 +4,5 @@ resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
 resourceOutput=Citizen Research:1
-techRequirement=Beer
+techRequirement=Brewing
 techRequirement=Advanced Toolmaking
