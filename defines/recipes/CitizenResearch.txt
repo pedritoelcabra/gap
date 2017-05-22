@@ -1,6 +1,6 @@
-name=IntermediateResearch
-resourceInput=Work:1
+name=Citizen Research
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
-resourceOutput=Intermediate Research:1
+resourceOutput=Citizen Research:1
