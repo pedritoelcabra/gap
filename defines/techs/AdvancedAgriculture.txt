@@ -1,5 +1,5 @@
 name=Advanced Agriculture
-techCost=100
+techCost=10
 resourceInput=Work:1
 resourceInput=Basic Instrument:1
 techRequirement=Agriculture
