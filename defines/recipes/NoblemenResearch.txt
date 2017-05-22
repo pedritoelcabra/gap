@@ -1,5 +1,5 @@
 name=AdvancedResearch
-resourceInput=Work:1
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Beer:1
