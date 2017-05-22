@@ -1,6 +1,7 @@
 name=Bronze Weapons
-techCost=100
-resourceInput=Work:1
+techCost=20
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 techRequirement=Bronze
 techRequirement=Basic Weapons
+minSkill=1
