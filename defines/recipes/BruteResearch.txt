@@ -1,1 +1,4 @@
 
+name=Brute Research
+resourceInput=Work:10
+resourceOutput=Brute Research:1
