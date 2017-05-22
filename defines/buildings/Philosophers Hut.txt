@@ -14,3 +14,4 @@ workerCount=1
 productionRecipe=BasicResearch
 productionRecipe=IntermediateResearch
 productionRecipe=AdvancedResearch
+techRequirement=Disabled
