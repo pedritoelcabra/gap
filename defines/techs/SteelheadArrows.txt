@@ -1,11 +1,11 @@
 name=Steelhead Arrows
-techCost=100
-resourceInput=Work:1
+techCost=40
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
 resourceInput=Books:1
 resourceInput=Beer:1
 resourceInput=Wine:1
-minSkill=2
+minSkill=3
 techRequirement=Steelmaking
 techRequirement=Ironhead Arrows
