@@ -1,7 +1,8 @@
 name=Medium Armor
-techCost=100
-resourceInput=Work:1
+techCost=20
+resourceInput=Work:10
 resourceInput=Basic Instrument:1
 techRequirement=Bronze
 techRequirement=Tanning
 techRequirement=Light Armor
+minSkill=1
