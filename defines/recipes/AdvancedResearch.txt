@@ -6,3 +6,5 @@ resourceInput=Beer:1
 resourceInput=Wine:1
 resourceInput=Books:1
 resourceOutput=Advanced Research:1
+techRequirement=Wine
+techRequirement=Bookbinding
