@@ -1,4 +1,4 @@
-name=Citizen Research
+name=CitizenResearch
 resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceInput=Advanced Instrument:1
