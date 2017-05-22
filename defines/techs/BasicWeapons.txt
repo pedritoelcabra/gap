@@ -1,3 +1,6 @@
 name=Basic Weapons
 techCost=10
-resourceInput=Work:10
+resourceInput=Work:20
+resourceInput=Basic Instrument:1
+techRequirement=Carpentry
+minSkill=1
