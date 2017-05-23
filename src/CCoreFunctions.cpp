@@ -7,6 +7,7 @@ bool CGame::OnInit(){
     zoom = 1;
 
     LoadSettings();
+    SettingsManager.Init();
 
     SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
 

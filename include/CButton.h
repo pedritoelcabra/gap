@@ -31,7 +31,6 @@ public:
     build_weak_ptr      GetBuilding(){                                  return buildingPtr;};
     int                 GetAction(){                                    return action;};
     CRecipe*            GetRecipe(){                                    return recipe;};
-    void                SetPosition(int x, int y, int w, int h);
 
 
     const int           TYPE_MENU = 1;
@@ -39,6 +38,7 @@ public:
 private:
 
     int                 action;
+    int                 clipnumber;
     std::string         name;
     unit_weak_ptr       unitPtr;
     build_weak_ptr      buildingPtr;
@@ -50,6 +50,9 @@ private:
     std::string         caption;
     void                CenterCaption();
     CRecipe*            recipe = nullptr;
+
+    GPU_Image*          captionImage;
+    void                Init(int clipnumber);
 };
 
 #endif // _CBUTTON_H

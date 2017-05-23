@@ -27,6 +27,7 @@
 #include "CTaskManager.h"
 #include "CRecipeManager.h"
 #include "CTechManager.h"
+#include "CSettingManager.h"
 #include "CPathfinder.h"
 #include "CTree.h"
 
@@ -53,6 +54,7 @@ public:
     CRecipeManager      RecipeManager;
     CTechManager        TechManager;
     CPathfinder         Pathfinder;
+    CSettingManager     SettingsManager;
 
 
     CGame();
@@ -90,6 +92,7 @@ public:
     int                 GetMouseTileY(){return mouseTileY;};
     float               ZoomLvl();
 
+    int                                     Setting(int var);
     build_weak_ptr                          Building(int id);
     build_weak_ptr                          BuildingAt(int x, int y);
     CBuildingType*                          BuildingType(int type);

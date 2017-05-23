@@ -204,22 +204,22 @@ void CMenuManager::SetHighLightCirce(build_weak_ptr ptr){
             highLightColor = {255, 255, 255, 80};
             highLightRadius = s->DistributionRange();
         }
-        if(s->PopRange()){
-            highLightColor = {255, 100, 100, 50};
-            highLightRadius = s->PopRange();
-        }
-        if(s->BuildArea()){
-            highLightColor = {100, 255, 100, 50};
-            highLightRadius = s->BuildArea();
-        }
+//        if(s->PopRange()){
+//            highLightColor = {255, 100, 100, 50};
+//            highLightRadius = s->PopRange();
+//        }
+//        if(s->BuildArea()){
+//            highLightColor = {100, 255, 100, 50};
+//            highLightRadius = s->BuildArea();
+//        }
         if(s->ResourceArea()){
             highLightColor = {100, 100, 255, 50};
             highLightRadius = s->ResourceArea();
         }
-        if(s->TransportRange()){
-            highLightColor2 = {255, 255, 255, 30};
-            highLightRadius2 = s->TransportRange();
-        }
+//        if(s->TransportRange()){
+//            highLightColor2 = {255, 255, 255, 30};
+//            highLightRadius2 = s->TransportRange();
+//        }
     }
 }
 

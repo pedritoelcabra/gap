@@ -68,8 +68,10 @@ void CChunkManager::UpdateChunks(bool forceUpdate){
     currentChunkY = GetChunk(GAP.Player->GetTileY());
 
     bool hasGenerated;
-    for(int i = currentChunkY - 2; i <= currentChunkY + 2; i++ ){
-        for(int k = currentChunkX - 2; k <= currentChunkX + 2; k++ ){
+    for(int i = currentChunkY - GAP.Setting(CSettingManager::ChunkGenerationDistance)
+        ; i <= currentChunkY + GAP.Setting(CSettingManager::ChunkGenerationDistance); i++ ){
+        for(int k = currentChunkX - GAP.Setting(CSettingManager::ChunkGenerationDistance);
+        k <= currentChunkX + GAP.Setting(CSettingManager::ChunkGenerationDistance); k++ ){
             hasGenerated = GenerateChunk(k, i);
             if(hasGenerated && !forceUpdate){
                 return;
