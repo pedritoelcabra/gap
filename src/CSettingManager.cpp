@@ -18,6 +18,10 @@ bool CSettingManager::Init(){
             if(!key.compare("ChunkGenerationDistance")){
                 settingsInt.at(ChunkGenerationDistance) = std::stoi(value);
             }
+		
+            if(!key.compare("BuildingInventoryUseCooldown")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
         }
 	}
 	SettingsInt = settingsInt;
