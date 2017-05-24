@@ -11,7 +11,10 @@
 class CSettingManager
 {
     public:
-        enum ESettings { ChunkGenerationDistance, BuildingInventoryUseCooldown };
+        enum ESettings { ChunkGenerationDistance, BuildingInventoryUseCooldown, GathererBuildingStorage,
+                       ProductionBuildingInputStorage, ProductionBuildingOutputStorage, BuildDuration,
+                       ResourceGatherDuration, ResourceRand, ForestFrequency, ForestRand, ForestRoof,
+                       WoodPerTree, StoneFrequency, StoneRand, StoneRoof, StonePerBlock, TerrainFrequency };
 
         CSettingManager(){};
         virtual ~CSettingManager(){};
