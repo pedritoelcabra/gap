@@ -50,14 +50,14 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
                 resourceRand = rand() % GAP.Setting(CSettingManager::ResourceRand) ;
                 if( (heightMapForest->GetValue(k, i) * GAP.Setting(CSettingManager::ForestRand)) + resourceRand 
                    > GAP.Setting(CSettingManager::ForestRoof) ){
-                    resource = 1;
-                    resourceAmount = 1;
+                    resource = CGood::wood;
+                    resourceAmount = GAP.Setting(CSettingManager::WoodPerTree);
                     moveCost = 3.0f;
                 }
                 if( (heightMapStones->GetValue(k, i) * GAP.Setting(CSettingManager::StoneRand)) + resourceRand 
                    > GAP.Setting(CSettingManager::StoneRoof) ){
-                    resource = 2;
-                    resourceAmount = 1;
+                    resource = CGood::stone;
+                    resourceAmount = GAP.Setting(CSettingManager::StonePerBlock);
                     moveCost = 3.0f;
                 }
             }
