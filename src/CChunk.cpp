@@ -115,6 +115,18 @@ void CChunk::Init(int chunkX, int chunkY){
                     resource = CGood::lapis;
                     resourceAmount = GAP.Setting(CSettingManager::LapisPerBlock);
                 }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.LimeMap()->GetValue(k, i) * GAP.Setting(CSettingManager::LimeRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::LimeRoof) ){
+                    resource = CGood::lime;
+                    resourceAmount = GAP.Setting(CSettingManager::LimePerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.MarbleMap()->GetValue(k, i) * GAP.Setting(CSettingManager::MarbleRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::MarbleRoof) ){
+                    resource = CGood::marble;
+                    resourceAmount = GAP.Setting(CSettingManager::MarblePerBlock);
+                }
                 if(resource != 0){
                     moveCost = 3.0f;
                 }
