@@ -31,6 +31,20 @@ class CChunkManager
 
         int                         GetX(){             return currentChunkX;};
         int                         GetY(){             return currentChunkY;};
+    
+    
+        utils::NoiseMap*            HeightMap(){        return &heightMap; };
+        utils::NoiseMap*            ForestMap(){        return &heightMapForest; };
+        utils::NoiseMap*            StoneMap(){         return &heightMapStones; };
+        utils::NoiseMap*            CopperMap(){        return &heightMapCopper; };
+        utils::NoiseMap*            TinMap(){           return &heightMapTin; };
+        utils::NoiseMap*            CoalMap(){          return &heightMapCoal; };
+        utils::NoiseMap*            SilverMap(){        return &heightMapSilver; };
+        utils::NoiseMap*            GoldMap(){          return &heightMapGold; };
+        utils::NoiseMap*            IronMap(){          return &heightMapIron; };
+        utils::NoiseMap*            EbonyMap(){         return &heightMapEbony; };
+        utils::NoiseMap*            GemsMap(){          return &heightMapGems; };
+        utils::NoiseMap*            LapisMap(){         return &heightMapLapis; };
     protected:
     private:
         int                 currentChunkX;
@@ -48,12 +62,42 @@ class CChunkManager
 
 
         utils::NoiseMapBuilderPlane             heightMapBuilder;
+    
         utils::NoiseMap                         heightMap;
         noise::module::Perlin                   myModule;
+    
         utils::NoiseMap                         heightMapForest;
         noise::module::Perlin                   myModuleForest;
+    
         utils::NoiseMap                         heightMapStones;
         noise::module::Perlin                   myModuleStones;
+    
+        utils::NoiseMap                         heightMapCopper;
+        noise::module::Perlin                   myModuleCopper;
+    
+        utils::NoiseMap                         heightMapCoal;
+        noise::module::Perlin                   myModuleCoal;
+    
+        utils::NoiseMap                         heightMapTin;
+        noise::module::Perlin                   myModuleTin;
+    
+        utils::NoiseMap                         heightMapSilver;
+        noise::module::Perlin                   myModuleSilver;
+    
+        utils::NoiseMap                         heightMapGold;
+        noise::module::Perlin                   myModuleGold;
+    
+        utils::NoiseMap                         heightMapIron;
+        noise::module::Perlin                   myModuleIron;
+    
+        utils::NoiseMap                         heightMapLapis;
+        noise::module::Perlin                   myModuleLapis;
+    
+        utils::NoiseMap                         heightMapGems;
+        noise::module::Perlin                   myModuleGems;
+    
+        utils::NoiseMap                         heightMapEbony;
+        noise::module::Perlin                   myModuleEbony;
 
         float                                   chunkPortion;
 
