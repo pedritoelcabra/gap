@@ -11,7 +11,7 @@
 class CSettingManager
 {
     public:
-        enum ESettings { ChunkGenerationDistance };
+        enum ESettings { ChunkGenerationDistance, BuildingInventoryUseCooldown };
 
         CSettingManager(){};
         virtual ~CSettingManager(){};
