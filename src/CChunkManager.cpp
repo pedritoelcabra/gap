@@ -62,6 +62,12 @@ void CChunkManager::Init(){
     myModuleEbony.SetFrequency (GAP.Setting(CSettingManager::EbonyFrequency)/100);
     myModuleEbony.SetSeed(GAP.GetSeed());
 
+    myModuleLime.SetFrequency (GAP.Setting(CSettingManager::LimeFrequency)/100);
+    myModuleLime.SetSeed(GAP.GetSeed());
+
+    myModuleMarble.SetFrequency (GAP.Setting(CSettingManager::MarbleFrequency)/100);
+    myModuleMarble.SetSeed(GAP.GetSeed());
+
     bool findingStartingPlace = true;
     xOff = -1;
     while(findingStartingPlace){
@@ -216,6 +222,16 @@ bool CChunkManager::GenerateChunk(int x, int y){
     heightMapBuilder.SetSourceModule (myModuleEbony);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapEbony);
+    heightMapBuilder.Build ();
+
+    heightMapBuilder.SetSourceModule (myModuleLime);
+    heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
+    heightMapBuilder.SetDestNoiseMap (heightMapLime);
+    heightMapBuilder.Build ();
+
+    heightMapBuilder.SetSourceModule (myModuleMarble);
+    heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
+    heightMapBuilder.SetDestNoiseMap (heightMapMarble);
     heightMapBuilder.Build ();
 
     chunk_shared_ptr newChunk = std::make_shared<CChunk>();
