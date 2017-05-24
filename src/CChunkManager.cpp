@@ -26,13 +26,13 @@ void CChunkManager::Init(){
 
     heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
 
-    myModule.SetFrequency (0.5);
+    myModule.SetFrequency (GAP.Setting(CSettingManager::TerrainFrequency)/100);
     myModule.SetSeed(GAP.GetSeed());
 
-    myModuleForest.SetFrequency (5.0);
+    myModuleForest.SetFrequency (GAP.Setting(CSettingManager::ForestFrequency)/100);
     myModuleForest.SetSeed(GAP.GetSeed());
 
-    myModuleStones.SetFrequency (3.0);
+    myModuleStones.SetFrequency (GAP.Setting(CSettingManager::StoneFrequency)/100);
     myModuleStones.SetSeed(GAP.GetSeed());
 
     bool findingStartingPlace = true;
