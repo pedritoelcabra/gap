@@ -6,7 +6,7 @@
 
 extern CGame GAP;
 
-void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones){
+void CChunk::Init(int chunkX, int chunkY){
 
     SDL_Surface* targetSurf;
     SDL_Surface* sourceSurf;
@@ -28,7 +28,7 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
         for(int i = 0; i < tilesPerChunk; i++){
             x = (chunkX * tilesPerChunk) + i;
             y = (chunkY * tilesPerChunk) + k;
-            height = heightMap->GetValue(k, i);
+            height = GAP.ChunkManager.HeightMap()->GetValue(k, i);
             if(height < CScreen::waterLevel){
                 terrain = 92;
                 moveCost = 4.0f;
@@ -46,18 +46,76 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
                 moveCost = 5.0f;
             }
             resource = 0;
+            resourceAmount = 0;
             if(terrain > 93 && terrain < 96){
                 resourceRand = rand() % GAP.Setting(CSettingManager::ResourceRand) ;
-                if( (heightMapForest->GetValue(k, i) * GAP.Setting(CSettingManager::ForestRand)) + resourceRand 
+                if( resource == 0 && 
+                   (GAP.ChunkManager.ForestMap()->GetValue(k, i) * GAP.Setting(CSettingManager::ForestRand)) + resourceRand 
                    > GAP.Setting(CSettingManager::ForestRoof) ){
                     resource = CGood::wood;
                     resourceAmount = GAP.Setting(CSettingManager::WoodPerTree);
-                    moveCost = 3.0f;
                 }
-                if( (heightMapStones->GetValue(k, i) * GAP.Setting(CSettingManager::StoneRand)) + resourceRand 
+                if( resource == 0 && 
+                   (GAP.ChunkManager.StoneMap()->GetValue(k, i) * GAP.Setting(CSettingManager::StoneRand)) + resourceRand 
                    > GAP.Setting(CSettingManager::StoneRoof) ){
                     resource = CGood::stone;
                     resourceAmount = GAP.Setting(CSettingManager::StonePerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.CopperMap()->GetValue(k, i) * GAP.Setting(CSettingManager::CopperRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::CopperRoof) ){
+                    resource = CGood::copperOre;
+                    resourceAmount = GAP.Setting(CSettingManager::CopperPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.TinMap()->GetValue(k, i) * GAP.Setting(CSettingManager::TinRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::TinRoof) ){
+                    resource = CGood::tinOre;
+                    resourceAmount = GAP.Setting(CSettingManager::TinPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.CoalMap()->GetValue(k, i) * GAP.Setting(CSettingManager::CoalRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::CoalRoof) ){
+                    resource = CGood::coal;
+                    resourceAmount = GAP.Setting(CSettingManager::CoalPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.SilverMap()->GetValue(k, i) * GAP.Setting(CSettingManager::SilverRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::SilverRoof) ){
+                    resource = CGood::silverOre;
+                    resourceAmount = GAP.Setting(CSettingManager::SilverPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.GoldMap()->GetValue(k, i) * GAP.Setting(CSettingManager::GoldRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::GoldRoof) ){
+                    resource = CGood::goldOre;
+                    resourceAmount = GAP.Setting(CSettingManager::GoldPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.IronMap()->GetValue(k, i) * GAP.Setting(CSettingManager::IronRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::IronRoof) ){
+                    resource = CGood::ironOre;
+                    resourceAmount = GAP.Setting(CSettingManager::IronPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.EbonyMap()->GetValue(k, i) * GAP.Setting(CSettingManager::EbonyRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::EbonyRoof) ){
+                    resource = CGood::ebony;
+                    resourceAmount = GAP.Setting(CSettingManager::EbonyPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.GemsMap()->GetValue(k, i) * GAP.Setting(CSettingManager::GemRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::GemRoof) ){
+                    resource = CGood::gemstones;
+                    resourceAmount = GAP.Setting(CSettingManager::GemPerBlock);
+                }
+                if( resource == 0 && 
+                   (GAP.ChunkManager.LapisMap()->GetValue(k, i) * GAP.Setting(CSettingManager::LapisRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::LapisRoof) ){
+                    resource = CGood::lapis;
+                    resourceAmount = GAP.Setting(CSettingManager::LapisPerBlock);
+                }
+                if(resource != 0){
                     moveCost = 3.0f;
                 }
             }
