@@ -105,7 +105,7 @@ int CBuilding::SetY(int y){
 bool CBuilding::IsInBlockedLocation(){
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
-            if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) != 2.0f){
+            if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) != CScreen::flatMoveCost ){
                 return true;
             }
             if(!typePtr->IsRoad()){
@@ -559,7 +559,7 @@ int CBuilding::AddToInventory(int resource, int amount){
        resource == CGood::citizenResearch ||
        resource == CGood::noblemenResearch){
         GAP.TechManager.AddProgress(resource);
-        return amount;
+        return 0;
     }
     if(amount <= GetMaxStorage(resource, true)){
         Inventory.at(resource) += amount;
@@ -571,7 +571,7 @@ int CBuilding::AddToInventory(int resource, int amount){
 }
 
 bool CBuilding::InventoryAvailable(){
-    return (GAP.GetTick() - lastItemPickedUp > 30);
+    return (GAP.GetTick() - lastItemPickedUp > GAP.Setting(CSettingManager::BuildingInventoryUseCooldown));
 }
 
 void CBuilding::UseInventory(){
