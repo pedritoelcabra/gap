@@ -45,6 +45,8 @@ class CChunkManager
         utils::NoiseMap*            EbonyMap(){         return &heightMapEbony; };
         utils::NoiseMap*            GemsMap(){          return &heightMapGems; };
         utils::NoiseMap*            LapisMap(){         return &heightMapLapis; };
+        utils::NoiseMap*            LimeMap(){          return &heightMapLime; };
+        utils::NoiseMap*            MarbleMap(){        return &heightMapMarble; };
     protected:
     private:
         int                 currentChunkX;
@@ -98,6 +100,12 @@ class CChunkManager
     
         utils::NoiseMap                         heightMapEbony;
         noise::module::Perlin                   myModuleEbony;
+    
+        utils::NoiseMap                         heightMapLime;
+        noise::module::Perlin                   myModuleLime;
+    
+        utils::NoiseMap                         heightMapMarble;
+        noise::module::Perlin                   myModuleMarble;
 
         float                                   chunkPortion;
 
