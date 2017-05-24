@@ -655,7 +655,9 @@ void CUnit::UpdateGatherAssignment(){
     }
     if(auto s = resourceTilePtr.lock()){
         if(GetTileFlightSquareDistance(s->GetTileX(), s->GetTileY()) <= 1 ){
-            CAction action = CAction(CAction::gatherResource, 240, s->GetResource());
+            CAction action = CAction(CAction::gatherResource
+                                     , GAP.Setting(CSettingManager::ResourceGatherDuration)
+                                     , s->GetResource());
             AddAction(action);
             thought = "Gathering resource";
             return;
@@ -687,7 +689,8 @@ void CUnit::UpdateGatherAssignment(){
 void CUnit::UpdateBuildAssignment(){
     if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
         if(GetTileFlightSquareDistance(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY()) < 1 ){
-            CAction action = CAction(CAction::buildBuilding, 240, 1);
+            CAction action = CAction(CAction::buildBuilding, 
+                                     GAP.Setting(CSettingManager::BuildDuration), 1);
             AddAction(action);
             thought = "Building!";
             return;
