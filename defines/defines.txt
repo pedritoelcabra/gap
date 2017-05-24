@@ -65,4 +65,14 @@ EbonyRand=10000
 EbonyRoof=11500
 EbonyPerBlock=1
 
+LimeFrequency=300
+LimeRand=10000
+LimeRoof=11500
+LimePerBlock=1
+
+MarbleFrequency=300
+MarbleRand=10000
+MarbleRoof=11500
+MarblePerBlock=1
+
 TerrainFrequency=50
