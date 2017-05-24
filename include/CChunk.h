@@ -26,7 +26,7 @@ class CChunk
         CChunk(){};
         virtual ~CChunk(){};
 
-        void                            Init(int x, int y, utils::NoiseMap* heightMap, utils::NoiseMap* heightMapForest, utils::NoiseMap* heightMapStones);
+        void                            Init(int x, int y);
         tile_weak_ptr                   GetTile(int x, int y);
         void                            AddUnit(unit_weak_ptr ptr);
         void                            RemoveUnit(int id);
