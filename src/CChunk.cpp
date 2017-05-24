@@ -47,13 +47,15 @@ void CChunk::Init(int chunkX, int chunkY, utils::NoiseMap* heightMap, utils::Noi
             }
             resource = 0;
             if(terrain > 93 && terrain < 96){
-                resourceRand = rand() % 2000 ;
-                if( (heightMapForest->GetValue(k, i) * 1000) + resourceRand > 2100 ){
+                resourceRand = rand() % GAP.Setting(CSettingManager::ResourceRand) ;
+                if( (heightMapForest->GetValue(k, i) * GAP.Setting(CSettingManager::ForestRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::ForestRoof) ){
                     resource = 1;
                     resourceAmount = 1;
                     moveCost = 3.0f;
                 }
-                if( (heightMapStones->GetValue(k, i) * 10000) + resourceRand > 11500 ){
+                if( (heightMapStones->GetValue(k, i) * GAP.Setting(CSettingManager::StoneRand)) + resourceRand 
+                   > GAP.Setting(CSettingManager::StoneRoof) ){
                     resource = 2;
                     resourceAmount = 1;
                     moveCost = 3.0f;
