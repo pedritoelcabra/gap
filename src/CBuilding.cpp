@@ -644,11 +644,11 @@ int CBuilding::GetMaxStorage(int resource_, bool excludingOrders){
     if(workToComplete){
         availableStorage = typePtr->BuildCost(resource_);
     }else if(GetResource() == resource_){
-        availableStorage = 10;
+        availableStorage = GAP.Setting(CSettingManager::GathererBuildingStorage);
     }else if(ConsumesResource(resource_)){
-        availableStorage = ConsumesResource(resource_) * 5;
+        availableStorage = ConsumesResource(resource_) * GAP.Setting(CSettingManager::ProductionBuildingInputStorage);
     }else if(typePtr->ProducesResource(resource_)){
-        availableStorage = typePtr->ProducesResource(resource_) * 5;
+        availableStorage = typePtr->ProducesResource(resource_) * GAP.Setting(CSettingManager::ProductionBuildingOutputStorage);
     }
     if(availableStorage && !excludingOrders){
         availableStorage -= IncomingByResource(resource_);
