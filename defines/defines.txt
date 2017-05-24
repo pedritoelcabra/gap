@@ -1,1 +1,2 @@
 ChunkGenerationDistance=5
+BuildingInventoryUseCooldown=30
