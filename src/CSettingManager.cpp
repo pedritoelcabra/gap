@@ -22,6 +22,66 @@ bool CSettingManager::Init(){
             if(!key.compare("BuildingInventoryUseCooldown")){
                 settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
             }
+		
+            if(!key.compare("GathererBuildingStorage")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ProductionBuildingInputStorage")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ProductionBuildingOutputStorage")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("BuildDuration")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ResourceGatherDuration")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ResourceRand")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ForestFrequency")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ForestRand")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("ForestRoof")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("WoodPerTree")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("StoneFrequency")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("StoneRand")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("StoneRoof")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("StonePerBlock")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
+		
+            if(!key.compare("TerrainFrequency")){
+                settingsInt.at(BuildingInventoryUseCooldown) = std::stoi(value);
+            }
         }
 	}
 	SettingsInt = settingsInt;
