@@ -121,8 +121,11 @@ bool CMenuManager::HandleLClickUp(int x, int y){
 bool CMenuManager::HandleMouseMovement(int x, int y){
 
     for(CMenu& e : InfoMenus)    {
-       e.HandleMouseMovement(x, y);
+        if(e.HandleMouseMovement(x, y)){
+            return true;
+        }
     }
+    ShowInfoTile(GAP.ChunkManager.GetTile(GAP.GetMouseTileX(), GAP.GetMouseTileY()));
     return false;
 }
 
@@ -285,7 +288,23 @@ void CMenuManager::MousePointerDemolition(){
     mouseIsDemolition = true;
 }
 
+void CMenuManager::ShowInfoTile(tile_weak_ptr ptr){
+    if(InfoMenus.size() && !showingTile){
+        return;
+    }
+    InfoMenus.clear();
+    showingTile = true;
+    if(auto s = ptr.lock()){
+        if(s->GetResource()){
+            CInfoMenu infoMenu = CInfoMenu(ptr);
+            InfoMenus.push_back(infoMenu);
+            return;
+        }
+    }
+}
+
 void CMenuManager::ShowInfoUnit(unit_weak_ptr ptr){
+    showingTile = false;
     InfoMenus.clear();
     SetHighLightCirce(build_weak_ptr());
     CInfoMenu infoMenu = CInfoMenu(ptr);
@@ -293,6 +312,7 @@ void CMenuManager::ShowInfoUnit(unit_weak_ptr ptr){
 }
 
 void CMenuManager::ShowInfoBuilding(build_weak_ptr ptr){
+    showingTile = false;
     InfoMenus.clear();
     SetHighLightCirce(ptr);
     CInfoMenu infoMenu = CInfoMenu(ptr);

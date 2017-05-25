@@ -1,5 +1,6 @@
-ChunkGenerationDistance=5
+ChunkGenerationDistance=4
 BuildingInventoryUseCooldown=30
+AllTechsResearched=1
 
 GathererBuildingStorage=10
 ProductionBuildingInputStorage=5
@@ -9,6 +10,11 @@ BuildDuration=240
 ResourceGatherDuration=240
 
 ResourceRand=2000
+WaterLevel=-50
+BeachLevel=-40
+GrassLevel=10
+MineralLevel=40
+DryLandLevel=60
 
 ForestFrequency=500
 ForestRand=1000
@@ -20,57 +26,57 @@ StoneRand=10000
 StoneRoof=11500
 StonePerBlock=1
 
-CopperFrequency=300
+CopperFrequency=200
 CopperRand=10000
 CopperRoof=11500
 CopperPerBlock=1
 
-TinFrequency=300
+TinFrequency=200
 TinRand=10000
 TinRoof=11500
 TinPerBlock=1
 
-CoalFrequency=300
+CoalFrequency=200
 CoalRand=10000
 CoalRoof=11500
 CoalPerBlock=1
 
-GoldFrequency=300
+GoldFrequency=200
 GoldRand=10000
 GoldRoof=11500
 GoldPerBlock=1
 
-SilverFrequency=300
+SilverFrequency=200
 SilverRand=10000
 SilverRoof=11500
 SilverPerBlock=1
 
-IronFrequency=300
+IronFrequency=200
 IronRand=10000
 IronRoof=11500
 IronPerBlock=1
 
-LapisFrequency=300
+LapisFrequency=200
 LapisRand=10000
 LapisRoof=11500
 LapisPerBlock=1
 
-GemFrequency=300
+GemFrequency=200
 GemRand=10000
 GemRoof=11500
 GemPerBlock=1
 
-EbonyFrequency=300
+EbonyFrequency=200
 EbonyRand=10000
 EbonyRoof=11500
 EbonyPerBlock=1
 
-LimeFrequency=300
+LimeFrequency=200
 LimeRand=10000
 LimeRoof=11500
 LimePerBlock=1
 
-MarbleFrequency=300
+MarbleFrequency=200
 MarbleRand=10000
 MarbleRoof=11500
 MarblePerBlock=1

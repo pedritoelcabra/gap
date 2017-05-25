@@ -93,6 +93,7 @@ public:
     float               ZoomLvl();
 
     int                                     Setting(int var);
+    float                                   SettingF(int var){          return static_cast<float>(Setting(var)) / 100.0f; };
     build_weak_ptr                          Building(int id);
     build_weak_ptr                          BuildingAt(int x, int y);
     CBuildingType*                          BuildingType(int type);

@@ -74,6 +74,7 @@ class CBuilding : public CGUIObject
         void                AddResourceRequest(build_weak_ptr sourcePtr, int res, int prio);
         bool                InventoryAvailable();
         void                UseInventory();
+        int                 MaxAssignedWorkers(int newMax = -1);
 
         std::vector<build_weak_ptr>*    GetConnections();
 
@@ -120,6 +121,7 @@ class CBuilding : public CGUIObject
         int                 currentProductionCooldown = 0;
         int                 resourcePrio = 10;
         int                 lastItemPickedUp = 0;
+        int                 maxAssignedWorkers;
 
 
         std::vector<task_weak_ptr>      Outgoing;

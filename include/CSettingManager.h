@@ -14,7 +14,14 @@ class CSettingManager
         enum ESettings { ChunkGenerationDistance, BuildingInventoryUseCooldown, GathererBuildingStorage,
                        ProductionBuildingInputStorage, ProductionBuildingOutputStorage, BuildDuration,
                        ResourceGatherDuration, ResourceRand, ForestFrequency, ForestRand, ForestRoof,
-                       WoodPerTree, StoneFrequency, StoneRand, StoneRoof, StonePerBlock, TerrainFrequency };
+                       WoodPerTree, StoneFrequency, StoneRand, StoneRoof, StonePerBlock, TerrainFrequency,
+                       CopperFrequency,CopperRand,CopperRoof,CopperPerBlock,TinFrequency,TinRand,TinRoof,
+                       TinPerBlock,CoalFrequency,CoalRand,CoalRoof,CoalPerBlock,GoldFrequency,GoldRand,GoldRoof,
+                       GoldPerBlock,SilverFrequency,SilverRand,SilverRoof,SilverPerBlock,IronFrequency,IronRand,
+                       IronRoof,IronPerBlock,LapisFrequency,LapisRand,LapisRoof,LapisPerBlock,GemFrequency,
+                       GemRand,GemRoof,GemPerBlock,EbonyFrequency,EbonyRand,EbonyRoof,EbonyPerBlock,LimeFrequency,
+                       LimeRand,LimeRoof,LimePerBlock,MarbleFrequency,MarbleRand,MarbleRoof,MarblePerBlock,
+                       AllTechsResearched, WaterLevel, BeachLevel, GrassLevel, MineralLevel, DryLandLevel };
 
         CSettingManager(){};
         virtual ~CSettingManager(){};

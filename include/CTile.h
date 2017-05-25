@@ -33,6 +33,7 @@ class CTile : public CGUIObject
 
         float                       GetMoveCost(){              return moveCost;};
         int                         GetResource(){              return resource;};
+        int                         GetResourceAmount(){        return resourceAmount;};
         int                         GetVariety(){               return resourceVariety;};
         void                        SetMoveCost(float cost_){   moveCost = cost_;};
         void                        SetRightNeighbour(tile_weak_ptr rightNeighbour_){ rightNeighbour = rightNeighbour_.lock(); };

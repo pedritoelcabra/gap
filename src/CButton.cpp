@@ -55,6 +55,19 @@ CButton::CButton(int x, int y, int clipnumber, int w, int h, CRecipe& recipe_) :
     Init(clipnumber);
 }
 
+CButton::CButton(int x, int y, int clipnumber, int w, int h, build_weak_ptr building) : CGUIObject(x, y){
+    if(auto s = building.lock()){
+        box.h = h;
+        box.w = w;
+        fontSize = 10;
+        std::stringstream tmp;
+        tmp << s->MaxAssignedWorkers();
+        this->caption = tmp.str();
+        workerBuilding = building;
+        Init(clipnumber);
+    }
+}
+
 bool CButton::Render(){
     GAP.TextureManager.DrawTextureGL(&name, &clip, &box, true);
 

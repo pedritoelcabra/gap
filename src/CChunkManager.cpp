@@ -26,46 +26,46 @@ void CChunkManager::Init(){
 
     heightMapBuilder.SetDestSize (CScreen::tilesPerChunk, CScreen::tilesPerChunk);
 
-    myModule.SetFrequency (GAP.Setting(CSettingManager::TerrainFrequency)/100);
+    myModule.SetFrequency (GAP.SettingF(CSettingManager::TerrainFrequency));
     myModule.SetSeed(GAP.GetSeed());
 
-    myModuleForest.SetFrequency (GAP.Setting(CSettingManager::ForestFrequency)/100);
+    myModuleForest.SetFrequency (GAP.SettingF(CSettingManager::ForestFrequency));
     myModuleForest.SetSeed(GAP.GetSeed());
 
-    myModuleStones.SetFrequency (GAP.Setting(CSettingManager::StoneFrequency)/100);
+    myModuleStones.SetFrequency (GAP.SettingF(CSettingManager::StoneFrequency));
     myModuleStones.SetSeed(GAP.GetSeed());
 
-    myModuleCopper.SetFrequency (GAP.Setting(CSettingManager::CopperFrequency)/100);
+    myModuleCopper.SetFrequency (GAP.SettingF(CSettingManager::CopperFrequency));
     myModuleCopper.SetSeed(GAP.GetSeed());
 
-    myModuleTin.SetFrequency (GAP.Setting(CSettingManager::TinFrequency)/100);
+    myModuleTin.SetFrequency (GAP.SettingF(CSettingManager::TinFrequency));
     myModuleTin.SetSeed(GAP.GetSeed());
 
-    myModuleCoal.SetFrequency (GAP.Setting(CSettingManager::CoalFrequency)/100);
+    myModuleCoal.SetFrequency (GAP.SettingF(CSettingManager::CoalFrequency));
     myModuleCoal.SetSeed(GAP.GetSeed());
 
-    myModuleGold.SetFrequency (GAP.Setting(CSettingManager::GoldFrequency)/100);
+    myModuleGold.SetFrequency (GAP.SettingF(CSettingManager::GoldFrequency));
     myModuleGold.SetSeed(GAP.GetSeed());
 
-    myModuleSilver.SetFrequency (GAP.Setting(CSettingManager::SilverFrequency)/100);
+    myModuleSilver.SetFrequency (GAP.SettingF(CSettingManager::SilverFrequency));
     myModuleSilver.SetSeed(GAP.GetSeed());
 
-    myModuleIron.SetFrequency (GAP.Setting(CSettingManager::IronFrequency)/100);
+    myModuleIron.SetFrequency (GAP.SettingF(CSettingManager::IronFrequency));
     myModuleIron.SetSeed(GAP.GetSeed());
 
-    myModuleLapis.SetFrequency (GAP.Setting(CSettingManager::LapisFrequency)/100);
+    myModuleLapis.SetFrequency (GAP.SettingF(CSettingManager::LapisFrequency));
     myModuleLapis.SetSeed(GAP.GetSeed());
 
-    myModuleGems.SetFrequency (GAP.Setting(CSettingManager::GemFrequency)/100);
+    myModuleGems.SetFrequency (GAP.SettingF(CSettingManager::GemFrequency));
     myModuleGems.SetSeed(GAP.GetSeed());
 
-    myModuleEbony.SetFrequency (GAP.Setting(CSettingManager::EbonyFrequency)/100);
+    myModuleEbony.SetFrequency (GAP.SettingF(CSettingManager::EbonyFrequency));
     myModuleEbony.SetSeed(GAP.GetSeed());
 
-    myModuleLime.SetFrequency (GAP.Setting(CSettingManager::LimeFrequency)/100);
+    myModuleLime.SetFrequency (GAP.SettingF(CSettingManager::LimeFrequency));
     myModuleLime.SetSeed(GAP.GetSeed());
 
-    myModuleMarble.SetFrequency (GAP.Setting(CSettingManager::MarbleFrequency)/100);
+    myModuleMarble.SetFrequency (GAP.SettingF(CSettingManager::MarbleFrequency));
     myModuleMarble.SetSeed(GAP.GetSeed());
 
     bool findingStartingPlace = true;
@@ -82,7 +82,8 @@ void CChunkManager::Init(){
         findingStartingPlace = false;
         for(int k = 0; k < tilesPerChunk ; k++){
             for(int i = 0; i < tilesPerChunk ; i++){
-                if(heightMap.GetValue(k, i) < CScreen::waterLevel || heightMap.GetValue(k, i) >= CScreen::dryLandLevel){
+                if(heightMap.GetValue(k, i) < GAP.SettingF(CSettingManager::WaterLevel)
+                   || heightMap.GetValue(k, i) >= GAP.SettingF(CSettingManager::DryLandLevel)){
                     findingStartingPlace = true;
                 }
             }
@@ -168,66 +169,92 @@ bool CChunkManager::GenerateChunk(int x, int y){
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMap);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleForest);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapForest);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleStones);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapStones);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleCopper);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapCopper);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleCoal);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapCoal);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleTin);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapTin);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleSilver);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapSilver);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleGold);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapGold);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleIron);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapIron);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleLapis);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapLapis);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleGems);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapGems);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleEbony);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapEbony);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleLime);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);
     heightMapBuilder.SetDestNoiseMap (heightMapLime);
     heightMapBuilder.Build ();
+    chunkX += 110;
+    chunkY += 220;
 
     heightMapBuilder.SetSourceModule (myModuleMarble);
     heightMapBuilder.SetBounds (chunkY, chunkY + chunkPortion,chunkX, chunkX + chunkPortion);

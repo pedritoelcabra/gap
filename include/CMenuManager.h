@@ -40,6 +40,7 @@ class CMenuManager
         void                        SetHighLightCirce(build_weak_ptr ptr);
         void                        ShowInfoUnit(unit_weak_ptr ptr);
         void                        ShowInfoBuilding(build_weak_ptr ptr);
+        void                        ShowInfoTile(tile_weak_ptr ptr);
     protected:
 
     private:
@@ -52,6 +53,7 @@ class CMenuManager
         bool                                        contextOpen = false;
         bool                                        buildingOpen = false;
         bool                                        techOpen = false;
+        bool                                        showingTile = false;
 
         build_shared_ptr                            mouseBuilding;
         bool                                        mouseHasBuilding = false;

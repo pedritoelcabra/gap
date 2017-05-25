@@ -10,7 +10,7 @@ class CTree : public CGUIObject
         CTree();
         virtual ~CTree();
         void            Set(int x_, int y_, int type_, int variety_);
-        bool            Render();
+        bool            Render(bool absolute = false);
     protected:
 
     private:

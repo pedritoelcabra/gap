@@ -98,7 +98,7 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::bruteResearch, "Brute Research"},
    {CGood::peasantResearch, "Peasant Research"},
    {CGood::citizenResearch, "Citizen Research"},
-   {CGood::citizenResearch, "Noblemen Research"}
+   {CGood::noblemenResearch, "Noblemen Research"}
 };
 
 std::map<int, int > CGood::ResourceIcons = {

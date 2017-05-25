@@ -29,7 +29,7 @@ void CBuilding::SetId(int id_, build_weak_ptr ptr){
     id = id_;
     myPtr = ptr;
     std::vector<task_weak_ptr> taskVec;
-
+    maxAssignedWorkers = MaxWorkers();
     for(auto & recipe : *(typePtr->GetRecipes()) ){
         CRecipe recipeCopy = recipe;
         recipeCopy.SetParent(&recipe);
@@ -152,7 +152,7 @@ void CBuilding::Destroy(){
 
 bool CBuilding::AddWork(int amount, bool setUp){
     workToComplete -= amount;
-    if(workToComplete){
+    if(workToComplete < 1){
         workToComplete = 0;
         ApplyMovementCosts();
         for(auto p : CGood::GetResources() ){
@@ -428,11 +428,35 @@ unit_weak_ptr CBuilding::GetIdleInhabitant(){
 }
 
 bool CBuilding::HasEnoughWorkers(){
-    return static_cast<int>(Workers.size()) >= typePtr->WorkerCount() ;
+    return static_cast<int>(Workers.size()) >= MaxAssignedWorkers() ;
+}
+
+int CBuilding::MaxAssignedWorkers(int newMax){
+    if(newMax == -1){
+        return maxAssignedWorkers;
+    }else if(newMax < 1){
+        maxAssignedWorkers = 0;
+    }else if(newMax > MaxWorkers()){
+        maxAssignedWorkers = MaxWorkers();
+    }else{
+        maxAssignedWorkers = newMax;
+    }
+    int previousSize = Workers.size() + 1;
+    while(maxAssignedWorkers < static_cast<int>(Workers.size()) && static_cast<int>(Workers.size()) != previousSize){
+        previousSize = Workers.size();
+        DeleteUnusedWeak(&Workers);
+        if(auto s = Workers.back().lock()){
+            s->SetIdleAssignment();
+        }
+    }
+    return maxAssignedWorkers;
 }
 
 bool CBuilding::HasWorkToDo(){
     if(workToComplete){
+        return false;
+    }
+    if(MaxAssignedWorkers() < 0){
         return false;
     }
     if(ResourceArea() > 0 && GAP.ChunkManager.GetResources(GetResource(), ResourceArea(), DoorX(), DoorY()).size() > 0){
@@ -445,6 +469,9 @@ bool CBuilding::HasWorkToDo(){
 }
 
 bool CBuilding::CanProduce(){
+    if(MaxAssignedWorkers() < 0){
+        return false;
+    }
     if(currentProductionCooldown > 0){
         return false;
     }
@@ -571,7 +598,7 @@ int CBuilding::AddToInventory(int resource, int amount){
 }
 
 bool CBuilding::InventoryAvailable(){
-    return (GAP.GetTick() - lastItemPickedUp > GAP.Setting(CSettingManager::BuildingInventoryUseCooldown));
+    return (GAP.GetTick() - lastItemPickedUp > static_cast<unsigned int>(GAP.Setting(CSettingManager::BuildingInventoryUseCooldown)));
 }
 
 void CBuilding::UseInventory(){

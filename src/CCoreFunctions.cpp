@@ -86,8 +86,20 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
     TextureManager.LoadTextureGL("icons", "gfx/icons.png");
     TextureManager.LoadTextureGL("minimap", "gfx/minimap.png");
+
     TextureManager.LoadTextureGL("tree", "gfx/resources/tree.png");
     TextureManager.LoadTextureGL("rock", "gfx/resources/rock.png");
+    TextureManager.LoadTextureGL("copper", "gfx/resources/copper.png");
+    TextureManager.LoadTextureGL("tin", "gfx/resources/tin.png");
+    TextureManager.LoadTextureGL("coal", "gfx/resources/coal.png");
+    TextureManager.LoadTextureGL("iron", "gfx/resources/iron.png");
+    TextureManager.LoadTextureGL("silver", "gfx/resources/silver.png");
+    TextureManager.LoadTextureGL("gold", "gfx/resources/gold.png");
+    TextureManager.LoadTextureGL("gems", "gfx/resources/gems.png");
+    TextureManager.LoadTextureGL("lapis", "gfx/resources/lapis.png");
+    TextureManager.LoadTextureGL("lime", "gfx/resources/lime.png");
+    TextureManager.LoadTextureGL("marble", "gfx/resources/marble.png");
+    TextureManager.LoadTextureGL("ebony", "gfx/resources/ebony.png");
 
     if( TTF_Init() == -1 )
     {

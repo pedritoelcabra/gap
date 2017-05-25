@@ -12,6 +12,7 @@ class CInfoMenu : public CMenu
     public:
         CInfoMenu(unit_weak_ptr ptr);
         CInfoMenu(build_weak_ptr ptr);
+        CInfoMenu(tile_weak_ptr ptr);
         virtual ~CInfoMenu();
 
         void                    Render();
@@ -26,6 +27,7 @@ class CInfoMenu : public CMenu
     private:
         unit_weak_ptr           myUnit;
         build_weak_ptr          myBuilding;
+        tile_weak_ptr           myTile;
         int                     x;
         int                     y;
         int                     h;
@@ -33,6 +35,7 @@ class CInfoMenu : public CMenu
         int                     yOff;
         int                     yScroll = 0;
         CRecipe*                selectedRecipe = nullptr;
+        build_weak_ptr          selectecWorkerBuilding;
         GPU_Rect                imageBox;
 };
 

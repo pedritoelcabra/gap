@@ -61,6 +61,9 @@ void CTech::Init(){
     for(auto n : RequirementsNames){
         Requirements.push_back(GAP.TechManager.GetTechByName(&n)->GetId());
     }
+    if(GAP.Setting(CSettingManager::AllTechsResearched)){
+        isResearched = true;
+    }
 }
 
 void CTech::UpdateStatus(){

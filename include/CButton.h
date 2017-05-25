@@ -24,11 +24,13 @@ public:
     CButton (int x, int y, int clip, int id, std::string caption);
     CButton(int x, int y, int clipnumber, int w, int h);
     CButton(int x, int y, int clipnumber, int w, int h, CRecipe& recipe);
+    CButton(int x, int y, int clipnumber, int w, int h, build_weak_ptr building);
 
 
     bool                Render();
     unit_weak_ptr       GetUnit(){                                      return unitPtr;};
     build_weak_ptr      GetBuilding(){                                  return buildingPtr;};
+    build_weak_ptr      GetWorkerBuilding(){                            return workerBuilding;};
     int                 GetAction(){                                    return action;};
     CRecipe*            GetRecipe(){                                    return recipe;};
 
@@ -42,6 +44,7 @@ private:
     std::string         name;
     unit_weak_ptr       unitPtr;
     build_weak_ptr      buildingPtr;
+    build_weak_ptr      workerBuilding;
     int                 ParentMenu;
     int                 fontSize;
     SDL_Rect            captionRect;

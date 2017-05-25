@@ -30,6 +30,20 @@ CInfoMenu::CInfoMenu(build_weak_ptr ptr){
     imageBox.h = w - 20;
 }
 
+CInfoMenu::CInfoMenu(tile_weak_ptr ptr){
+    myBuilding.reset();
+    myUnit.reset();
+    myTile = ptr;
+    w = CScreen::screen_w / 5;
+    x = CScreen::screen_w - w;
+    y = 0;
+    h = w ;
+    imageBox.x = x + 10;
+    imageBox.y = y + 10;
+    imageBox.w = w - 20;
+    imageBox.h = w / 2;
+}
+
 CInfoMenu::~CInfoMenu(){
     //dtor
 }
@@ -43,8 +57,16 @@ void CInfoMenu::Render(){
     GPU_RectangleFilled(GAP.MainGLWindow,x,y,x + w,y + h,grey);
     yOff = imageBox.h + imageBox.y + 10 + yScroll;
 
+    std::stringstream tmp;
+    if(auto s = myTile.lock()){
+        tmp << s->GetResourceAmount() << " " << CGood::GetResourceName(s->GetResource());
+        CTree resource = CTree();
+        resource.Set(imageBox.x + 50, imageBox.y + 80, s->GetResource(), s->GetVariety());
+        resource.Render(true);
+        std::string strings = tmp.str();
+        RenderLine(tmp.str().c_str(), 16);
+    }
     if(auto s = myUnit.lock()){
-        std::stringstream tmp;
         RenderLine("Unit Overview:", 16);
         tmp << "TileX: " << s->GetTileX() << " TileY: " << s->GetTileY();
         RenderLine(tmp.str().c_str(), 16);
@@ -81,7 +103,6 @@ void CInfoMenu::Render(){
         GPU_Rect itemRect;
         itemRect.w = 20;
         itemRect.h = 20;
-        std::stringstream tmp;
         RenderLine("Building Overview:", 16);
         RenderLine(*(s->GetName()), 16);
         RenderLine(*(s->GetDescription()), 16);
@@ -126,22 +147,19 @@ void CInfoMenu::Render(){
                 GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, green);
             }
         }
-        RenderLine("Workers:", 16);
-        for(auto wu : s->GetWorkers()){
-            if(auto su = wu.lock()){
-                CButton button = CButton(x + 10, yOff, 1, wu );
-                yOff += button.GetH();
-                PopUpButtons.push_back(button);
-                GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, red);
-            }
-        }
-        RenderLine("Workers:", 16);
-        for(auto wu : s->GetWorkers()){
-            if(auto su = wu.lock()){
-                CButton button = CButton(x + 10, yOff, 1, wu );
-                yOff += button.GetH();
-                PopUpButtons.push_back(button);
-                GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, red);
+        if(s->MaxWorkers()){
+            RenderLine("Workers:", 16);
+            GPU_Line(GAP.MainGLWindow, x + 10, yOff + 10, x + 210, yOff + 10, black);
+            CButton button = CButton(x + 10 + (s->MaxAssignedWorkers()*(200/s->MaxWorkers())), yOff, 1, 20, 20, myBuilding );
+            yOff += button.GetH();
+            PopUpButtons.push_back(button);
+            for(auto wu : s->GetWorkers()){
+                if(auto su = wu.lock()){
+                    CButton button = CButton(x + 10, yOff, 1, wu );
+                    yOff += button.GetH();
+                    PopUpButtons.push_back(button);
+                    GAP.TextureManager.DrawConnectionLine(su->GetTileX(),su->GetTileY(),s->GetDoor().first,s->GetDoor().second, red);
+                }
             }
         }
         RenderLine("Production:", 16);
@@ -197,18 +215,29 @@ void CInfoMenu::Clicked(CButton button){
         return;
     }
 
+    build_weak_ptr workers_build_ptr = button.GetWorkerBuilding();
+    if(auto s = workers_build_ptr.lock()){
+        selectecWorkerBuilding = workers_build_ptr;
+        return;
+    }
+
     CRecipe* recipe = button.GetRecipe();
     if(recipe != nullptr){
         selectedRecipe = recipe;
+        return;
     }
 }
 
 bool CInfoMenu::HandleLClickUp(int x_, int y_){
     selectedRecipe = nullptr;
+    selectecWorkerBuilding = build_weak_ptr();
     return true;
 }
 
 bool CInfoMenu::HandleMouseMovement(int x_, int y_){
+    if(auto s = selectecWorkerBuilding.lock()){
+        s->MaxAssignedWorkers((x_ - (x + 10)) / (200/s->MaxWorkers()));
+    }
     if(selectedRecipe != nullptr){
         int currentPrio = selectedRecipe->GetProductionPrio();
         int newVal = (x_ - (x + 10)) / 20;
@@ -221,9 +250,9 @@ bool CInfoMenu::HandleMouseMovement(int x_, int y_){
         if(newVal != currentPrio){
             selectedRecipe->SetProductionPrio(newVal);
         }
-
+        return true;
     }
-    return true;
+    return false;
 }
 
 bool CInfoMenu::OnMouseWheel(bool Up, int x_, int y_){

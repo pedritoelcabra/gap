@@ -447,6 +447,9 @@ void CUnit::SetIdleAssignment(){
     if(auto s = workBuildingPtr.lock()){
         s->RemoveWorker(id);
     }
+    if(auto s = targetBuildingPtr.lock()){
+        s->RemoveWorker(id);
+    }
     workBuildingPtr.reset();
     UpdateAssignment();
 }
@@ -537,7 +540,6 @@ void CUnit::UpdateIdleAssignment(){
 void CUnit::UpdateTransportAssignment(){
     if(auto taskPtrS = taskPtr.lock()){
         if(GetCarriedItem()){
-            maxCollision = 2.0f;
             if(auto destS = taskPtrS->GetDropOff().lock()){
                 if(destS->IsValidWorkLocation(tileX, tileY)){
                     if(!destS->InventoryAvailable()){
@@ -565,6 +567,7 @@ void CUnit::UpdateTransportAssignment(){
                     return;
                 }
                 thought = "No path to drop off goods";
+                maxCollision = 3.0f;
                 Idle(60);
                 return;
             }
@@ -584,11 +587,11 @@ void CUnit::UpdateTransportAssignment(){
                     destS->UseInventory();
                     CarryItem(taskPtrS->GetResource());
                     thought = "Picked up goods";
+                    maxCollision = 2.0f;
                     return;
                 }
                 thought = "Cant pick up goods!";
                 CancelTransportTask();
-                maxCollision = 3.0f;
                 return;
             }
             vec2i randomTile = destS->GetRandomPassableTile();
@@ -597,6 +600,7 @@ void CUnit::UpdateTransportAssignment(){
                 return;
             }
             thought = "No path to pick up goods";
+            maxCollision = 3.0f;
             Idle(60);
             return;
         }
@@ -689,7 +693,7 @@ void CUnit::UpdateGatherAssignment(){
 void CUnit::UpdateBuildAssignment(){
     if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
         if(GetTileFlightSquareDistance(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY()) < 1 ){
-            CAction action = CAction(CAction::buildBuilding, 
+            CAction action = CAction(CAction::buildBuilding,
                                      GAP.Setting(CSettingManager::BuildDuration), 1);
             AddAction(action);
             thought = "Building!";

@@ -121,7 +121,7 @@ std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings(build_weak_
     if(auto s = ptr.lock()){
         for(auto wc : *(s->GetConnections())){
             if(auto sc = wc.lock()){
-                if(sc->UnderConstruction() && sc->HasBuildingResources() && sc->GetWorkers().size() < 1){
+                if(sc->UnderConstruction() && sc->HasBuildingResources()){
                     result.push_back(build_weak_ptr(wc));
                 }
             }
