@@ -3,3 +3,4 @@ resourceInput=Work:1
 resourceInput=Fabric:1
 resourceInput=Plank:1
 resourceOutput=Padded Armor:1
+minSkill=1

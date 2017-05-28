@@ -2,3 +2,4 @@ name=SimpleMealFromGrape
 resourceInput=Work:1
 resourceInput=Grape:1
 resourceOutput=Simple Meal:1
+minSkill=1

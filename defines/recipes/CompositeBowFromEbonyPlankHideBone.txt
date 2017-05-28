@@ -6,3 +6,4 @@ resourceInput=Ebony:1
 resourceInput=Bone:1
 resourceOutput=Composite Bow:1
 techRequirement=Composite Bows
+minSkill=3

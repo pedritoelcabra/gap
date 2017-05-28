@@ -5,3 +5,4 @@ resourceInput=Tin:1
 resourceInput=Coal:1
 resourceOutput=Bronze:1
 techRequirement=Bronze
+minSkill=1

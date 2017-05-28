@@ -1,0 +1,4 @@
+name=FlourFromWheat
+resourceInput=Work:1
+resourceInput=Wheat:1
+resourceOutput=Flour:1

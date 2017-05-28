@@ -1,0 +1,5 @@
+name=Grindstones
+techCost=10
+resourceInput=Work:10
+techRequirement=Stoneworking
+

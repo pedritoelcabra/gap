@@ -2,3 +2,4 @@ name=PigFromWheat
 resourceInput=Work:1
 resourceInput=Wheat:1
 resourceOutput=Pig:1
+minSkill=1

@@ -53,15 +53,30 @@ build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner, 
 
     build_weak_ptr ptr;
     build_shared_ptr building = std::make_shared<CBuilding>(type, x, y, owner);
+    std::map<int, int> inventory;
+
+    if(auto s = GetBuildingAt(x, y).lock()){
+        if(s->GetTileX() != building->GetTileX() || s->GetTileY() != building->GetTileY() || building->GetName()->compare(*s->GetUpgrade())){
+            return ptr;
+        }else{
+            inventory = s->GetInventory();
+            DemolishBuilding(x, y);
+        }
+    }
+
     if(building->IsInBlockedLocation()){
         if(!ignoreBlocked){
             return ptr;
         }
     }
     ptr = build_weak_ptr(building);
+
     buildingCount++;
     building->SetId(buildingCount, ptr);
     building->ApplyMovementCosts();
+    for(auto item : inventory){
+        building->AddToInventory(item.first, item.second);
+    }
 	Buildings.push_back(building);
 	if(building->DistributionRange()){
         Towns.push_back(build_weak_ptr(building));
@@ -105,43 +120,15 @@ build_weak_ptr CBuildingManager::GetBuildingAt(int x, int y){
         if(y < b->GetTileY()){
             continue;
         }
-        if(x > b->GetTileX() + b->GetTileWidth()){
+        if(x >= b->GetTileX() + b->GetTileWidth()){
             continue;
         }
-        if(y > b->GetTileY() + b->GetTileHeight()){
+        if(y >= b->GetTileY() + b->GetTileHeight()){
             continue;
         }
         return build_weak_ptr(b);
     }
     return build_weak_ptr();
-}
-
-std::vector<build_weak_ptr> CBuildingManager::GetUnfinishedBuildings(build_weak_ptr ptr){
-    std::vector<build_weak_ptr> result;
-    if(auto s = ptr.lock()){
-        for(auto wc : *(s->GetConnections())){
-            if(auto sc = wc.lock()){
-                if(sc->UnderConstruction() && sc->HasBuildingResources()){
-                    result.push_back(build_weak_ptr(wc));
-                }
-            }
-        }
-    }
-    return result;
-}
-
-std::vector<build_weak_ptr> CBuildingManager::GetWorkPositions(build_weak_ptr ptr){
-    std::vector<build_weak_ptr> result;
-    if(auto s = ptr.lock()){
-        for(auto wc : *(s->GetConnections())){
-            if(auto sc = wc.lock()){
-                if(!sc->HasEnoughWorkers() && sc->HasWorkToDo()){
-                    result.push_back(build_weak_ptr(wc));
-                }
-            }
-        }
-    }
-    return result;
 }
 
 build_weak_ptr CBuildingManager::GetBuilding(int id){
@@ -156,6 +143,7 @@ void CBuildingManager::Update(){
         for(auto w : Towns){
             if(auto s = w.lock()){
                 s->MatchTransportTasks();
+                s->UpdateWorkPositions();
             }
         }
     }

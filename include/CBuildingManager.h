@@ -27,8 +27,6 @@ class CBuildingManager
         build_weak_ptr                      GetBuildingAt(int x, int y);
         build_weak_ptr                      GetBuilding(int id);
         build_weak_ptr                      FindCollision(int x, int y);
-        std::vector<build_weak_ptr>         GetUnfinishedBuildings( build_weak_ptr ptr );
-        std::vector<build_weak_ptr>         GetWorkPositions( build_weak_ptr ptr );
 
         std::vector<build_weak_ptr>*        GetTowns(){                             return &Towns; };
     protected:

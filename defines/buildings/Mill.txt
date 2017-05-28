@@ -1,0 +1,14 @@
+name=Mill
+description=Grinds wheat
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Wood:5
+buildCost=Stone:5
+workerCount=1
+workerPriority=80
+productionRecipe=FlourFromWheat
+techRequirement=Grindstones
+

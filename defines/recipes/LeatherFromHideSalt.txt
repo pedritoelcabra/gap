@@ -1,5 +1,6 @@
 name=LeatherFromHideSalt
 resourceInput=Work:1
-resourceInput=Hide:1
+resourceInput=Hides:1
 resourceInput=Salt:1
 resourceOutput=Leather:1
+minSkill=1

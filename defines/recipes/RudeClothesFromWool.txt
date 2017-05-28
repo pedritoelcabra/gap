@@ -2,3 +2,4 @@ name=RudeClothesFromWool
 resourceInput=Work:1
 resourceInput=Wool:1
 resourceOutput=Rude Clothes:1
+minSkill=1

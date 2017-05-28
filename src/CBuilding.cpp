@@ -103,6 +103,11 @@ int CBuilding::SetY(int y){
 }
 
 bool CBuilding::IsInBlockedLocation(){
+    if(auto s = GAP.BuildingManager.GetBuildingAt(tileX, tileY).lock()){
+        if(s->GetTileX() == GetTileX() && s->GetTileY() == GetTileY() && !GetName()->compare(*s->GetUpgrade())){
+            return false;
+        }
+    }
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
             if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) != CScreen::flatMoveCost ){
@@ -258,6 +263,106 @@ void CBuilding::MatchTransportTasks(){
     }
 }
 
+void CBuilding::UpdateWorkPositions(){
+    ConstructionJobs.clear();
+    NoblemanJobs.clear();
+    CitizenJobs.clear();
+    PeasantJobs.clear();
+    BruteJobs.clear();
+    for(auto wc : *(GetConnections())){
+        if(auto sc = wc.lock()){
+            if(!sc->HasEnoughWorkers()){
+                if(sc->UnderConstruction() && sc->HasBuildingResources()){
+                    ConstructionJobs.push_back(wc);
+                    continue;
+                }
+                if(sc->HasWorkToDo(3)){
+                    NoblemanJobs.push_back(wc);
+                }
+                if(sc->HasWorkToDo(2)){
+                    CitizenJobs.push_back(wc);
+                }
+                if(sc->HasWorkToDo(1)){
+                    PeasantJobs.push_back(wc);
+                }
+                if(sc->HasWorkToDo(0)){
+                    BruteJobs.push_back(wc);
+                }
+            }
+        }
+    }
+}
+
+build_weak_ptr CBuilding::GetWorkPlace(unit_weak_ptr worker){
+    if(DistributionRange() == 0){
+        if(auto s = myTown.lock()){
+            return s->GetWorkPlace(worker);
+        }
+        return build_weak_ptr();
+    }
+    build_weak_ptr job;
+    if(auto s = worker.lock()){
+        if(s->GetSkill() == 3){
+            if(NoblemanJobs.size() > 0){
+                job = NoblemanJobs.back();
+                NoblemanJobs.pop_back();
+            }else if(CitizenJobs.size() > 0){
+                job = CitizenJobs.back();
+                CitizenJobs.pop_back();
+            }
+        }
+        if(s->GetSkill() == 2){
+            if(CitizenJobs.size() > 0){
+                job = CitizenJobs.back();
+                CitizenJobs.pop_back();
+            }else if(PeasantJobs.size() > 0){
+                job = PeasantJobs.back();
+                PeasantJobs.pop_back();
+            }
+        }
+        if(s->GetSkill() == 1){
+            if(PeasantJobs.size() > 0){
+                job = PeasantJobs.back();
+                PeasantJobs.pop_back();
+            }else if(BruteJobs.size() > 0){
+                job = BruteJobs.back();
+                BruteJobs.pop_back();
+            }
+        }
+        if(s->GetSkill() == 0){
+            if(BruteJobs.size() > 0){
+                job = BruteJobs.back();
+                BruteJobs.pop_back();
+            }
+        }
+    }
+    return job;
+}
+
+build_weak_ptr CBuilding::GetBuildPlace(unit_weak_ptr worker){
+    if(DistributionRange() == 0){
+        if(auto s = myTown.lock()){
+            return s->GetBuildPlace(worker);
+        }
+        return build_weak_ptr();
+    }
+    build_weak_ptr job;
+    if(auto s = worker.lock()){
+        if(s->GetSkill() < 3){
+            while(ConstructionJobs.size() > 0){
+                job = ConstructionJobs.back();
+                ConstructionJobs.pop_back();
+                if(auto sc = job.lock()){
+                    if(!sc->HasEnoughWorkers() && sc->UnderConstruction() && sc->HasBuildingResources()){
+                        return job;
+                    }
+                }
+            }
+        }
+    }
+    return build_weak_ptr();
+}
+
 task_weak_ptr CBuilding::FindPlaceToDropOff(int resource){
     if(!DistributionRange()){
         if(auto s = myTown.lock()){
@@ -347,11 +452,12 @@ void CBuilding::UpdateNeededGoods(){
 }
 
 void CBuilding::GenerateInhabitant(){
-    unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, "player");
+    unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, *typePtr->GetInhabitant());
     unit_weak_ptr iw = unit_weak_ptr(is);
 
     GAP.UnitManager.AddNPC(is);
     is->SetHome(myPtr);
+    is->SetSkill(InhabitantSkill());
     is->SetIdleAssignment();
     Inhabitants.push_back(iw);
 }
@@ -432,6 +538,9 @@ bool CBuilding::HasEnoughWorkers(){
 }
 
 int CBuilding::MaxAssignedWorkers(int newMax){
+    if(workToComplete){
+        return 1;
+    }
     if(newMax == -1){
         return maxAssignedWorkers;
     }else if(newMax < 1){
@@ -452,36 +561,37 @@ int CBuilding::MaxAssignedWorkers(int newMax){
     return maxAssignedWorkers;
 }
 
-bool CBuilding::HasWorkToDo(){
+bool CBuilding::HasWorkToDo(int skill){
     if(workToComplete){
         return false;
     }
     if(MaxAssignedWorkers() < 0){
         return false;
     }
-    if(ResourceArea() > 0 && GAP.ChunkManager.GetResources(GetResource(), ResourceArea(), DoorX(), DoorY()).size() > 0){
+    if(skill < 1 && ResourceArea() > 0
+       && GAP.ChunkManager.GetResources(GetResource(), ResourceArea(), DoorX(), DoorY()).size() > 0){
         return true;
     }
-    if(CanProduce()){
+    if(CanProduce(skill)){
         return true;
     }
     return false;
 }
 
-bool CBuilding::CanProduce(){
+bool CBuilding::CanProduce(int skill){
     if(MaxAssignedWorkers() < 0){
         return false;
     }
     if(currentProductionCooldown > 0){
         return false;
     }
-    if(AvailableRecipe() == nullptr){
+    if(AvailableRecipe(skill) == nullptr){
         return false;
     }
     return true;
 }
 
-CRecipe* CBuilding::AvailableRecipe(){
+CRecipe* CBuilding::AvailableRecipe(int skill){
     if(!ConsumesResource(0)){
         return nullptr;
     }
@@ -489,6 +599,9 @@ CRecipe* CBuilding::AvailableRecipe(){
     CRecipe* bestRecipe = nullptr;
     for(auto & recipe : Recipes ){
         if(!recipe.IsAvailable()){
+            continue;
+        }
+        if(recipe.GetSkill() > skill || recipe.GetSkill() < (skill - 1)){
             continue;
         }
         bool canProduce = true;
@@ -537,9 +650,9 @@ CRecipe* CBuilding::AvailableRecipe(){
     return bestRecipe;
 }
 
-int CBuilding::StartProduction(){
+int CBuilding::StartProduction(int skill){
     int timeRequired = 0;
-    currentProduction = AvailableRecipe();
+    currentProduction = AvailableRecipe(skill);
     if(currentProduction == nullptr){
         return timeRequired;
     }

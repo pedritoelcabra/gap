@@ -30,6 +30,7 @@ class CBuilding : public CGUIObject
         void                Update();
         void                UpdateTransportTasks();
         void                MatchTransportTasks();
+        void                UpdateWorkPositions();
         task_weak_ptr       FindPlaceToDropOff(int resource);
         void                UpdateNeededGoods();
         bool                Render();
@@ -44,7 +45,7 @@ class CBuilding : public CGUIObject
         void                RemoveInhabitant(int id);
         unit_weak_ptr       GetIdleInhabitant();
         bool                HasEnoughWorkers();
-        bool                HasWorkToDo();
+        bool                HasWorkToDo(int skill);
         void                Destroy();
         bool                AddWork(int amount, bool setUp = true);
         void                AddIncoming(task_weak_ptr ptr);
@@ -65,16 +66,18 @@ class CBuilding : public CGUIObject
         bool                HasBuildingResources();
         vec2i               GetRandomPassableTile();
         bool                IsValidWorkLocation(int x, int y);
-        bool                CanProduce();
+        bool                CanProduce(int skill);
         bool                DoProduce();
-        int                 StartProduction();
-        CRecipe*            AvailableRecipe();
+        int                 StartProduction(int skill);
+        CRecipe*            AvailableRecipe(int skill);
         void                ConnectToNearestTown(bool forceReconnect = false);
         void                AddResourceOffer(build_weak_ptr sourcePtr, int res);
         void                AddResourceRequest(build_weak_ptr sourcePtr, int res, int prio);
         bool                InventoryAvailable();
         void                UseInventory();
         int                 MaxAssignedWorkers(int newMax = -1);
+        build_weak_ptr      GetWorkPlace(unit_weak_ptr worker);
+        build_weak_ptr      GetBuildPlace(unit_weak_ptr worker);
 
         std::vector<build_weak_ptr>*    GetConnections();
 
@@ -100,9 +103,11 @@ class CBuilding : public CGUIObject
         int                             UnderConstruction(){                    return workToComplete;};
         std::string*                    GetName(){                              return typePtr->GetName();};
         std::string*                    GetDescription(){                       return typePtr->GetDescription();};
+        std::string*                    GetUpgrade(){                           return typePtr->GetUpgrade();};
         bool                            IsRoad(){                               return typePtr->IsRoad();};
         int                             ConsumesResource(int res_ = 0){         return typePtr->ConsumesResource(res_);};
         int                             ProducesResource(int res_ = 0){         return typePtr->ProducesResource(res_);};
+        int                             InhabitantSkill(){                      return typePtr->InhabitantSkill();};
 
     protected:
 
@@ -140,6 +145,13 @@ class CBuilding : public CGUIObject
         std::map<int, std::vector<task_weak_ptr> >      RequestedGoods;
         std::map<int, std::vector<task_weak_ptr> >      OfferedGoods;
         std::vector<task_weak_ptr>                      AvailableTasks;
+
+
+        std::vector<build_weak_ptr>         ConstructionJobs;
+        std::vector<build_weak_ptr>         BruteJobs;
+        std::vector<build_weak_ptr>         PeasantJobs;
+        std::vector<build_weak_ptr>         CitizenJobs;
+        std::vector<build_weak_ptr>         NoblemanJobs;
 
 };
 

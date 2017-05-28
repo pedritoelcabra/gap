@@ -2,3 +2,4 @@ name=EarthenwareFromClay
 resourceInput=Work:1
 resourceInput=Clay:1
 resourceOutput=Earthenware:1
+minSkill=1

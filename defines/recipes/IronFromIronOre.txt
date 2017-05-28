@@ -3,3 +3,4 @@ resourceInput=Work:1
 resourceInput=Iron Ore:3
 resourceInput=Coal:1
 resourceOutput=Iron:1
+minSkill=2

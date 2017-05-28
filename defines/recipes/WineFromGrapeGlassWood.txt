@@ -1,6 +1,7 @@
 name=WineFromGrapeGlassWood
 resourceInput=Work:1
-resourceInput=Grape:1
+resourceInput=Grapes:1
 resourceInput=Glass:1
 resourceInput=Wood:1
 resourceOutput=Wine:1
+minSkill=2

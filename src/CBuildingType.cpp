@@ -108,6 +108,14 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		LoadLayout(value);
 		return;
 	}
+	if(!key.compare("inhabitant")){
+		inhabitant = value;
+		return;
+	}
+	if(!key.compare("inhabitantSkill")){
+		inhabitantSkill = std::stoi(value);
+		return;
+	}
 }
 
 int CBuildingType::ConsumesResource(int res_){

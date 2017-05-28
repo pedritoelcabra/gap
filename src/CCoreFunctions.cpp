@@ -82,6 +82,10 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("sky_god", "gfx/chars/sky_god.png");
     TextureManager.LoadTextureGL("forest_god", "gfx/chars/forest_god.png");
     TextureManager.LoadTextureGL("death_god", "gfx/chars/death_god.png");
+    TextureManager.LoadTextureGL("brute", "gfx/chars/brute.png");
+    TextureManager.LoadTextureGL("peasant", "gfx/chars/peasant.png");
+    TextureManager.LoadTextureGL("citizen", "gfx/chars/citizen.png");
+    TextureManager.LoadTextureGL("nobleman", "gfx/chars/nobleman.png");
     TextureManager.LoadTextureGL("tiles", "gfx/tile_sprites.png");
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
     TextureManager.LoadTextureGL("icons", "gfx/icons.png");

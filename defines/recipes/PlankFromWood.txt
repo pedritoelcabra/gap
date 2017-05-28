@@ -2,3 +2,4 @@ name=PlankFromWood
 resourceInput=Wood:1
 resourceInput=Work:2
 resourceOutput=Plank:1
+minSkill=1

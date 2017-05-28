@@ -141,8 +141,13 @@ bool CMenuManager::OnMouseWheel(bool Up, int x, int y){
 void CMenuManager::Render(){
 
     if(mouseHasBuilding){
-        mouseBuilding->SetX(GAP.GetMouseTileX() - (mouseBuilding->GetTileWidth() / 2));
-        mouseBuilding->SetY(GAP.GetMouseTileY() - (mouseBuilding->GetTileHeight() / 2));
+        if(auto s = GAP.BuildingManager.GetBuildingAt(GAP.GetMouseTileX(), GAP.GetMouseTileY()).lock()){
+            mouseBuilding->SetX(s->GetTileX());
+            mouseBuilding->SetY(s->GetTileY());
+        }else{
+            mouseBuilding->SetX(GAP.GetMouseTileX() - (mouseBuilding->GetTileWidth() / 2));
+            mouseBuilding->SetY(GAP.GetMouseTileY() - (mouseBuilding->GetTileHeight() / 2));
+        }
         mouseBuilding->RenderOnTooltip();
         SetHighLightCirce(build_weak_ptr(mouseBuilding));
     }

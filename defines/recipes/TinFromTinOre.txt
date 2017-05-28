@@ -4,3 +4,4 @@ resourceInput=Tin Ore:1
 resourceInput=Coal:1
 resourceOutput=Tin:1
 techRequirement=Tin
+minSkill=1

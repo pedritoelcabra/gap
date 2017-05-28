@@ -4,3 +4,4 @@ resourceInput=Pig:1
 resourceOutput=Meat:1
 resourceOutput=Bones:1
 resourceOutput=Hides:1
+minSkill=1

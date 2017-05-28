@@ -1,0 +1,15 @@
+name=Small House
+description=A solid stone house
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:3:3:3
+layoutLine=3:3:0:3:3
+buildCost=Wood:1
+buildCost=Stone:1
+buildCost=Simple Food:1
+buildCost=Work:5
+populationMax=1
+populationCost=15
+inhabitant=peasant
+inhabitantSkill=1

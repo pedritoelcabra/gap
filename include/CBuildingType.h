@@ -29,6 +29,8 @@ class CBuildingType
         int                                 GetH(){                 return h;};
         std::string*                        GetName(){              return &name;};
         std::string*                        GetDescription(){       return &description;};
+        std::string*                        GetUpgrade(){           return &upgrade;};
+        std::string*                        GetInhabitant(){        return &inhabitant;};
         GPU_Rect                            GetClip(){              return clip;};
         vec2i                               GetDoor(){              return door;};
         int                                 MaxPop(){               return popMax;};
@@ -47,6 +49,7 @@ class CBuildingType
         int                                 ProductionStages(){     return productionStages;};
         int                                 ProductionCooldown(){   return productionCooldown;};
         int                                 ProductionSetback(){    return productionSetback;};
+        int                                 InhabitantSkill(){      return inhabitantSkill; };
         bool                                RandomWorkPosition(){   return randomWorkPosition;};
         bool                                RequirementsMet();
 
@@ -60,6 +63,7 @@ class CBuildingType
         std::string                             name;
         std::string                             description;
         std::string                             upgrade;
+        std::string                             inhabitant;
         std::vector<int>                        Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
@@ -70,6 +74,7 @@ class CBuildingType
         bool                                    connects = false;
         GPU_Rect                                clip;
         vec2i                                   door;
+        int                                     inhabitantSkill = 0;
         int                                     resource = 0;
         int                                     resourceRadius = 0;
         int                                     buildArea = 0;

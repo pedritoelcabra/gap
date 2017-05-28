@@ -59,11 +59,12 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::bricks, "Bricks"},
    {CGood::mortar, "Mortar"},
    {CGood::reinforcedDoor, "Reinforced Door"},
-   {CGood::rudeClothes, "Pig Iron"},
    {CGood::basicFurniture, "Basic Furniture"},
    {CGood::earthenware, "Earthenware"},
    {CGood::simpleFood, "Simple Food"},
    {CGood::elegantClothes, "Elegant Clothes"},
+   {CGood::rudeClothes, "Rude Clothes"},
+   {CGood::earthenware, "Earthenware"},
    {CGood::nobleFurniture, "Noble Furniture"},
    {CGood::ornatePorcelain, "Ornate Porcelain"},
    {CGood::elaborateFood, "Elaborate Food"},
@@ -94,6 +95,7 @@ std::map<int, std::string > CGood::ResourceNames = {
    {CGood::steelSpear, "Steel Spear"},
    {CGood::steelSword, "Steel Sword"},
    {CGood::pig, "Pig"},
+   {CGood::flour, "Flour"},
    {CGood::compositeBow, "Composite Bow"},
    {CGood::bruteResearch, "Brute Research"},
    {CGood::peasantResearch, "Peasant Research"},
@@ -191,6 +193,7 @@ std::map<int, int > CGood::ResourceIcons = {
    {CGood::steelSpear, 3097},
    {CGood::steelSword, 3054},
    {CGood::pig, 2689},
+   {CGood::flour, 3048},
    {CGood::compositeBow, 3089}
 };
 
@@ -208,6 +211,8 @@ const int CGood::GetResourceByName(std::string resourceName){
             return it->first;
         }
     }
+    CLog::Write("Couldn't load resource:");
+    CLog::Write(resourceName);
     return 0;
 }
 

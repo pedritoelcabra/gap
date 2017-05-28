@@ -2,3 +2,4 @@ name=GemsFromGemstones
 resourceInput=Work:1
 resourceInput=Gemstones:1
 resourceOutput=Gems:1
+minSkill=2

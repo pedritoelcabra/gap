@@ -4,3 +4,4 @@ resourceInput=Steel:1
 resourceInput=Leather:1
 resourceOutput=Steel Chainmail:1
 techRequirement=Steel Armor
+minSkill=3

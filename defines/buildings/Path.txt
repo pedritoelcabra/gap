@@ -4,4 +4,3 @@ description=Connects Buildings
 layoutLine=0
 draggable
 connects
-buildCost=work:1

@@ -83,6 +83,8 @@ class CUnit : public CGUIObject
         void                SetFacing(int direction);
         void                SetMoving(bool);
         void                SetId(int id_, std::weak_ptr<CUnit> myPtr_);
+        void                SetSkill(int skill){        skillLvl = skill; };
+        int                 GetSkill(){                 return skillLvl; };
 
 
     protected:
@@ -119,6 +121,7 @@ class CUnit : public CGUIObject
         float               maxCollision = 3.0f;
 
         int                 assignment;
+        int                 skillLvl = 0;
 
         int                 targetUnit;
         int                 targetBuilding;

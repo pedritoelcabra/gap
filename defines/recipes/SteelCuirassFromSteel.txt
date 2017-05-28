@@ -3,3 +3,4 @@ resourceInput=Work:1
 resourceInput=Steel:1
 resourceOutput=Steel Cuirass:1
 techRequirement=Steel Armor
+minSkill=3

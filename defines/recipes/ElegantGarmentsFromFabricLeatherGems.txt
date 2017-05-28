@@ -5,3 +5,4 @@ resourceInput=Leather:1
 resourceInput=Gems:1
 resourceOutput=Elegant Garments:1
 techRequirement=Elegant Garments
+minSkill=2

@@ -8,3 +8,4 @@ resourceInput=Books:1
 resourceOutput=Noblemen Research:1
 techRequirement=Wine
 techRequirement=Bookbinding
+minSkill=3

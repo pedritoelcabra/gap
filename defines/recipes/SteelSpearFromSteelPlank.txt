@@ -4,3 +4,4 @@ resourceInput=Steel:1
 resourceInput=Plank:1
 resourceOutput=Steel Spear:1
 techRequirement=Steel Weapons
+minSkill=3

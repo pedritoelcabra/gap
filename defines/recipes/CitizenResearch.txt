@@ -6,3 +6,4 @@ resourceInput=Beer:1
 resourceOutput=Citizen Research:1
 techRequirement=Brewing
 techRequirement=Advanced Toolmaking
+minSkill=2

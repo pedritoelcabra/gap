@@ -9,6 +9,10 @@ void CRecipe::LoadLine(std::string key, std::string value){
 		name = value;
 		return;
 	}
+	if(!key.compare("minSkill")){
+		minSkill = std::stoi(value);
+		return;
+	}
 	if(!key.compare("resourceInput")){
 		LoadCosts(Input, value);
 		return;

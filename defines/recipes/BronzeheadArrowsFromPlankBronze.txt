@@ -4,3 +4,4 @@ resourceInput=Plank:1
 resourceInput=Bronze:1
 resourceOutput=Bronzehead Arrow:1
 techRequirement=Bronzehead Arrows
+minSkill=1

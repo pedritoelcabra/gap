@@ -1,5 +1,6 @@
 name=IronFromPigIron
 resourceInput=Work:1
-resourceInput=PigIron:1
+resourceInput=Pig Iron:1
 resourceInput=Coal:1
 resourceOutput=Iron:1
+minSkill=3

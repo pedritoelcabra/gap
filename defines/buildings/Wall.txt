@@ -2,8 +2,8 @@ slug=wall
 name=Wooden Wall
 description=A basic defensive structure
 layoutLine=3
-buildCost=wood:10
-buildCost=work:10
+buildCost=Wood:10
+buildCost=Work:10
 upgrade=reinforced_wall
 draggable
 techRequirement=Disabled

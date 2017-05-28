@@ -2,3 +2,4 @@ name=GlassFromSand
 resourceInput=Work:1
 resourceInput=Sand:1
 resourceOutput=Glass:1
+minSkill=1

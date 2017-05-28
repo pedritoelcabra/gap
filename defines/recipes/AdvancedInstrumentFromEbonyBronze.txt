@@ -4,3 +4,4 @@ resourceInput=Ebony:1
 resourceInput=Bronze:1
 resourceOutput=Advanced Instrument:1
 techRequirement=Advanced Toolmaking
+minSkill=1

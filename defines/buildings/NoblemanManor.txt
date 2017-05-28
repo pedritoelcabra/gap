@@ -1,0 +1,23 @@
+name=Nobleman's Manor
+description=A fine mansion
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:3:3:3:3:3
+layoutLine=3:3:3:0:3:3:3:3
+buildCost=Plank:1
+buildCost=Bricks:1
+buildCost=Stone:1
+buildCost=Ornate Porcelain:1
+buildCost=Elaborate Food:1
+buildCost=Noble Furniture:1
+buildCost=Elegant Clothes:1
+buildCost=Work:1
+populationMax=1
+populationCost=1
+inhabitant=nobleman
+inhabitantSkill=2
+

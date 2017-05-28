@@ -310,7 +310,7 @@ int CUnit::ExecuteAction(CAction action_){
             StopMovement();
             if(auto s = workBuildingPtr.lock()){
                 SetAnimation("slashing");
-                timeForAction = s->StartProduction();
+                timeForAction = s->StartProduction(skillLvl);
                 if(!timeForAction){
                     SetIdleAssignment();
                 }
@@ -486,34 +486,28 @@ void CUnit::UpdateIdleAssignment(){
                 return;
             }
         }
-        std::vector<build_weak_ptr> nearestSites = GAP.BuildingManager.GetUnfinishedBuildings(homeBuildingPtr);
-        if(nearestSites.size() > 0){
-            targetBuildingPtr = nearestSites.back();
-            if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
-                ClearActions();
-                thought = "Found a building site";
-                targetBuildingPtrS->AddWorker(myPtr);
-                assignment = CAction::builderAssignment;
-                return;
-            }
+        targetBuildingPtr = s->GetBuildPlace(myPtr);
+        if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
+            ClearActions();
+            thought = "Found a building site";
+            targetBuildingPtrS->AddWorker(myPtr);
+            assignment = CAction::builderAssignment;
+            return;
         }
-        std::vector<build_weak_ptr> nearestJobs = GAP.BuildingManager.GetWorkPositions(homeBuildingPtr);
-        if(nearestJobs.size() > 0){
-            workBuildingPtr = nearestJobs.back();
-            if(auto workBuildingPtrS = workBuildingPtr.lock()){
-                ClearActions();
-                if(workBuildingPtrS->GetResource()){
-                    assignment = CAction::gatherResources;
-                    resourceTilePtr.reset();
-                    workBuildingPtrS->AddWorker(myPtr);
-                    thought = "Found a gathering assignment";
-                }else if(workBuildingPtrS->CanProduce()){
-                    assignment = CAction::productionAssignment;
-                    workBuildingPtrS->AddWorker(myPtr);
-                    thought = "Found a production assignment";
-                }
-                return;
+        workBuildingPtr = s->GetWorkPlace(myPtr);
+        if(auto workBuildingPtrS = workBuildingPtr.lock()){
+            ClearActions();
+            if(workBuildingPtrS->GetResource()){
+                assignment = CAction::gatherResources;
+                resourceTilePtr.reset();
+                workBuildingPtrS->AddWorker(myPtr);
+                thought = "Found a gathering assignment";
+            }else if(workBuildingPtrS->CanProduce(skillLvl)){
+                assignment = CAction::productionAssignment;
+                workBuildingPtrS->AddWorker(myPtr);
+                thought = "Found a production assignment";
             }
+            return;
         }
         taskPtr = s->FindConnectedTask(tileX, tileY);
         if(SetTransportAssignment(taskPtr)){
@@ -640,6 +634,7 @@ void CUnit::UpdateGatherAssignment(){
         SetIdleAssignment();
         return;
     }
+    maxCollision = 3.0f;
     if(GetCarriedItem()){
         if(GetTileFlightSquareDistance(workBuildingPtrS->DoorX(), workBuildingPtrS->DoorY()) < 1 ){
             if(workBuildingPtrS->AddToInventory(GetCarriedItem(), 1) == 0){
@@ -713,7 +708,7 @@ void CUnit::UpdateProductionAssignment(){
         SetIdleAssignment();
         return;
     }
-    if(!workBuildingPtrS->CanProduce()){
+    if(!workBuildingPtrS->CanProduce(skillLvl)){
         SetIdleAssignment();
         return;
     }

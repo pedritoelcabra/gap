@@ -29,6 +29,7 @@ class CRecipe
 
         void                                SetParent(CRecipe* parent_);
 
+        int                                 GetSkill(){                     return minSkill; };
         bool                                IsAvailable();
         bool                                UpdateAvailability();
         void                                Init();
@@ -38,6 +39,7 @@ class CRecipe
         int                                     productionPrio = 10;
         int                                     productionProgress = 0;
         bool                                    isAvailable = false;
+        int                                     minSkill = 0;
         std::string                             name;
         std::map< int, int >                    Input;
         std::map< int, int >                    Output;

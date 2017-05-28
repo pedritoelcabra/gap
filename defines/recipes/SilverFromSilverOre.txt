@@ -4,3 +4,4 @@ resourceInput=Silver Ore:1
 resourceInput=Coal:1
 resourceOutput=Silver:1
 techRequirement=Silver
+minSkill=1

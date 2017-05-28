@@ -3,3 +3,4 @@ resourceInput=Work:10
 resourceInput=Basic Instrument:1
 resourceOutput=Peasant Research:1
 techRequirement=Toolmaking
+minSkill=1

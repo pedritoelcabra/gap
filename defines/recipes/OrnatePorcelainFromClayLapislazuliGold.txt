@@ -1,1 +1,8 @@
 name=OrnatePorcelainFromClayLapislazuliGold
+resourceInput=Work:1
+resourceInput=Clay:1
+resourceInput=Lapis Lazuli:1
+resourceInput=Gold:1
+resourceOutput=Ornate Porcelain:1
+techRequirement=Ornate Porcelain
+minSkill=2

@@ -2,3 +2,4 @@ name=FabricFromCotton
 resourceInput=Work:1
 resourceInput=Cotton:1
 resourceOutput=Fabric:1
+minSkill=1

@@ -3,3 +3,4 @@ resourceInput=Work:1
 resourceInput=Wood:1
 resourceOutput=Wooden Shield:1
 techRequirement=Basic Weapons
+minSkill=1

@@ -2,3 +2,4 @@ name=BronzeGladiusFromBronze
 resourceInput=Work:1
 resourceInput=Bronze:1
 resourceOutput=Bronze Gladius:1
+minSkill=1

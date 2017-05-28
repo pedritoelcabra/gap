@@ -5,3 +5,4 @@ resourceInput=Salt:1
 resourceInput=Fish:1
 resourceOutput=Elaborate Meal:1
 techRequirement=Gastronomy
+minSkill=2
