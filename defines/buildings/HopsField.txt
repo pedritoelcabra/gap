@@ -19,3 +19,4 @@ productionSetback=2
 productionCooldown=2
 randomWorkPosition
 techRequirement=Advanced Agriculture
+maxWorkerCollision=3

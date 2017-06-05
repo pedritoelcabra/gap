@@ -1,6 +1,7 @@
-ChunkGenerationDistance=1
+ChunkGenerationDistance=2
 BuildingInventoryUseCooldown=30
-AllTechsResearched=1
+AllTechsResearched=0
+MaxTownConnectionRangeFactor=2
 
 GathererBuildingStorage=10
 ProductionBuildingInputStorage=5
@@ -21,7 +22,7 @@ ForestRand=1000
 ForestRoof=2100
 WoodPerTree=1
 
-StoneFrequency=300
+StoneFrequency=500
 StoneRand=10000
 StoneRoof=11500
 StonePerBlock=1

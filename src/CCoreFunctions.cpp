@@ -52,11 +52,15 @@ bool CGame::OnInit(){
                                         Player->GetTileY() - chiefH ,
                                         1);
             if(auto s = w.lock()){
-                for(auto r : CGood::GetResources()){
-                    if(1){// r.first ==
-                        s->AddToInventory(r.first, 99);
-                    }
-                }
+                s->AddToInventory(CGood::wood, 1);
+                s->AddWork(1000);
+                s->AddToInventory(CGood::wood, 20);
+                s->AddToInventory(CGood::stone, 20);
+//                for(auto r : CGood::GetResources()){
+//                    if(1){// r.first ==
+//                        s->AddToInventory(r.first, 99);
+//                    }
+//                }
             }
         }
         buildingCount++;
@@ -86,6 +90,7 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("peasant", "gfx/chars/peasant.png");
     TextureManager.LoadTextureGL("citizen", "gfx/chars/citizen.png");
     TextureManager.LoadTextureGL("nobleman", "gfx/chars/nobleman.png");
+    TextureManager.LoadTextureGL("trader", "gfx/chars/trader.png");
     TextureManager.LoadTextureGL("tiles", "gfx/tile_sprites.png");
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
     TextureManager.LoadTextureGL("icons", "gfx/icons.png");

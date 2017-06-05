@@ -56,6 +56,9 @@ void CInfoMenu::Render(){
     SDL_Color black = {0, 0, 0, 255};
     GPU_RectangleFilled(GAP.MainGLWindow,x,y,x + w,y + h,grey);
     yOff = imageBox.h + imageBox.y + 10 + yScroll;
+    GPU_Rect itemRect;
+    itemRect.w = 20;
+    itemRect.h = 20;
 
     std::stringstream tmp;
     if(auto s = myTile.lock()){
@@ -78,6 +81,27 @@ void CInfoMenu::Render(){
             RenderLine(tmp.str().c_str(), 16);
             tmp.str(std::string());
         }
+
+        RenderLine("Inventory:", 16);
+        int counter = 0;
+        itemRect.x = x;
+        itemRect.y = yOff;
+        for(auto const& item : *(s->GetInventory()) ){
+            if(item.second > 0 ){
+                counter++;
+                CGood::Render(&itemRect, item.first, item.second, true);
+                if(counter > 2){
+                    itemRect.x = x;
+                    yOff += itemRect.h;
+                    itemRect.y = yOff;
+                    counter = 0;
+                }else{
+                    itemRect.x += itemRect.w * 4;
+                }
+            }
+        }
+        yOff += itemRect.h;
+
         tmp << "Actions queued: " << s->GetActionCount();
         RenderLine(tmp.str().c_str(), 16);
         tmp.str(std::string());
@@ -100,9 +124,6 @@ void CInfoMenu::Render(){
     }
 
     if(auto s = myBuilding.lock()){
-        GPU_Rect itemRect;
-        itemRect.w = 20;
-        itemRect.h = 20;
         RenderLine("Building Overview:", 16);
         RenderLine(*(s->GetName()), 16);
         RenderLine(*(s->GetDescription()), 16);
@@ -113,7 +134,7 @@ void CInfoMenu::Render(){
         int counter = 0;
         itemRect.x = x;
         itemRect.y = yOff;
-        for(auto const& item : s->GetInventory() ){
+        for(auto const& item : *(s->GetInventory()) ){
             if(item.second > 0 || ( s->UnderConstruction() && s->GetMaxStorage(item.first, true) ) ){
                 counter++;
                 CGood::Render(&itemRect, item.first, item.second, true);
@@ -136,6 +157,17 @@ void CInfoMenu::Render(){
         for(auto wb : *(s->GetConnections())){
             if(auto sb = wb.lock()){
                 GAP.TextureManager.DrawConnectionLine(sb->GetDoor().first ,sb->GetDoor().second ,s->GetDoor().first,s->GetDoor().second, grey);
+            }
+        }
+        if(s->DistributionRange()){
+            RenderLine("Connected Towns:", 16);
+            for(auto wb : *(s->GetConnectedTowns())){
+                if(auto sb = wb.lock()){
+                    CButton button = CButton(x + 10, yOff, 1, wb );
+                    yOff += button.GetH();
+                    PopUpButtons.push_back(button);
+                    GAP.TextureManager.DrawConnectionLine(sb->GetDoor().first,sb->GetDoor().second, s->GetDoor().first,s->GetDoor().second, green);
+                }
             }
         }
         RenderLine("Inhabitants:", 16);
@@ -185,7 +217,7 @@ void CInfoMenu::Render(){
 void CInfoMenu::RenderLine(std::string text, int fontSize){
 
     SDL_Color black = {0, 0, 0};
-    SDL_Surface* textSurface = TTF_RenderText_Solid( GAP.TextureManager.GetFont(20), text.c_str(), black );
+    SDL_Surface* textSurface = TTF_RenderText_Solid( GAP.TextureManager.GetFont(30), text.c_str(), black );
     GPU_Image* texture = GPU_CopyImageFromSurface( textSurface );
     GPU_Rect Message_rect; //create a rect
     Message_rect.x = x + 10;  //controls the rect's x coordinate

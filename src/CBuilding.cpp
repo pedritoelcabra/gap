@@ -28,6 +28,12 @@ CBuilding::CBuilding(int type_, int x_, int y_, int owner_){
 void CBuilding::SetId(int id_, build_weak_ptr ptr){
     id = id_;
     myPtr = ptr;
+    if(DistributionRange()){
+        name = "Town ";
+        std::stringstream tmp;
+        tmp << id;
+        name.append(tmp.str());
+    }
     std::vector<task_weak_ptr> taskVec;
     maxAssignedWorkers = MaxWorkers();
     for(auto & recipe : *(typePtr->GetRecipes()) ){
@@ -108,6 +114,15 @@ bool CBuilding::IsInBlockedLocation(){
             return false;
         }
     }
+    if(DistributionRange()){
+        for(auto const & tw : *(GAP.BuildingManager.GetTowns())){
+            if(auto ts = tw.lock()){
+                if(ts->GetTileFlightRoundDistance(tileX, tileY) < DistributionRange()){
+                    return true;
+                }
+            }
+        }
+    }
     for(int i = 0; i < GetTileHeight(); i++ ){
         for(int k = 0; k < GetTileWidth(); k++ ){
             if(GAP.Pathfinder.GetCost(tileX + k, tileY + i) != CScreen::flatMoveCost ){
@@ -139,6 +154,11 @@ void CBuilding::Destroy(){
             s->Destroy();
         }
     }
+    for(auto e : Traders)    {
+        if(auto s = e.lock()){
+            s->Destroy();
+        }
+    }
     for(auto e : Incoming)    {
         if(auto s = e.lock()){
             s->MarkComplete();
@@ -159,11 +179,15 @@ bool CBuilding::AddWork(int amount, bool setUp){
     workToComplete -= amount;
     if(workToComplete < 1){
         workToComplete = 0;
+        clip.y = 0;
         ApplyMovementCosts();
         for(auto p : CGood::GetResources() ){
             Inventory[p.first] = 0;
         }
         Workers.clear();
+        if(DistributionRange()){
+            ConnectToNearestTown();
+        }
         UpdateNeededGoods();
         return true;
     }
@@ -173,16 +197,39 @@ bool CBuilding::AddWork(int amount, bool setUp){
 ///////
 
 void CBuilding::Update(){
+    if(!IsRoad() && !DistributionRange() && GetConnections()->size() < 1){
+        ConnectToNearestTown(true);
+    }
     if(!workToComplete){
         if(currentProductionCooldown > 0){
             currentProductionCooldown--;
         }
         DeleteUnusedWeak(&Workers);
-        if(typePtr->MaxPop() > static_cast<int>(Inhabitants.size())){
+        DeleteUnusedWeak(&Traders);
+        if(MaxPop() > static_cast<int>(Inhabitants.size())){
             popProgress++;
             if(popProgress >= typePtr->PopCost()){
                 popProgress = 0;
-                GenerateInhabitant();
+                unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, *typePtr->GetInhabitant());
+                unit_weak_ptr iw = unit_weak_ptr(is);
+
+                GAP.UnitManager.AddNPC(is);
+                is->SetHome(myPtr);
+                is->SetSkill(InhabitantSkill());
+                is->SetIdleAssignment();
+                Inhabitants.push_back(iw);
+            }
+        }else if(MaxTraders() > static_cast<int>(Traders.size())){
+            popProgress++;
+            if(popProgress >= typePtr->PopCost()){
+                popProgress = 0;
+                unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, "trader");
+                unit_weak_ptr iw = unit_weak_ptr(is);
+
+                GAP.UnitManager.AddNPC(is);
+                is->SetHome(myPtr);
+                is->SetTraderAssignment();
+                Traders.push_back(iw);
             }
         }
     }
@@ -451,17 +498,6 @@ void CBuilding::UpdateNeededGoods(){
     }
 }
 
-void CBuilding::GenerateInhabitant(){
-    unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, *typePtr->GetInhabitant());
-    unit_weak_ptr iw = unit_weak_ptr(is);
-
-    GAP.UnitManager.AddNPC(is);
-    is->SetHome(myPtr);
-    is->SetSkill(InhabitantSkill());
-    is->SetIdleAssignment();
-    Inhabitants.push_back(iw);
-}
-
 ////////////////
 
 void CBuilding::AddIncoming(task_weak_ptr ptr){
@@ -495,22 +531,28 @@ void CBuilding::RemoveWorker(int id){
 }
 
 void CBuilding::AddConnection(build_weak_ptr ptr){
-    ConnectedBuildings.push_back(ptr);
-}
-
-void CBuilding::AddConnections(std::vector<build_weak_ptr> connections){
-    ConnectedBuildings.insert( ConnectedBuildings.end(), connections.begin(), connections.end() );
-    RemoveConnection(id);
+    if(DistributionRange()){
+        if(auto s = ptr.lock()){
+            RemoveConnection(s->GetId());
+            if(s->DistributionRange() && s->GetId() != id && !s->UnderConstruction()){
+                ConnectedTowns.push_back(ptr);
+            }else{
+                ConnectedBuildings.push_back(ptr);
+            }
+        }
+    }
 }
 
 void CBuilding::RemoveConnection(int id_){
     if(!isBeingDestroyed){
-        DeleteById(&ConnectedBuildings, id);
+        DeleteById(&ConnectedBuildings, id_);
+        DeleteById(&ConnectedTowns, id_);
     }
 }
 
 void CBuilding::ClearConnections(){
     ConnectedBuildings.clear();
+    myTown.reset();
 }
 
 void CBuilding::RemoveInhabitant(int id){
@@ -703,10 +745,20 @@ int CBuilding::AddToInventory(int resource, int amount){
     }
     if(amount <= GetMaxStorage(resource, true)){
         Inventory.at(resource) += amount;
+        if(workToComplete && HasBuildingResources()){
+            if(auto s = myTown.lock()){
+                s->UpdateWorkPositions();
+            }
+        }
         return 0;
     }
     int amountAdded = GetMaxStorage(resource, true) - Inventory.at(resource);
     Inventory.at(resource) += amountAdded;
+    if(workToComplete && HasBuildingResources()){
+        if(auto s = myTown.lock()){
+            s->UpdateWorkPositions();
+        }
+    }
     return amount - amountAdded;
 }
 
@@ -873,11 +925,35 @@ std::vector<build_weak_ptr>* CBuilding::GetConnections(){
     return &ConnectedBuildings;
 }
 
+std::vector<build_weak_ptr>* CBuilding::GetConnectedTowns(){
+    return &ConnectedTowns;
+}
+
 void CBuilding::ConnectToNearestTown(bool forceReconnect){
     if(DistributionRange() > 0){
-        myTown = myPtr;
-        ConnectedBuildings.push_back(build_weak_ptr(myPtr));
+        if(!workToComplete){
+            if(auto s = myTown.lock()){
+                s->RemoveConnection(id);
+            }
+            ConnectedBuildings.clear();
+            myTown = myPtr;
+            ConnectedBuildings.push_back(build_weak_ptr(myPtr));
+            for(auto cw : ConnectedTowns){
+                if(auto cs = cw.lock()){
+                    cs->RemoveConnection(id);
+                }
+            }
+            ConnectedTowns.clear();
+            for(auto const & tw : *(GAP.BuildingManager.GetTowns())){
+                if(auto ts = tw.lock()){
+                    if(ts->GetTileFlightRoundDistance(tileX, tileY) < ts->DistributionRange() * GAP.Setting(CSettingManager::MaxTownConnectionRangeFactor)){
+                        AddConnection(tw);
+                        ts->AddConnection(myPtr);
+                    }
+                }
+            }
         return;
+        }
     }
     if(IsRoad()){
         return;
@@ -893,7 +969,11 @@ void CBuilding::ConnectToNearestTown(bool forceReconnect){
     }
     for(auto const & tw : *(GAP.BuildingManager.GetTowns())){
         if(auto ts = tw.lock()){
-            if(ts->GetTileFlightRoundDistance(tileX, tileY) < closestDist){
+            if( !ts->UnderConstruction()
+                && ts->GetTileFlightRoundDistance(tileX, tileY) < closestDist
+                && (ts->GetTileFlightRoundDistance(tileX, tileY) < ts->DistributionRange()
+                    || (DistributionRange() && workToComplete))){
+
                 closestDist = ts->GetTileFlightRoundDistance(tileX, tileY);
                 myTown = tw;
             }
@@ -930,5 +1010,24 @@ void CBuilding::AddResourceRequest(build_weak_ptr destPtr, int res, int prio){
             RequestedGoods.at(res).push_back(tw);
         }
     }
+}
+
+build_weak_ptr CBuilding::GetNextTraderDestination(){
+    bool foundCurrent = false;
+    DeleteUnusedWeak(&ConnectedTowns);
+    for(auto t : ConnectedTowns){
+        if(foundCurrent){
+            return t;
+        }
+        if(auto s = t.lock()){
+            if(s->GetId() == lastVisitedTownId){
+                foundCurrent = true;
+            }
+        }
+    }
+    if(ConnectedTowns.size()){
+        return ConnectedTowns.back();
+    }
+    return build_weak_ptr();
 }
 

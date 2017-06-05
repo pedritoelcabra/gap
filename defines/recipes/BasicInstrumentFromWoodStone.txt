@@ -3,4 +3,3 @@ resourceInput=Work:1
 resourceInput=Wood:1
 resourceInput=Stone:1
 resourceOutput=Basic Instrument:1
-techRequirement=Toolmaking

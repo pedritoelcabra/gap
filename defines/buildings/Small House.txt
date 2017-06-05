@@ -13,3 +13,4 @@ populationMax=1
 populationCost=15
 inhabitant=peasant
 inhabitantSkill=1
+techRequirement=Stone Houses

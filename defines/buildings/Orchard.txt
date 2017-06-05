@@ -18,4 +18,5 @@ productionStages=4
 productionSetback=1
 productionCooldown=2
 randomWorkPosition
-techRequirement=Disabled
+maxWorkerCollision=3
+techRequirement=Agriculture

@@ -42,6 +42,7 @@ void CPathfinder::Init(){
 
 void CPathfinder::SetCost(int x, int y, float cost){
     CollisionMap[Coord(x, y)] = cost;
+    PathCache.clear();
 }
 
 float CPathfinder::GetCost(int x, int y){
@@ -64,6 +65,18 @@ float CPathfinder::getMoveCost(Coord coords_){
 }
 
 CoordList CPathfinder::FindPath(Coord source_, Coord target_, float minv_, float maxv_, bool diagonal){
+    if(maxv_ != 2.0f || minv_ != 0.0f){
+        return DoFindPath(source_, target_, minv_, maxv_, diagonal);
+    }
+    if(PathCache.count(source_) && PathCache.at(source_).count(target_)){
+        return PathCache.at(source_).at(target_);
+    }
+    CoordList resultPath = DoFindPath(source_, target_, minv_, maxv_, diagonal);
+    PathCache[source_][target_] = resultPath;
+    return resultPath;
+}
+
+CoordList CPathfinder::DoFindPath(Coord source_, Coord target_, float minv_, float maxv_, bool diagonal){
 
     Coord distC = getDelta(source_, target_);
     unsigned int distance = distC.x + distC.y;
@@ -97,7 +110,7 @@ CoordList CPathfinder::FindPath(Coord source_, Coord target_, float minv_, float
                 break;
         	}
 
-            if(closedSet.size() > distance * 10){
+            if(closedSet.size() > distance * 20){
                 CLog::Write("Aborting path... too long");
                 CLog::Write(static_cast<int>(distance));
                 return path;

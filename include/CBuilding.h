@@ -40,7 +40,6 @@ class CBuilding : public CGUIObject
         int                 SetY(int y);
         bool                IsInBlockedLocation();
         void                AddWorker(unit_weak_ptr ptr);
-        void                GenerateInhabitant();
         void                RemoveWorker(int id);
         void                RemoveInhabitant(int id);
         unit_weak_ptr       GetIdleInhabitant();
@@ -53,7 +52,6 @@ class CBuilding : public CGUIObject
         void                AddOutgoing(task_weak_ptr ptr);
         void                RemoveOutgoing(int id);
         void                AddConnection(build_weak_ptr ptr);
-        void                AddConnections(std::vector<build_weak_ptr> connections);
         void                RemoveConnection(int id);
         void                ClearConnections();
         int                 AddToInventory(int resource, int amount);
@@ -78,10 +76,12 @@ class CBuilding : public CGUIObject
         int                 MaxAssignedWorkers(int newMax = -1);
         build_weak_ptr      GetWorkPlace(unit_weak_ptr worker);
         build_weak_ptr      GetBuildPlace(unit_weak_ptr worker);
+        build_weak_ptr      GetNextTraderDestination();
 
         std::vector<build_weak_ptr>*    GetConnections();
+        std::vector<build_weak_ptr>*    GetConnectedTowns();
 
-        std::map<int, int>              GetInventory(){                         return Inventory;};
+        std::map<int, int>*             GetInventory(){                         return &Inventory;};
         std::vector<unit_weak_ptr>      GetInhabitants(){                       return Inhabitants;};
         std::vector<CRecipe>*           GetRecipes(){                           return &Recipes;};
         std::vector<unit_weak_ptr>      GetWorkers(){                           return Workers;};
@@ -90,8 +90,10 @@ class CBuilding : public CGUIObject
         int                             GetTileWidth(){                         return GetW() / CScreen::tileWidth;};
         int                             GetTileHeight(){                        return GetH() / CScreen::tileWidth;};
         int                             PopRange(){                             return typePtr->PopRange(); };
+        int                             MaxTraders(){                              return typePtr->Traders(); };
         int                             MaxPop(){                               return typePtr->MaxPop(); };
         int                             MaxWorkers(){                           return typePtr->WorkerCount(); };
+        int                             WorkerCollision(){                      return typePtr->WorkerCollision();};
         int                             BuildArea(){                            return typePtr->BuildArea(); };
         int                             DistributionRange(){                    return typePtr->DistributionRange(); };
         int                             TransportRange(){                       return typePtr->TransportRange(); };
@@ -101,7 +103,7 @@ class CBuilding : public CGUIObject
         int                             DoorY(){                                return door.second; };
         int                             GetType(){                              return type;};
         int                             UnderConstruction(){                    return workToComplete;};
-        std::string*                    GetName(){                              return typePtr->GetName();};
+        std::string*                    GetName(){                              if(DistributionRange()){ return &name; } return typePtr->GetName();};
         std::string*                    GetDescription(){                       return typePtr->GetDescription();};
         std::string*                    GetUpgrade(){                           return typePtr->GetUpgrade();};
         bool                            IsRoad(){                               return typePtr->IsRoad();};
@@ -113,6 +115,8 @@ class CBuilding : public CGUIObject
 
     private:
         bool                isBeingDestroyed = false;
+
+        std::string         name = "Town";
 
         int                 owner = 0;
         int                 type;
@@ -126,6 +130,7 @@ class CBuilding : public CGUIObject
         int                 currentProductionCooldown = 0;
         int                 resourcePrio = 10;
         int                 lastItemPickedUp = 0;
+        int                 lastVisitedTownId = 0;
         int                 maxAssignedWorkers;
 
 
@@ -133,8 +138,10 @@ class CBuilding : public CGUIObject
         std::vector<task_weak_ptr>      Incoming;
         std::vector<unit_weak_ptr>      Workers;
         std::vector<unit_weak_ptr>      Inhabitants;
+        std::vector<unit_weak_ptr>      Traders;
         std::map<int, int>              Inventory;
         std::vector<build_weak_ptr>     ConnectedBuildings;
+        std::vector<build_weak_ptr>     ConnectedTowns;
         std::vector<vec2i>              PassableTiles;
         build_weak_ptr                  myPtr;
         build_weak_ptr                  myTown;

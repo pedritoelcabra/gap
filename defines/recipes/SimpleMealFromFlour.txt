@@ -3,4 +3,3 @@ resourceInput=Work:1
 resourceInput=Flour:1
 resourceInput=Fruit:1
 resourceOutput=Simple Food:1
-minSkill=1

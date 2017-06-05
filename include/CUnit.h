@@ -23,7 +23,6 @@ typedef std::weak_ptr<CTransportTask> task_weak_ptr;
 class CUnit : public CGUIObject
 {
     public:
-        enum EEmotes { idle, building, nothingToBuild, woodcutting, noWood };
 
         CUnit(){};
         CUnit(int x, int y, std::string name) ;
@@ -53,10 +52,12 @@ class CUnit : public CGUIObject
         void                UpdateIdleAssignment();
         void                UpdateProductionAssignment();
         void                UpdateTransportAssignment();
+        void                UpdateTraderAssignment();
         void                Destroy();
         void                CarryItem(int resource);
         int                 GetCarriedItem(bool takeIt = false);
         void                CancelTransportTask();
+        void                FillTraderInventory(build_weak_ptr src, build_weak_ptr dest);
 
         float               GetMinCollision(){          return minCollision;};
         float               GetMaxCollision(){          return maxCollision;};
@@ -74,6 +75,7 @@ class CUnit : public CGUIObject
         float               GetMoveSpeed();
 
         void                SetIdleAssignment();
+        void                SetTraderAssignment();
         void                SetFollowAssignment(unit_weak_ptr ptr);
         void                SetGatherAssignment(build_weak_ptr ptr);
         void                SetBuildAssignment(build_weak_ptr ptr);
@@ -86,6 +88,7 @@ class CUnit : public CGUIObject
         void                SetSkill(int skill){        skillLvl = skill; };
         int                 GetSkill(){                 return skillLvl; };
 
+        std::map<int, int>*             GetInventory(){                         return &Inventory;};
 
     protected:
 
@@ -139,6 +142,7 @@ class CUnit : public CGUIObject
 
         std::vector<CAction>    ActionQueue;
         std::map<int, int>      Inventory;
+        int                     inventorySize = 10;
         int                     carriedItem = 0;
         GPU_Rect                itemBox;
 

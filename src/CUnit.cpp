@@ -454,6 +454,14 @@ void CUnit::SetIdleAssignment(){
     UpdateAssignment();
 }
 
+void CUnit::SetTraderAssignment(){
+    ClearActions();
+    assignment = CAction::traderAssignment;
+    maxCollision = 2.0f;
+    baseSpeed = 32;
+    UpdateAssignment();
+}
+
 void CUnit::SetFollowAssignment(unit_weak_ptr targetPtr_){
     ClearActions();
     if(targetPtr_.lock()){
@@ -609,6 +617,52 @@ void CUnit::UpdateTransportAssignment(){
     return;
 }
 
+void CUnit::UpdateTraderAssignment(){
+    if(auto homeBuildingPtrS = homeBuildingPtr.lock()){
+        if(auto targetBuildingPtrS = targetBuildingPtr.lock()){
+            // we have a target to reach
+            if(GetTileFlightSquareDistance(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY()) < 1 ){
+                // we have reached our destination
+                int surplus;
+                for(auto const& item : Inventory ){
+                    if(item.second > 0){
+                        surplus = targetBuildingPtrS->AddToInventory(item.first, item.second);
+                        Inventory.at(item.first) = surplus;
+                    }
+                }
+                FillTraderInventory(targetBuildingPtr, homeBuildingPtr);
+                targetBuildingPtr.reset();
+                thought = "Dropped off my cargo";
+                return;
+            }else{
+                // we need to move to another town
+                thought = "Going to another town";
+                MoveTo(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY());
+            }
+        }else{
+            // we have to go home
+            if(GetTileFlightSquareDistance(homeBuildingPtrS->DoorX(), homeBuildingPtrS->DoorY()) < 1 ){
+                // we have reached our destination
+                int surplus;
+                for(auto const& item : Inventory ){
+                    if(item.second > 0){
+                        surplus = homeBuildingPtrS->AddToInventory(item.first, item.second);
+                        Inventory.at(item.first) = surplus;
+                    }
+                }
+                targetBuildingPtr = homeBuildingPtrS->GetNextTraderDestination();
+                FillTraderInventory(homeBuildingPtr, targetBuildingPtr);
+                thought = "Reached my home";
+                return;
+            }else{
+                // we need to move to another town
+                thought = "Going home";
+                MoveTo(homeBuildingPtrS->DoorX(), homeBuildingPtrS->DoorY());
+            }
+        }
+    }
+}
+
 void CUnit::UpdateFollowAssignment(){
     auto targetUnitPtrS = targetUnitPtr.lock();
     if(!targetUnitPtrS){
@@ -718,6 +772,7 @@ void CUnit::UpdateProductionAssignment(){
         thought = "Producing!";
         return;
     }
+    maxCollision = workBuildingPtrS->WorkerCollision();
     thought = "Going to production site";
     vec2i randomTile = workBuildingPtrS->GetRandomPassableTile();
     MoveTo(randomTile.first, randomTile.second);
@@ -740,6 +795,8 @@ void CUnit::UpdateAssignment(){
         UpdateProductionAssignment(); break;
     case CAction::transportAssignment:
         UpdateTransportAssignment(); break;
+    case CAction::traderAssignment:
+        UpdateTraderAssignment(); break;
     }
 }
 
@@ -778,6 +835,41 @@ void CUnit::Destroy(){
 
 void CUnit::CarryItem(int resource){
     carriedItem = resource;
+}
+
+void CUnit::FillTraderInventory(build_weak_ptr src, build_weak_ptr dest){
+    if(auto s = src.lock()){
+        if(auto d = dest.lock()){
+            int currentInventoryCargo = 0;
+            for(auto const& item : Inventory ){
+                currentInventoryCargo += item.second;
+            }
+            while(currentInventoryCargo < inventorySize){
+                int biggestDelta = 1;
+                int biggestItem = 0;
+                int delta = 0;
+                for(auto const& item : *(s->GetInventory()) ){
+                    delta = item.second - d->GetInventory()->at(item.first);
+                    if(Inventory.at(item.first) > 0){
+                        delta = delta / Inventory.at(item.first);
+                    }
+                    if(delta > biggestDelta){
+                        biggestDelta = delta;
+                        biggestItem = item.first;
+                    }
+                }
+                if(!biggestItem){
+                    return;
+                }
+                if(s->TakeFromInventory(biggestItem, 1) == 1){
+                    Inventory.at(biggestItem)++;
+                    currentInventoryCargo++;
+                }else{
+                    return;
+                }
+            }
+        }
+    }
 }
 
 int CUnit::GetCarriedItem(bool takeIt){

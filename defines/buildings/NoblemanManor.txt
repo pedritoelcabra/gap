@@ -20,4 +20,5 @@ populationMax=1
 populationCost=1
 inhabitant=nobleman
 inhabitantSkill=2
+techRequirement=Manors
 

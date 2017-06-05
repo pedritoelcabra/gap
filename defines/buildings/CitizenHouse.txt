@@ -16,3 +16,4 @@ populationMax=1
 populationCost=1
 inhabitant=citizen
 inhabitantSkill=2
+techRequirement=Furnished Houses

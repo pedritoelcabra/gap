@@ -47,6 +47,8 @@ void CChunk::Init(int chunkX, int chunkY){
             }
             resource = 0;
             resourceAmount = 0;
+            int maxRand = GAP.Setting(CSettingManager::ResourceRand);
+            resourceRand = rand() % maxRand ;
             if(terrain == 95 && height >= GAP.SettingF(CSettingManager::MineralLevel)){
 
                 if( resource == 0 &&
@@ -95,8 +97,6 @@ void CChunk::Init(int chunkX, int chunkY){
                 }
             }
             if(terrain == 94 || terrain == 95){
-                int maxRand = GAP.Setting(CSettingManager::ResourceRand);
-                resourceRand = rand() % maxRand ;
                 if( resource == 0 &&
                    (GAP.ChunkManager.ForestMap()->GetValue(k, i) * GAP.Setting(CSettingManager::ForestRand)) + resourceRand
                    > GAP.Setting(CSettingManager::ForestRoof) ){

@@ -19,3 +19,4 @@ productionSetback=4
 productionCooldown=2
 randomWorkPosition
 techRequirement=Pig Domestication
+maxWorkerCollision=3

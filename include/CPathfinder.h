@@ -43,8 +43,7 @@ class CPathfinder{
 
     public:
 
-
-
+        using PathMap = std::unordered_map<Coord, std::unordered_map<Coord, CoordList, CoordHasher>, CoordHasher>;
         using CoordMap = std::unordered_map<Coord, float, CoordHasher>;
         using NodeSet = std::set<Node*>;
 
@@ -67,12 +66,15 @@ class CPathfinder{
     protected:
 
     private:
+        CoordList           DoFindPath(Coord source_, Coord target_, float minv_, float maxv_, bool diagonal = true);
+
         float               minv;
         float               maxv;
         unsigned int        directions;
         CoordList           direction;
 
         CoordMap            CollisionMap;
+        PathMap             PathCache;
 
         Node*               findNodeOnList(NodeSet& nodes_, Coord coords_);
         Coord               getDelta(Coord source_, Coord target_);

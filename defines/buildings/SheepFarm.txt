@@ -19,3 +19,4 @@ productionSetback=2
 productionCooldown=2
 randomWorkPosition
 techRequirement=Animal Husbandry
+maxWorkerCollision=3

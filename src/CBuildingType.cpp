@@ -28,6 +28,10 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 		popMax = std::stoi(value);
 		return;
 	}
+	if(!key.compare("traders")){
+		traders = std::stoi(value);
+		return;
+	}
 	if(!key.compare("populationCost")){
 		popCost = std::stoi(value);
 		return;
@@ -42,6 +46,10 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 	}
 	if(!key.compare("transportRange")){
 		transportRange = std::stoi(value);
+		return;
+	}
+	if(!key.compare("maxWorkerCollision")){
+		maxWorkerCollision = std::stof(value);
 		return;
 	}
 	if(!key.compare("workerCount")){

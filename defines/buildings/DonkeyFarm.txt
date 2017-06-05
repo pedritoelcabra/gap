@@ -19,3 +19,4 @@ productionSetback=4
 productionCooldown=2
 randomWorkPosition
 techRequirement=Pack Animals
+maxWorkerCollision=3

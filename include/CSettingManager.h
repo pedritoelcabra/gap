@@ -21,7 +21,8 @@ class CSettingManager
                        IronRoof,IronPerBlock,LapisFrequency,LapisRand,LapisRoof,LapisPerBlock,GemFrequency,
                        GemRand,GemRoof,GemPerBlock,EbonyFrequency,EbonyRand,EbonyRoof,EbonyPerBlock,LimeFrequency,
                        LimeRand,LimeRoof,LimePerBlock,MarbleFrequency,MarbleRand,MarbleRoof,MarblePerBlock,
-                       AllTechsResearched, WaterLevel, BeachLevel, GrassLevel, MineralLevel, DryLandLevel };
+                       AllTechsResearched, WaterLevel, BeachLevel, GrassLevel, MineralLevel, DryLandLevel,
+                       MaxTownConnectionRangeFactor };
 
         CSettingManager(){};
         virtual ~CSettingManager(){};

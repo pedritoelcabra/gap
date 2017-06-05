@@ -59,7 +59,7 @@ build_weak_ptr CBuildingManager::AddBuilding(int type, int x, int y, int owner, 
         if(s->GetTileX() != building->GetTileX() || s->GetTileY() != building->GetTileY() || building->GetName()->compare(*s->GetUpgrade())){
             return ptr;
         }else{
-            inventory = s->GetInventory();
+            inventory = *(s->GetInventory());
             DemolishBuilding(x, y);
         }
     }

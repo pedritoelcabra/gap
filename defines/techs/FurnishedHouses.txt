@@ -1,0 +1,7 @@
+name=Furnished Houses
+techCost=20
+resourceInput=Work:10
+resourceInput=Basic Instrument:1
+techRequirement=Stone Houses
+minSkill=1
+

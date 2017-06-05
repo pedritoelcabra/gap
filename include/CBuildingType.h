@@ -33,9 +33,11 @@ class CBuildingType
         std::string*                        GetInhabitant(){        return &inhabitant;};
         GPU_Rect                            GetClip(){              return clip;};
         vec2i                               GetDoor(){              return door;};
+        int                                 Traders(){              return traders;};
         int                                 MaxPop(){               return popMax;};
         int                                 WorkerCount(){          return workerCount;};
         int                                 WorkerPriority(){       return workerPriority;};
+        int                                 WorkerCollision(){      return maxWorkerCollision;};
         int                                 PopCost(){              return popCost;};
         int                                 PopRange(){             return popRange;};
         int                                 BuildArea(){            return buildArea;};
@@ -85,12 +87,14 @@ class CBuildingType
         int                                     productionCooldown = 0;
         bool                                    randomWorkPosition = false;
 
+        int                                     traders = 0;
         int                                     popMax = 0;
         int                                     popCost = 0;
         int                                     popRange = 0;
         int                                     workerCount = 0;
         int                                     workerPriority = 0;
         int                                     maxStorage = 0;
+        float                                   maxWorkerCollision = 2.0f;
 
         void            LoadCosts(std::map< int, int > & container, std::string value);
         void            LoadLayout(std::string value);

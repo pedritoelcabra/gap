@@ -44,7 +44,7 @@ void CIngameMenu::Clicked(CButton button){
 
     switch(button.GetAction()){
         case 1:
-            GAP.Exit();
+            // GAP.Exit();
             break;
         case 2:
             GAP.MenuManager.ShowBuildingMenu();

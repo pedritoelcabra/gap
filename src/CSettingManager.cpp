@@ -282,6 +282,10 @@ bool CSettingManager::Init(){
             if(!key.compare("DryLandLevel")){
                 settingsInt.at(DryLandLevel) = std::stoi(value);
             }
+
+            if(!key.compare("MaxTownConnectionRangeFactor")){
+                settingsInt.at(MaxTownConnectionRangeFactor) = std::stoi(value);
+            }
         }
 	}
 	SettingsInt = settingsInt;

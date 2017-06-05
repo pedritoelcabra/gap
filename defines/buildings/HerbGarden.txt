@@ -19,3 +19,4 @@ productionSetback=1
 productionCooldown=2
 randomWorkPosition
 techRequirement=Disabled
+maxWorkerCollision=3
