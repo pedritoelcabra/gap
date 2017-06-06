@@ -286,6 +286,10 @@ bool CSettingManager::Init(){
             if(!key.compare("MaxTownConnectionRangeFactor")){
                 settingsInt.at(MaxTownConnectionRangeFactor) = std::stoi(value);
             }
+
+            if(!key.compare("ResearchSpeed")){
+                settingsInt.at(ResearchSpeed) = std::stoi(value);
+            }
         }
 	}
 	SettingsInt = settingsInt;

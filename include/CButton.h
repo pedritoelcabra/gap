@@ -21,7 +21,7 @@ class CButton : public CGUIObject{
 public:
     CButton (int x, int y, int clip, unit_weak_ptr object);
     CButton (int x, int y, int clip, build_weak_ptr building);
-    CButton (int x, int y, int clip, int id, std::string caption);
+    CButton (int x, int y, int clip, int id, std::string caption, int w_ = 151, int h_ = 30);
     CButton(int x, int y, int clipnumber, int w, int h);
     CButton(int x, int y, int clipnumber, int w, int h, CRecipe& recipe);
     CButton(int x, int y, int clipnumber, int w, int h, build_weak_ptr building);

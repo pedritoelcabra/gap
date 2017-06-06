@@ -22,7 +22,7 @@ class CSettingManager
                        GemRand,GemRoof,GemPerBlock,EbonyFrequency,EbonyRand,EbonyRoof,EbonyPerBlock,LimeFrequency,
                        LimeRand,LimeRoof,LimePerBlock,MarbleFrequency,MarbleRand,MarbleRoof,MarblePerBlock,
                        AllTechsResearched, WaterLevel, BeachLevel, GrassLevel, MineralLevel, DryLandLevel,
-                       MaxTownConnectionRangeFactor };
+                       MaxTownConnectionRangeFactor, ResearchSpeed };
 
         CSettingManager(){};
         virtual ~CSettingManager(){};

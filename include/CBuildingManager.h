@@ -22,6 +22,7 @@ class CBuildingManager
         build_weak_ptr                      AddBuilding(int type, int x, int y, int owner, bool ignoreBlocked = false);
         void                                Render();
         CBuildingType*                      GetBuildingType(int type);
+        int                                 GetRoadType();
         std::vector<CBuildingType>          GetBuildingTypes();
         void                                DemolishBuilding(int x, int y);
         build_weak_ptr                      GetBuildingAt(int x, int y);

@@ -30,12 +30,6 @@ bool CMenuManager::HandleLClick(int x, int y){
 
     for(CIngameMenu& e : IngameMenus)    {
         if(e.HandleLClick( x,  y)){
-            mouseHasBuilding = false;
-            mouseIsDemolition = false;
-            mouseHasDraggable = false;
-            draggedPlanted = false;
-            highLightRadius = 0;
-            highLightRadius2 = 0;
             return true;
         }
     }
@@ -258,6 +252,16 @@ void CMenuManager::ShowTechMenu(){
     CTechMenu techMenu = CTechMenu();
     TechMenus.push_back(techMenu);
     techOpen = true;
+}
+
+void CMenuManager::ClearMenus(){
+    mouseHasBuilding = false;
+    mouseIsDemolition = false;
+    mouseHasDraggable = false;
+    draggedPlanted = false;
+    highLightRadius = 0;
+    highLightRadius2 = 0;
+
 }
 
 void CMenuManager::HideBuildingMenus(){

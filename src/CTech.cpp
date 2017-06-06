@@ -50,7 +50,7 @@ void CTech::LoadCosts(std::map< int, int > & container, std::string value){
 }
 
 bool CTech::AddProgress(){
-    currentProgress++;
+    currentProgress += GAP.Setting(CSettingManager::ResearchSpeed);
     if(currentProgress >= techCost){
         isResearched = true;
     }

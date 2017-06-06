@@ -32,6 +32,7 @@ class CMenuManager
         void                        ShowBuildingMenu();
         void                        ShowTechMenu();
         void                        HideBuildingMenus();
+        void                        ClearMenus();
         void                        HideTechMenus();
         void                        HideContextMenus();
         void                        Render();

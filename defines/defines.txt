@@ -1,6 +1,7 @@
 ChunkGenerationDistance=2
 BuildingInventoryUseCooldown=30
 AllTechsResearched=0
+ResearchSpeed=10
 MaxTownConnectionRangeFactor=2
 
 GathererBuildingStorage=10

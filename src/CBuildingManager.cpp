@@ -167,6 +167,15 @@ build_weak_ptr CBuildingManager::FindCollision(int x, int y){
     return emptyPtr;
 }
 
-
+int CBuildingManager::GetRoadType(){
+    int counter = 0;
+    for(auto & t : BuildingTypes){
+        if(t.IsRoad()){
+            return counter;
+        }
+        counter++;
+    }
+    return 0;
+}
 
 

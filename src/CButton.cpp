@@ -27,9 +27,9 @@ CButton::CButton(int x, int y, int clipnumber, build_weak_ptr building) : CGUIOb
     Init(clipnumber);
 }
 
-CButton::CButton(int x, int y, int clipnumber, int id, std::string caption) : CGUIObject(x, y){
-    box.h = 30;
-    box.w = 151;
+CButton::CButton(int x, int y, int clipnumber, int id, std::string caption, int w_, int h_) : CGUIObject(x, y){
+    box.h = h_;
+    box.w = w_;
     fontSize = int(box.h / 4)*2;
     this->caption = caption;
     this->action = id;
@@ -102,6 +102,12 @@ void CButton::Init(int clipnumber){
             clip.y = 309;
             clip.w = 149;
             clip.h = 28;
+            break;
+        case 4:
+            clip.x = 150;
+            clip.y = 308;
+            clip.w = 30;
+            clip.h = 30;
             break;
     }
 
