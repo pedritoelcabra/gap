@@ -9,3 +9,4 @@ resourceGatherer=Ebony
 resourceRadius=20
 workerCount=1
 workerPriority=100
+techRequirement=Advanced Carpentry
