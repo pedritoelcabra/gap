@@ -176,7 +176,7 @@ void CBuilding::Destroy(){
 }
 
 bool CBuilding::AddWork(int amount, bool setUp){
-    workToComplete -= amount;
+    workToComplete -= (amount * GAP.Setting(CSettingManager::BuildSpeed) ); // 
     if(workToComplete < 1){
         workToComplete = 0;
         clip.y = 0;
