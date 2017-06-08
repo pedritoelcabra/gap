@@ -12,7 +12,7 @@ class CRecipeManager
         virtual ~CRecipeManager(){};
 
         bool                                Init();
-        CRecipe                             GetRecipeByName(std::string name);
+        CRecipe*                            GetRecipeByName(std::string name);
         void                                UpdateAvailabilities();
     protected:
 

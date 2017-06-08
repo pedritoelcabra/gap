@@ -24,7 +24,7 @@ class CBuildingType
 
         std::vector< std::vector<float> >   GetLayout(){            return Layout;};
         std::map< int, int >                GetBuildCosts(){        return BuildCosts;};
-        std::vector<CRecipe>*               GetRecipes(){           return &Recipes;};
+        std::vector<CRecipe*>*              GetRecipes(){           return &Recipes;};
         int                                 GetW(){                 return w;};
         int                                 GetH(){                 return h;};
         std::string*                        GetName(){              return &name;};
@@ -69,7 +69,7 @@ class CBuildingType
         std::vector<int>                        Requirements;
         std::vector< std::vector<float> >       Layout;
         std::map< int, int >                    BuildCosts;
-        std::vector<CRecipe>                    Recipes;
+        std::vector<CRecipe*>                   Recipes;
         int                                     w = -1;
         int                                     h = -1;
         bool                                    draggable = false;

@@ -129,8 +129,8 @@ void CBuildingType::LoadLine(std::string key, std::string value){
 int CBuildingType::ConsumesResource(int res_){
 	int mostResource = 0;
 	for(auto r : Recipes){
-		if(r.ConsumesResource(res_) > mostResource){
-			mostResource = r.ConsumesResource(res_);
+		if(r->ConsumesResource(res_) > mostResource){
+			mostResource = r->ConsumesResource(res_);
 		}
 	}
     	return mostResource;
@@ -139,8 +139,8 @@ int CBuildingType::ConsumesResource(int res_){
 int CBuildingType::ProducesResource(int res_){
 	int mostResource = 0;
 	for(auto r : Recipes){
-		if(r.ProducesResource(res_) > mostResource){
-			mostResource = r.ProducesResource(res_);
+		if(r->ProducesResource(res_) > mostResource){
+			mostResource = r->ProducesResource(res_);
 		}
 	}
     	return mostResource;

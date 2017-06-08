@@ -488,6 +488,12 @@ bool CUnit::SetTransportAssignment(task_weak_ptr ptr){
 
 void CUnit::UpdateIdleAssignment(){
     if(auto s = homeBuildingPtr.lock()){
+        if(GAP.Pathfinder.GetCost(tileX, tileY ) >= 2.0f ){
+            maxCollision = 3.0f;
+            MoveTo(s->DoorX(), s->DoorY());
+            thought = "Going home";
+            return;
+        }
         if(GetCarriedItem()){
             taskPtr = s->FindPlaceToDropOff(GetCarriedItem());
             if(SetTransportAssignment(taskPtr)){
@@ -522,7 +528,6 @@ void CUnit::UpdateIdleAssignment(){
             return;
         }
         if( GetTileFlightRoundDistance(s->DoorX(), s->DoorY()) < 5 ){
-            maxCollision = 2.0f;
             if(rand() % 5 < 1){
                 MoveNextTo(tileX, tileY);
             }
@@ -530,8 +535,10 @@ void CUnit::UpdateIdleAssignment(){
             thought =  "Idling at home";
             return;
         }
-        maxCollision = 3.0f;
-        MoveTo(s->DoorX(), s->DoorY());
+        if(!MoveTo(s->DoorX(), s->DoorY())){
+            maxCollision = 3.0f;
+            MoveTo(s->DoorX(), s->DoorY());
+        }
         thought = "Going home";
         return;
     }
@@ -555,11 +562,9 @@ void CUnit::UpdateTransportAssignment(){
                         taskPtrS->MarkComplete();
                         taskPtr.reset();
                         thought = "Dropped off goods";
-                        maxCollision = 3.0f;
                         return;
                     }
                     thought = "Cant drop off goods!";
-                    maxCollision = 3.0f;
                     CancelTransportTask();
                     return;
                 }
@@ -569,13 +574,10 @@ void CUnit::UpdateTransportAssignment(){
                     return;
                 }
                 thought = "No path to drop off goods";
-                maxCollision = 3.0f;
-                Idle(60);
+                CancelTransportTask();
                 return;
             }
             CancelTransportTask();
-            thought =  "My task has no destination";
-            maxCollision = 3.0f;
             return;
         }
         if(auto destS = taskPtrS->GetPickUp().lock()){
@@ -589,7 +591,6 @@ void CUnit::UpdateTransportAssignment(){
                     destS->UseInventory();
                     CarryItem(taskPtrS->GetResource());
                     thought = "Picked up goods";
-                    maxCollision = 2.0f;
                     return;
                 }
                 thought = "Cant pick up goods!";
@@ -602,16 +603,13 @@ void CUnit::UpdateTransportAssignment(){
                 return;
             }
             thought = "No path to pick up goods";
-            maxCollision = 3.0f;
-            Idle(60);
+            CancelTransportTask();
             return;
         }
         CancelTransportTask();
-        maxCollision = 3.0f;
         thought =  "My task has no destination";
         return;
     }
-    maxCollision = 3.0f;
     SetIdleAssignment();
     thought = "Going home";
     return;
@@ -749,7 +747,9 @@ void CUnit::UpdateBuildAssignment(){
             return;
         }
         thought = "Going to building site";
-        MoveTo(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY());
+        if(!MoveTo(targetBuildingPtrS->DoorX(), targetBuildingPtrS->DoorY())){
+            thought = "Can't find a path...";
+        }
         return;
     }
     SetIdleAssignment();
@@ -772,16 +772,19 @@ void CUnit::UpdateProductionAssignment(){
         thought = "Producing!";
         return;
     }
-    maxCollision = workBuildingPtrS->WorkerCollision();
     thought = "Going to production site";
-    vec2i randomTile = workBuildingPtrS->GetRandomPassableTile();
+    vec2i randomTile = workBuildingPtrS->GetDoor();
     MoveTo(randomTile.first, randomTile.second);
     return;
 }
 
 void CUnit::UpdateAssignment(){
+    if(id == 1){
+        return;
+    }
     moveSpeed = baseSpeed;
     busyTime = 0;
+    maxCollision = 2.0f;
     switch(assignment){
     case CAction::idleAssignment:
         UpdateIdleAssignment(); break;

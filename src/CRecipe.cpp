@@ -72,7 +72,16 @@ bool CRecipe::IsAvailable(){
 }
 
 bool CRecipe::UpdateAvailability(){
-    isAvailable = false;
+    if(isAvailable){
+        return true;
+    }
+    if(!name.compare("PeasantResearch")){
+        if(isAvailable){
+            CLog::Write("Peasant available");
+        }else{
+            CLog::Write("Peasant not available");
+        }
+    }
     for(auto t : Requirements){
         if(!GAP.TechManager.IsResearched(t)){
             return false;

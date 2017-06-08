@@ -37,8 +37,8 @@ void CBuilding::SetId(int id_, build_weak_ptr ptr){
     std::vector<task_weak_ptr> taskVec;
     maxAssignedWorkers = MaxWorkers();
     for(auto & recipe : *(typePtr->GetRecipes()) ){
-        CRecipe recipeCopy = recipe;
-        recipeCopy.SetParent(&recipe);
+        CRecipe recipeCopy = *recipe;
+        recipeCopy.SetParent(recipe);
         Recipes.push_back(recipeCopy);
     }
     for(auto p : CGood::GetResources() ){
@@ -381,6 +381,11 @@ build_weak_ptr CBuilding::GetWorkPlace(unit_weak_ptr worker){
                 job = BruteJobs.back();
                 BruteJobs.pop_back();
             }
+        }
+    }
+    if(auto jobS = job.lock()){
+        if(jobS->HasEnoughWorkers()){
+            return build_weak_ptr();
         }
     }
     return job;
