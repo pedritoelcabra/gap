@@ -6,8 +6,13 @@ layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:0:3:3
 buildCost=Stone:1
+<<<<<<< HEAD
 buildCost=Plank:1
 buildCost=Work:1
+=======
+buildCost=Planks:1
+buildCost=Work:10
+>>>>>>> 4c94a3a0de7fe036eba2fadeeed405d632e10191
 workerCount=1
 workerPriority=90
 productionRecipe=BeerFromWheatHops

@@ -5,8 +5,13 @@ layoutLine=3:3:3:3:3:3:3
 layoutLine=3:3:3:3:3:3:3
 layoutLine=3:3:3:3:3:3:3
 layoutLine=3:3:0:3:3:3:3
+<<<<<<< HEAD
 buildCost=Wood:1
 buildCost=Work:10
+=======
+buildCost=Work:10
+buildCost=Wood:1
+>>>>>>> 4c94a3a0de7fe036eba2fadeeed405d632e10191
 workerCount=1
 workerPriority=80
 productionRecipe=RudeClothesFromWool

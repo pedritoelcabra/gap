@@ -6,6 +6,7 @@ layoutLine=3:3:3:3:3
 layoutLine=3:3:3:3:3
 layoutLine=3:3:0:3:3
 buildCost=Wood:1
+buildCost=Work:10
 workerCount=1
 workerPriority=80
 productionRecipe=WoodenBowFromPlankHide

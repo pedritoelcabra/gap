@@ -290,6 +290,10 @@ bool CSettingManager::Init(){
             if(!key.compare("ResearchSpeed")){
                 settingsInt.at(ResearchSpeed) = std::stoi(value);
             }
+
+            if(!key.compare("BuildSpeed")){
+                settingsInt.at(BuildSpeed) = std::stoi(value);
+            }
         }
 	}
 	SettingsInt = settingsInt;
