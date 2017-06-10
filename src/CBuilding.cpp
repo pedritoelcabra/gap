@@ -2,6 +2,7 @@
 #include "CGame.h"
 #include "CTaskManager.h"
 #include "Templates.h"
+#include "CWorker.h"
 
 extern CGame GAP;
 
@@ -176,7 +177,7 @@ void CBuilding::Destroy(){
 }
 
 bool CBuilding::AddWork(int amount, bool setUp){
-    workToComplete -= (amount * GAP.Setting(CSettingManager::BuildSpeed) ); // 
+    workToComplete -= (amount * GAP.Setting(CSettingManager::BuildSpeed) ); //
     if(workToComplete < 1){
         workToComplete = 0;
         clip.y = 0;
@@ -210,10 +211,11 @@ void CBuilding::Update(){
             popProgress++;
             if(popProgress >= typePtr->PopCost()){
                 popProgress = 0;
-                unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, *typePtr->GetInhabitant());
+                unit_shared_ptr is = std::make_shared<CWorker>(door.first, door.second, *typePtr->GetInhabitant());
                 unit_weak_ptr iw = unit_weak_ptr(is);
 
                 GAP.UnitManager.AddNPC(is);
+                is->Owner(owner);
                 is->SetHome(myPtr);
                 is->SetSkill(InhabitantSkill());
                 is->SetIdleAssignment();
@@ -223,10 +225,11 @@ void CBuilding::Update(){
             popProgress++;
             if(popProgress >= typePtr->PopCost()){
                 popProgress = 0;
-                unit_shared_ptr is = std::make_shared<CUnit>(door.first, door.second, "trader");
+                unit_shared_ptr is = std::make_shared<CWorker>(door.first, door.second, "trader");
                 unit_weak_ptr iw = unit_weak_ptr(is);
 
                 GAP.UnitManager.AddNPC(is);
+                is->Owner(owner);
                 is->SetHome(myPtr);
                 is->SetTraderAssignment();
                 Traders.push_back(iw);

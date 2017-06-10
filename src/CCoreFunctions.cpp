@@ -1,5 +1,6 @@
-
 #include "CGame.h"
+#include "CEnemy.h"
+#include "CPlayer.h"
 
 bool CGame::OnInit(){
     CLog::Init();
@@ -20,14 +21,19 @@ bool CGame::OnInit(){
 
     InitGL();
 
-    Player = std::make_shared<CUnit>(CScreen::tilesPerChunk / 2, CScreen::tilesPerChunk / 2 , "sky_god");
+    Player = std::make_shared<CPlayer>(CScreen::tilesPerChunk / 2, CScreen::tilesPerChunk / 2 , "sky_god");
     Player->SetSpeed(8);
+    Player->Owner(1);
 
     ChunkManager.Init();
     TechManager.Init();
     RecipeManager.Init();
     BuildingManager.Init();
 
+    unit_shared_ptr orc = std::make_shared<CEnemy>(CScreen::tilesPerChunk / 2 + 5, CScreen::tilesPerChunk / 2 , "orc");
+    orc->Owner(2);
+
+    UnitManager.AddNPC(orc);
 
     UnitManager.AddNPC(Player);
 
@@ -82,6 +88,7 @@ bool CGame::InitGL(){
     TextureManager.Init();
 
     TextureManager.LoadTextureGL("background", "gfx/BGload.png");
+
     TextureManager.LoadTextureGL("player", "gfx/chars/1.png");
     TextureManager.LoadTextureGL("sky_god", "gfx/chars/sky_god.png");
     TextureManager.LoadTextureGL("forest_god", "gfx/chars/forest_god.png");
@@ -91,6 +98,8 @@ bool CGame::InitGL(){
     TextureManager.LoadTextureGL("citizen", "gfx/chars/citizen.png");
     TextureManager.LoadTextureGL("nobleman", "gfx/chars/nobleman.png");
     TextureManager.LoadTextureGL("trader", "gfx/chars/trader.png");
+    TextureManager.LoadTextureGL("orc", "gfx/chars/orc.png");
+
     TextureManager.LoadTextureGL("tiles", "gfx/tile_sprites.png");
     TextureManager.LoadTextureGL("menusprites", "gfx/menusprites.png");
     TextureManager.LoadTextureGL("icons", "gfx/icons.png");

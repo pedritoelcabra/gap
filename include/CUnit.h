@@ -34,7 +34,7 @@ class CUnit : public CGUIObject
         void                SetAnimation(std::string);
         void                Update();
 
-        bool                IsIdle();
+        bool                IsIdle(){                           return isIdle;};
 
         void                AddAction(CAction action_);
         void                ClearActions();
@@ -45,19 +45,9 @@ class CUnit : public CGUIObject
         bool                MoveToAdyacent(int x_, int y_);
         void                StopMovement();
         void                Idle(int time, bool addOnly = false);
-        void                UpdateAssignment();
-        void                UpdateBuildAssignment();
-        void                UpdateGatherAssignment();
-        void                UpdateFollowAssignment();
-        void                UpdateIdleAssignment();
-        void                UpdateProductionAssignment();
-        void                UpdateTransportAssignment();
-        void                UpdateTraderAssignment();
-        void                Destroy();
-        void                CarryItem(int resource);
+        virtual void        Destroy();
+        void                CarryItem(int resource){    carriedItem = resource;};
         int                 GetCarriedItem(bool takeIt = false);
-        void                CancelTransportTask();
-        void                FillTraderInventory(build_weak_ptr src, build_weak_ptr dest);
 
         float               GetMinCollision(){          return minCollision;};
         float               GetMaxCollision(){          return maxCollision;};
@@ -71,24 +61,27 @@ class CUnit : public CGUIObject
         std::string*        GetThought() {              return &thought;};
         void                SetSpeed(int speed){        baseSpeed = speed; };
 
-        std::string         GetAssignmentName() const;
-        float               GetMoveSpeed();
-
         void                SetIdleAssignment();
-        void                SetTraderAssignment();
         void                SetFollowAssignment(unit_weak_ptr ptr);
-        void                SetGatherAssignment(build_weak_ptr ptr);
-        void                SetBuildAssignment(build_weak_ptr ptr);
-        void                SetProductionAssignment(build_weak_ptr ptr);
-        bool                SetTransportAssignment(task_weak_ptr ptr);
-        void                SetHome(build_weak_ptr ptr);
+
+        virtual void                SetTraderAssignment(){                          std::terminate(); };
+        virtual bool                SetTransportAssignment(task_weak_ptr ptr){      std::terminate(); };
+        virtual void                UpdateAssignment(){};
+        virtual void                CancelTransportTask(){};
+        virtual void                FillTraderInventory(build_weak_ptr src, build_weak_ptr dest){};
+
+        void                SetHome(build_weak_ptr ptr){        if(auto s = ptr.lock()){        homeBuildingPtr = ptr;    }};
         void                SetFacing(int direction);
         void                SetMoving(bool);
-        void                SetId(int id_, std::weak_ptr<CUnit> myPtr_);
+        void                SetId(int id_, std::weak_ptr<CUnit> myPtr_){    id = id_;    myPtr = myPtr_;};
         void                SetSkill(int skill){        skillLvl = skill; };
         int                 GetSkill(){                 return skillLvl; };
 
         std::map<int, int>*             GetInventory(){                         return &Inventory;};
+
+        int                 Owner(int newOwner = 0){       if(newOwner > 0){ owner = newOwner; UpdateNearbyUnits(); } return owner; };
+        void                UpdateNearbyUnits();
+        void                DoDamage(int amount);
 
     protected:
 
@@ -111,12 +104,12 @@ class CUnit : public CGUIObject
         int                 facing = 2;
         int                 moveDirection = 4;
         bool                moving = false;
-        int                 baseSpeed = 16;
-        Uint32              moveSpeed = baseSpeed;
         float               currentSpeed;
         float               carryOverPixels;
         int                 xoff;
         int                 yoff;
+        float               currentX;
+        float               currentY;
 
         int                 busyTime = 0;
         bool                isIdle;
@@ -125,6 +118,8 @@ class CUnit : public CGUIObject
 
         int                 assignment;
         int                 skillLvl = 0;
+
+        int                 owner = 0;
 
         int                 targetUnit;
         int                 targetBuilding;
@@ -146,6 +141,21 @@ class CUnit : public CGUIObject
         int                     carriedItem = 0;
         GPU_Rect                itemBox;
 
+        std::vector<unit_weak_ptr>          NearbyUnits;
+        std::vector<unit_weak_ptr>          NearbyHostiles;
+
+        int                 baseSpeed = 16;
+        Uint32              moveSpeed = baseSpeed;
+        int                 detectionDistance = 20;
+        int                 maxHealth = 1000;
+        int                 currentHealth = maxHealth;
+        int                 armor = 100;
+        int                 attackDamage = 100;
+        int                 attackSpeed = 100;
+
+        int                 healthBarWidth;
+        int                 healthBarMaxWidth;
+        SDL_Color           healthBarColor;
 };
 
 #endif // CUNIT_H

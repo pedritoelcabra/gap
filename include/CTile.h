@@ -31,6 +31,7 @@ class CTile : public CGUIObject
         std::vector<unit_weak_ptr>  UnitsAtTile();
         int                         HarvestResource(int amount = 1);
 
+        int                         Owner(){                    return owner;};
         float                       GetMoveCost(){              return moveCost;};
         int                         GetResource(){              return resource;};
         int                         GetResourceAmount(){        return resourceAmount;};
@@ -59,6 +60,7 @@ class CTile : public CGUIObject
         static const int    tileWidth = CScreen::tileWidth;
 
         std::vector<unit_weak_ptr>          Units;
+        int                 owner = 0;
 };
 
 #endif // CTILE_H

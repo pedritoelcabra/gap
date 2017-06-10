@@ -48,6 +48,17 @@ std::vector<unit_weak_ptr>  CUnitManager::FindTileCollision(int x, int y){
     return npcs;
 }
 
+std::vector<unit_weak_ptr>  CUnitManager::FindHostileUnitsWithinRange(int x, int y, int range, int faction){
+
+    std::vector<unit_weak_ptr> npcs;
+    for(auto e : NPCS){
+        if( e->GetTileFlightSquareDistance(x, y) < range && e->Owner() != faction ){
+            npcs.push_back( unit_weak_ptr(e) );
+        }
+    }
+    return npcs;
+}
+
 unit_weak_ptr CUnitManager::GetUnit(int target){
     return unit_weak_ptr();
 }

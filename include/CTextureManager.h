@@ -24,6 +24,7 @@ class CTextureManager
         void                DrawTextureGL(GPU_Image* texture, GPU_Rect* src_rect, GPU_Rect* dest_rect, bool absolutePos = false);
         void                DrawHighLightCircle(int tileX, int tileY, int radius, SDL_Color  color);
         void                DrawConnectionLine(int t1X, int t1Y, int t2X, int t2Y, SDL_Color color);
+        void                DrawRectangle(int x1, int y1, int x2, int y2, SDL_Color color);
         bool                LoadFont(std::string path);
         void                Init();
         GPU_Image*          GetTexture(std::string* name);

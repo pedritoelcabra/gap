@@ -18,7 +18,6 @@
 #include "CLog.h"
 #include "CScreen.h"
 #include "CGuiObject.h"
-#include "CCharacter.h"
 #include "CTextureManager.h"
 #include "CChunkManager.h"
 #include "CMenuManager.h"
@@ -28,12 +27,11 @@
 #include "CRecipeManager.h"
 #include "CTechManager.h"
 #include "CSettingManager.h"
+#include "CAttackManager.h"
 #include "CPathfinder.h"
 #include "CTree.h"
 
 typedef std::map<std::string, int> StrIntMap;
-
-typedef CGUIObject* gui_pointer;
 
 class CGame : public CEvent{
 
@@ -55,6 +53,7 @@ public:
     CTechManager        TechManager;
     CPathfinder         Pathfinder;
     CSettingManager     SettingsManager;
+    CAttackManager      AttackManager;
 
 
     CGame();

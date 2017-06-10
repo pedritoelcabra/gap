@@ -74,7 +74,6 @@ void CInfoMenu::Render(){
         tmp << "TileX: " << s->GetTileX() << " TileY: " << s->GetTileY();
         RenderLine(tmp.str().c_str(), 16);
         tmp.str(std::string());
-        RenderLine(s->GetAssignmentName(), 16);
         RenderLine(*(s->GetThought()), 16);
         if(s->GetCarriedItem()){
             tmp << "Carrying 1 " << CGood::GetResourceName(s->GetCarriedItem());

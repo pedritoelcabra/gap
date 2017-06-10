@@ -117,4 +117,15 @@ void CTextureManager::DrawConnectionLine(int t1X, int t1Y, int t2X, int t2Y, SDL
         );
 }
 
+void CTextureManager::DrawRectangle(int x1, int y1, int x2, int y2, SDL_Color color){
+    GPU_RectangleFilled	(
+        GAP.MainGLWindow,
+        (x1  - GAP.MainViewport.x)/ GAP.ZoomLvl(),
+        (y1  - GAP.MainViewport.y)/ GAP.ZoomLvl(),
+        (x2  - GAP.MainViewport.x)/ GAP.ZoomLvl(),
+        (y2  - GAP.MainViewport.y)/ GAP.ZoomLvl(),
+        color
+        );
+}
+
 

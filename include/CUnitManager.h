@@ -25,6 +25,7 @@ class CUnitManager
 
         std::vector<unit_weak_ptr>          FindCollision(int x, int y);
         std::vector<unit_weak_ptr>          FindTileCollision(int x, int y);
+        std::vector<unit_weak_ptr>          FindHostileUnitsWithinRange(int x, int y, int range, int faction);
     protected:
     private:
         std::vector<unit_shared_ptr>        NPCS;

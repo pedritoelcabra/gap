@@ -91,6 +91,11 @@ bool CTile::RenderUnits(){
 }
 
 void CTile::AddUnit(unit_weak_ptr ptr){
+    if(owner == 0){
+        if(auto s = ptr.lock()){
+            owner = s->Owner();
+        }
+    }
     Units.push_back(ptr);
 }
 
@@ -101,6 +106,9 @@ void CTile::RemoveUnit(int id){
         if(auto s = (*iter).lock()){
             if(s->GetId() == id){
                 Units.erase(iter);
+                if(Units.size() < 1){
+                    owner = 0;
+                }
                 return;
             }
         }

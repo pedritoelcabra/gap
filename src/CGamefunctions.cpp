@@ -102,6 +102,8 @@ void CGame::OnProcessTick(){
     BuildingManager.Update();
     UnitManager.Update();
     TaskManager.Update();
+    AttackManager.ExecuteAttacks();
+
     tick++;
 }
 
