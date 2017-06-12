@@ -1,4 +1,4 @@
-ChunkGenerationDistance=2
+ChunkGenerationDistance=1
 BuildingInventoryUseCooldown=30
 AllTechsResearched=0
 ResearchSpeed=10

@@ -30,10 +30,6 @@ bool CGame::OnInit(){
     RecipeManager.Init();
     BuildingManager.Init();
 
-    unit_shared_ptr orc = std::make_shared<CEnemy>(CScreen::tilesPerChunk / 2 + 5, CScreen::tilesPerChunk / 2 , "orc");
-    orc->Owner(2);
-
-    UnitManager.AddNPC(orc);
 
     UnitManager.AddNPC(Player);
 

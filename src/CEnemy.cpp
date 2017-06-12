@@ -1,5 +1,52 @@
 #include "CEnemy.h"
 
+CEnemy::CEnemy(int x_, int y_, std::string myName) : CUnit(x_, y_, myName){
+
+    std::string fileName = "defines/units/";
+    fileName.append(myName);
+    fileName.append(".txt");
+	std::ifstream is_file(fileName);
+	std::string line = "";
+
+    if (is_file.is_open()){
+        while( std::getline(is_file, line) ) {
+            std::istringstream is_line(line);
+            std::string key = "";
+            std::string value = "";
+            std::getline(is_line, key, '=');
+            std::getline(is_line, value);
+            LoadLine(key, value);
+        }
+	}
+}
+
+void CEnemy::LoadLine(std::string key, std::string value){
+
+	if(!key.compare("health")){
+		currentHealth = maxHealth = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("armor")){
+		armor = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("attackDamage")){
+		attackDamage = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("attackSpeed")){
+		attackSpeed = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("detectionDistance")){
+		detectionDistance = std::stoi(value);
+		return;
+	}
+	if(!key.compare("baseSpeed")){
+		baseSpeed = std::stoi(value);
+		return;
+	}
+}
 
 void CEnemy::UpdateAssignment(){
     int distance;
@@ -24,13 +71,16 @@ void CEnemy::UpdateAssignment(){
     for(auto w : NearbyHostiles){
         if(auto s = w.lock()){
             distance = GetTileFlightRoundDistance(s->GetTileX(), s->GetTileY());
-            if(distance < bestDist){
+            if(distance < bestDist && distance < detectionDistance){
                 bestDist = distance;
                 targetUnitPtr = w;
             }
         }
     }
     if(bestDist == 999){
-        Idle(60);
+        if(rand() % 2 < 1){
+            MoveNextTo(tileX, tileY);
+        }
+        Idle(120, true);
     }
 }

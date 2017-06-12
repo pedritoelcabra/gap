@@ -261,9 +261,8 @@ bool CChunkManager::GenerateChunk(int x, int y){
     heightMapBuilder.SetDestNoiseMap (heightMapMarble);
     heightMapBuilder.Build ();
 
-    chunk_shared_ptr newChunk = std::make_shared<CChunk>();
-    newChunk->Init(x, y);
-    Matrix[x][y] = newChunk;
+    Matrix[x][y] = std::make_shared<CChunk>();
+    Matrix[x][y]->Init(x, y);
     return true;
 }
 

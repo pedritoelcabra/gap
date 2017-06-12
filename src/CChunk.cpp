@@ -2,6 +2,7 @@
 
 #include "CChunk.h"
 #include "CGame.h"
+#include "CEnemy.h"
 
 
 extern CGame GAP;
@@ -16,6 +17,8 @@ void CChunk::Init(int chunkX, int chunkY){
     std::string tileSheetImage = CTile::spriteSheet;
     sourceSurf = GPU_CopySurfaceFromImage(GAP.TextureManager.GetTexture(&tileSheetImage));
 
+
+
     cx = chunkX;
     cy = chunkY;
     offX = (chunkX * tilesPerChunk);
@@ -24,6 +27,12 @@ void CChunk::Init(int chunkX, int chunkY){
     int terrain = 0;
     int x, y, resource, resourceRand, resourceAmount;
     float moveCost = 0.0f;
+
+    int npcx = rand() % CScreen::tilesPerChunk;
+    int npcy = rand() % CScreen::tilesPerChunk;
+    unit_shared_ptr npc;
+    bool hasNpc = false;
+
     for(int k = 0; k < tilesPerChunk; k++){
         for(int i = 0; i < tilesPerChunk; i++){
             x = (chunkX * tilesPerChunk) + i;
@@ -134,13 +143,23 @@ void CChunk::Init(int chunkX, int chunkY){
                     resourceAmount = GAP.Setting(CSettingManager::MarblePerBlock);
                 }
                 if(resource != 0){
-                    moveCost = 3.0f;
+                    moveCost = CScreen::impassableCost;
                 }
             }
+
+
             Tiles[k][i] = std::make_shared<CTile>();
             Tiles[k][i]->Init(terrain, x, y, resource, resourceAmount, rand() % 4);
             Tiles[k][i]->SetMoveCost(moveCost);
             GAP.Pathfinder.SetCost(x,y,moveCost);
+
+            if(k == npcx && i == npcy){
+                if(moveCost < CScreen::impassableCost){
+                    npc = std::make_shared<CEnemy>(x, y , "orc");
+                    npc->Owner(2);
+                    hasNpc = true;
+                }
+            }
         }
     }
     // right
@@ -209,6 +228,10 @@ void CChunk::Init(int chunkX, int chunkY){
     destRect.h++;
 
     isInited = true;
+
+    if(hasNpc){
+        GAP.UnitManager.AddNPC(npc);
+    }
 }
 
 tile_weak_ptr CChunk::GetTile(int x, int y){
