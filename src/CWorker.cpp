@@ -21,7 +21,6 @@ void CWorker::SetTraderAssignment(){
     ClearActions();
     assignment = CAction::traderAssignment;
     maxCollision = 2.0f;
-    baseSpeed = 32;
     UpdateAssignment();
 }
 
