@@ -22,7 +22,6 @@ bool CGame::OnInit(){
     InitGL();
 
     Player = std::make_shared<CPlayer>(CScreen::tilesPerChunk / 2, CScreen::tilesPerChunk / 2 , "sky_god");
-    Player->SetSpeed(8);
     Player->Owner(1);
 
     ChunkManager.Init();
