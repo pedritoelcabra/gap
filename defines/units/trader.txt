@@ -1,0 +1,6 @@
+health=100
+armor=0
+attackDamage=3
+attackSpeed=20
+detectionDistance=1
+baseSpeed=32
