@@ -20,34 +20,6 @@ CEnemy::CEnemy(int x_, int y_, std::string myName) : CUnit(x_, y_, myName){
 	}
 }
 
-void CEnemy::LoadLine(std::string key, std::string value){
-
-	if(!key.compare("health")){
-		currentHealth = maxHealth = std::stoi(value) * 10;
-		return;
-	}
-	if(!key.compare("armor")){
-		armor = std::stoi(value) * 10;
-		return;
-	}
-	if(!key.compare("attackDamage")){
-		attackDamage = std::stoi(value) * 10;
-		return;
-	}
-	if(!key.compare("attackSpeed")){
-		attackSpeed = std::stoi(value) * 10;
-		return;
-	}
-	if(!key.compare("detectionDistance")){
-		detectionDistance = std::stoi(value);
-		return;
-	}
-	if(!key.compare("baseSpeed")){
-		baseSpeed = std::stoi(value);
-		return;
-	}
-}
-
 void CEnemy::UpdateAssignment(){
     int distance;
     if(auto s = targetUnitPtr.lock()){
