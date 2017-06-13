@@ -512,4 +512,32 @@ void CUnit::DoDamage(int amount){
     healthBarWidth = (healthBarMaxWidth * currentHealth) / maxHealth;
 }
 
+void CUnit::LoadLine(std::string key, std::string value){
+
+	if(!key.compare("health")){
+		currentHealth = maxHealth = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("armor")){
+		armor = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("attackDamage")){
+		attackDamage = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("attackSpeed")){
+		attackSpeed = std::stoi(value) * 10;
+		return;
+	}
+	if(!key.compare("detectionDistance")){
+		detectionDistance = std::stoi(value);
+		return;
+	}
+	if(!key.compare("baseSpeed")){
+		baseSpeed = std::stoi(value);
+		return;
+	}
+}
+
 
