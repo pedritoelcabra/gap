@@ -2,22 +2,6 @@
 
 CEnemy::CEnemy(int x_, int y_, std::string myName) : CUnit(x_, y_, myName){
 
-    std::string fileName = "defines/units/";
-    fileName.append(myName);
-    fileName.append(".txt");
-	std::ifstream is_file(fileName);
-	std::string line = "";
-
-    if (is_file.is_open()){
-        while( std::getline(is_file, line) ) {
-            std::istringstream is_line(line);
-            std::string key = "";
-            std::string value = "";
-            std::getline(is_line, key, '=');
-            std::getline(is_line, value);
-            LoadLine(key, value);
-        }
-	}
 }
 
 void CEnemy::UpdateAssignment(){
