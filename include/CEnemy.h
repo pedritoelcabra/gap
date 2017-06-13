@@ -16,7 +16,6 @@ class CEnemy : public CUnit
         CEnemy(int x_, int y_, std::string myName);
         virtual ~CEnemy(){};
 
-        void                                LoadLine(std::string key, std::string value);
         void                                UpdateAssignment();
     protected:
 
