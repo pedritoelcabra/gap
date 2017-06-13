@@ -27,6 +27,8 @@ class CUnit : public CGUIObject
         CUnit(){};
         CUnit(int x, int y, std::string name) ;
         virtual ~CUnit(){};
+        
+        void                LoadLine(std::string key, std::string value);
 
         bool                PreRender();
         bool                Render();
