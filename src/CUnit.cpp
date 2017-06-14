@@ -45,7 +45,8 @@ bool CUnit::PreRender(){
 
     box.x = x + xoff;
     box.y = y + yoff;
-    if(currentFrameStarted + currentFrameSpeed < GAP.GetTick() ){
+	
+    if(!staticFrames && currentFrameStarted + currentFrameSpeed < GAP.GetTick() ){
         currentFrameStarted = GAP.GetTick();
         currentFrame++;
         if(currentFrame >= frameCount){
@@ -149,13 +150,20 @@ void CUnit::ResetFrames(){
 void CUnit::SetFacing(int direction){
     switch(direction){
         case 0:
-            facing = 0; break;
+			if(!staticFrames){
+            	facing = 0;
+			}
+			 break;
         case 1:
         case 2:
         case 3:
             facing = 1; break;
         case 4:
-            facing = 2; break;
+			
+			if(!staticFrames){
+            	facing = 2;
+			}
+			 break;
         case 5:
         case 6:
         case 7:
@@ -258,6 +266,10 @@ int CUnit::SetFrameOffset(){
 }
 
 int CUnit::BaseOffset(){
+	
+	if(staticFrames){
+		return 0;
+	}
     switch(currentAnimation){
         case 1:
             return 0;
@@ -555,6 +567,11 @@ void CUnit::LoadLine(std::string key, std::string value){
 		baseSpeed = std::stoi(value);
 		return;
 	}
+	if(!key.compare("staticFrames")){
+		staticFrames = true;
+		return;
+	}
+	
 }
 
 
