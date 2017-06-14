@@ -97,6 +97,7 @@ class CUnit : public CGUIObject
         std::string         name;
         std::string         thought;
         unit_weak_ptr       myPtr;
+        bool                staticFrames = false;
         int                 currentAnimation = 7;
         Uint32              currentFrame = 0;
         Uint32              currentFrameSpeed;
